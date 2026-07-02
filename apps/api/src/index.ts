@@ -1,10 +1,13 @@
 import { Hono } from 'hono'
-import { cors } from 'hono/cors';
-import { Bindings } from "@workspace/types"
 import auth from "./routes/auth";
 import user from "./routes/user";
+import { cors } from 'hono/cors';
+import { Bindings } from "@workspace/types"
+import { MastraServer, HonoBindings, HonoVariables } from "@mastra/hono";
+import { mastra } from "./mastra/index.js"
 
-const app = new Hono<{ Bindings: Bindings }>({ strict: false });
+
+const app = new Hono<{ Bindings: HonoBindings, Variables: HonoVariables }>({ strict: false });
 
 app.use(
   "*",
@@ -17,14 +20,29 @@ app.use(
   }),
 );
 
-app.get('/api/v1', (c) => {
-  return c.text("Healthy")
-});
+const server = new MastraServer({ app, mastra });
 
-const api = app.basePath("/api/v1");
-api.route("/auth", auth)
-api.route("/user", user);
+app.get('/early-health', c => c.json({ status: 'ok' }))
+
+await server.init()
+
+// After init - has access to Mastra context
+app.get('/custom', c => {
+  const mastraInstance = c.get('mastra')
+  return c.json({ agents: Object.keys(mastraInstance.listAgents()) })
+})
+
+
+
+// app.get('/api/v1', (c) => {
+//   return c.text("Healthy")
+// });
+
+// const api = app.basePath("/api/v1");
+// api.route("/auth", auth)
+// api.route("/user", user);
 
 export default {
-  fetch: app.fetch
+  fetch: app.fetch,
+  port: 8787
 }
