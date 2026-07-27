@@ -3,6 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
+    "@clerk/expo": "^4.0.4",
     "@expo/ui": "~57.0.7",
     "@react-native-vector-icons/ant-design": "^13.1.2",
     "expo": "~57.0.8",
@@ -14,6 +15,7 @@
     "expo-image": "~57.0.1",
     "expo-linking": "~57.0.4",
     "expo-router": "~57.0.8",
+    "expo-secure-store": "^57.0.1",
     "expo-splash-screen": "~57.0.5",
     "expo-status-bar": "~57.0.1",
     "expo-symbols": "~57.0.1",

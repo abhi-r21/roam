@@ -4,10 +4,10 @@ import { AntDesign } from "@react-native-vector-icons/ant-design"
 import { StatusBar } from "expo-status-bar"
 import Checkbox from "expo-checkbox"
 import React, { useState } from "react"
-import { Image } from "expo-image";
+
 
 export default function Index() {
-  const [isChecked, setIsChecked] = useState(false)
+  const [isChecked, setIsChecked] = useState(false);
 
   return (
     <SafeAreaView
@@ -22,12 +22,12 @@ export default function Index() {
           source={require("@/assets/expo.icon/Assets/yuvly_new.svg")}
           contentFit="cover"
         /> */}
-        <Text className="font-sans text-6xl font-semibold tracking-tight">
+        {/* <Text className="font-sans text-6xl font-semibold tracking-tight">
           Yuvly
         </Text>
         <Text className="font-sans text-3xl font-normal tracking-tight text-neutral-500">
           Your travel buddy.
-        </Text>
+        </Text> */}
       </View>
       <View className="h-full justify-end gap-2.5 px-4">
         <TouchableOpacity className="w-full flex-row items-center justify-center gap-3 rounded-full border-4 border-blue-400/80 bg-blue-500 py-5">
