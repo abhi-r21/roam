@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 
-def main() -> None:
-    print("Hello from api!")
+app = FastAPI(title="Yuvly Backend")
 
 
-if __name__ == "__main__":
-    main()
+@app.get("/health")
+def health():
+    return { "status" : "OK" }
+
