@@ -15,7 +15,6 @@ const footerColumns = [
         links: [
             { label: "Blog", href: "/blog" },
             { label: "Brand", href: "/brand" },
-            { label: "FAQ", href: "/faq" },
             { label: "Contact Us", href: "/contact" },
             { label: "Terms of Service", href: "/terms" },
             { label: "Privacy Policy", href: "/privacy" },
