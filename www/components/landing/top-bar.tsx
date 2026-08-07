@@ -19,7 +19,7 @@ const links = [
 
 export function Topbar() {
   return (
-    <div className="w-full max-w-7xl">
+    <div className="w-full max-w-360 mx-auto">
       <div className={cn("flex items-center justify-between w-full bg-[#FCFCFD]")}>
         <div className={cn("flex items-center relative")}>
           <Image src={"/yuvly_new.svg"} alt="logo" width={50} height={50} />
