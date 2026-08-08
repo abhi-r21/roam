@@ -5,21 +5,20 @@ import { cn } from "@/lib/utils";
 
 type Bubble = {
     text: string;
-    top: string;
-    left: string;
+    positionClass: string;
     delay: number;
     hideOnMobile?: boolean;
 };
 
 const bubbles: Bubble[] = [
-    { text: "plan my trip to SF next month ✈️", top: "8%", left: "18%", delay: 0.3 },
-    { text: "book the cheapest flight under $400", top: "14%", left: "56%", delay: 3.6, hideOnMobile: true },
-    { text: "find me a hotel near the venue", top: "42%", left: "10%", delay: 2.9 },
-    { text: "rebook me if my flight gets delayed", top: "48%", left: "50%", delay: 1.1 },
-    { text: "cool places to visit in SF", top: "72%", left: "28%", delay: 2.3, hideOnMobile: true },
+    { text: "plan my trip to SF next month ✈️", positionClass: "top-[8%] left-[18%]", delay: 0.3 },
+    { text: "book the cheapest flight under $400", positionClass: "top-[14%] left-[56%]", delay: 3.6, hideOnMobile: true },
+    { text: "find me a hotel near the venue", positionClass: "top-[73%] sm:top-[42%] left-[10%]", delay: 2.9 },
+    { text: "rebook me if my flight gets delayed", positionClass: "top-[48%] left-[50%]", delay: 1.1 },
+    { text: "cool places to visit in SF", positionClass: "top-[72%] left-[28%]", delay: 2.3, hideOnMobile: true },
 ];
 
-function MessageBubble({ text, top, left, delay, hideOnMobile }: Bubble) {
+function MessageBubble({ text, positionClass, delay, hideOnMobile }: Bubble) {
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.85, y: 10, filter: "blur(10px)" }}
@@ -29,9 +28,10 @@ function MessageBubble({ text, top, left, delay, hideOnMobile }: Bubble) {
                 ease: [0.16, 1, 0.3, 1],
                 delay,
             }}
-            style={{ position: "absolute", top, left }}
+            style={{ position: "absolute" }}
             className={cn(
                 "relative max-w-[180px] sm:max-w-[260px] rounded-2xl bg-blue-500 px-4 py-3 text-[15px] leading-snug text-white shadow-lg",
+                positionClass,
                 hideOnMobile && "hidden sm:block",
             )}
         >
