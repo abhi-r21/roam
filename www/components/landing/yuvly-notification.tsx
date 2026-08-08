@@ -11,10 +11,10 @@ type Bubble = {
 };
 
 const bubbles: Bubble[] = [
-    { text: "plan my trip to SF next month ✈️", positionClass: "top-[8%] left-[18%]", delay: 0.3 },
+    { text: "plan my trip to SF next month ✈️", positionClass: "top-[12%] left-[24%] sm:top-[8%] sm:left-[18%]", delay: 0.3 },
     { text: "book the cheapest flight under $400", positionClass: "top-[14%] left-[56%]", delay: 3.6, hideOnMobile: true },
-    { text: "find me a hotel near the venue", positionClass: "top-[73%] sm:top-[42%] left-[10%]", delay: 2.9 },
-    { text: "rebook me if my flight gets delayed", positionClass: "top-[48%] left-[50%]", delay: 1.1 },
+    { text: "find me a hotel near the venue", positionClass: "top-[74%] left-[14%] sm:top-[42%] sm:left-[10%]", delay: 2.9 },
+    { text: "rebook me if my flight gets delayed", positionClass: "top-[46%] left-[42%] sm:top-[48%] sm:left-[50%]", delay: 1.1 },
     { text: "cool places to visit in SF", positionClass: "top-[72%] left-[28%]", delay: 2.3, hideOnMobile: true },
 ];
 
