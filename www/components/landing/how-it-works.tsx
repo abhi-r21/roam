@@ -74,8 +74,8 @@ export function HowItWorks() {
     const steps = active === "personal" ? personalSteps : enterpriseSteps
 
     return (
-        <div className="max-w-7xl mx-auto mt-16 min-h-screen">
-            <h3 className={cn("text-[40px] font-is text-center mx-auto")}>
+        <div id="how-it-works" className="max-w-7xl mx-auto mt-16 min-h-screen px-4 sm:px-6">
+            <h3 className={cn("text-[34px] sm:text-[40px] font-is text-center mx-auto")}>
                 What it actually does
             </h3>
 

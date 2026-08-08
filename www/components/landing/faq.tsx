@@ -21,8 +21,8 @@ export function FAQ() {
 
 
     return (
-        <div className={cn("max-w-7xl mx-auto mt-16 min-h-160 h-full")}>
-            <h3 className={cn("text-[40px] font-is tracking-tight text-center mx-auto")}>
+        <div id="faq" className={cn("max-w-7xl mx-auto mt-16 min-h-160 h-full px-4 sm:px-6")}>
+            <h3 className={cn("text-[34px] sm:text-[40px] font-is tracking-tight text-center mx-auto")}>
                 Questions, answered.
             </h3>
             {/* Toggle b/w Personal and Enterprise btns*/}
@@ -66,7 +66,7 @@ export function FAQ() {
             
             {/* QnA Render */}
             <div className="mt-12 mx-auto">
-                <div className="border-t border-neutral-200 min-w-2xl max-w-2xl w-full">
+                <div className="border-t border-neutral-200 max-w-2xl w-full sm:min-w-2xl">
                     {faqs.map((item, index) => (
                         <FAQAccordionItem
                             key={`${active}-${index}`}

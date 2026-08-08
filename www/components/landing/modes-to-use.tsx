@@ -11,8 +11,8 @@ export function ModesToUse() {
     const [active, setActive] = useState<"personal" | "enterprise">("personal");
 
     return (
-        <div className={cn("max-w-7xl mx-auto mt-16 min-h-140 h-full")}>
-            <h3 className={cn("text-[40px] font-is mx-auto text-center")}>
+        <div className={cn("max-w-7xl mx-auto mt-16 min-h-140 h-full px-4 sm:px-6")}>
+            <h3 className={cn("text-[34px] sm:text-[40px] font-is mx-auto text-center")}>
                 It operates in two modes
             </h3>
             <div className="max-w-full flex justify-center mt-2">
@@ -66,7 +66,7 @@ export function ModesToUse() {
                         animate={{ opacity: 1, filter: "blur(0px)" }}
                         exit={{ opacity: 0, filter: "blur(8px)" }}
                         transition={{ duration: 0.2 }}
-                        className="max-w-2xl mt-20 tracking-tight font-normal text-xl text-center flex flex-col gap-10 leading-7.5">
+                        className="max-w-2xl mt-20 tracking-tight font-normal text-lg sm:text-xl text-center flex flex-col gap-10 leading-7.5">
                             <p>
                                 Ask Yuvly to take you to SF or any place around the globe — it plans
                                 the trip, books your flights and hotel, and puts everything
@@ -86,7 +86,7 @@ export function ModesToUse() {
                         animate={{ opacity: 1, filter: "blur(0px)" }}
                         exit={{ opacity: 0, filter: "blur(10px)" }}
                         transition={{ duration: 0.3 }}
-                        className="max-w-2xl mt-20 tracking-tight font-normal text-xl text-center flex flex-col gap-10 leading-7.5">
+                        className="max-w-2xl mt-20 tracking-tight font-normal text-lg sm:text-xl text-center flex flex-col gap-10 leading-7.5">
                         <p>
                             Ask Yuvly to book the team's trip to SF or any place around the globe. It plans for every traveler, books within policy, and keeps finance in the loop — no portal, no spreadsheets, no chasing receipts.
                         </p>

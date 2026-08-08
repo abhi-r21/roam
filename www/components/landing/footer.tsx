@@ -13,11 +13,11 @@ const footerColumns = [
     {
         title: "Company",
         links: [
-            { label: "Blog", href: "/blog" },
-            { label: "Brand", href: "/brand" },
-            { label: "Contact Us", href: "/contact" },
-            { label: "Terms of Service", href: "/terms" },
-            { label: "Privacy Policy", href: "/privacy" },
+            { label: "Blog", href: "#" },
+            { label: "Brand", href: "#" },
+            { label: "Contact Us", href: "#" },
+            { label: "Terms of Service", href: "#" },
+            { label: "Privacy Policy", href: "#" },
         ],
     },
 ];
@@ -25,7 +25,7 @@ const footerColumns = [
 export function Footer() {
     return (
         <footer className="w-full bg-neutral-50 py-16 my-20">
-            <div className="mx-auto flex max-w-7xl flex-col justify-between gap-12 md:flex-row items-start">
+            <div className="mx-auto flex max-w-7xl flex-col justify-between gap-12 md:flex-row items-start px-6">
                 <div className={cn("flex items-center relative")}>
                     <Image src={"/yuvly_new.svg"} alt="logo" width={50} height={50} />
                     <p className="font-sans text-2xl tracking-tighter font-medium absolute -right-11">
