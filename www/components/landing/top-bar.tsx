@@ -19,7 +19,7 @@ export function Topbar() {
     <div className="w-full max-w-360 mx-auto px-4 sm:px-6">
       <div className={cn("flex items-center justify-between w-full bg-[#FCFCFD]")}>
         <div className={cn("flex items-center relative")}>
-          <Image src={"/yuvly_new.svg"} alt="logo" width={50} height={50} />
+          <Image src={"/yuvly_new.svg"} alt="logo" width={50} height={50} loading="eager" />
           <p className="font-sans text-2xl tracking-tighter font-medium absolute -right-11">
             Yuvly
           </p>

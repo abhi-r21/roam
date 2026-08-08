@@ -10,7 +10,7 @@ export function FooterHighlight() {
         "w-full aspect-video bg-neutral-950 mb-5 mx-auto relative overflow-hidden max-w-full max-h-140",
       )}
     >
-      <Image src={"/hands3.png"} alt="footer-image" fill sizes="100vw" className="object-cover" />
+      <Image src={"/hands3.png"} alt="footer-image" fill sizes="100vw" className="object-cover" loading="eager" />
       {/* <div className="absolute left-1/2 top-1/3 -translate-x-1/2 max-w-xl pointer-events-none">
         <motion.h1
           initial={{ y: 20 }}

@@ -10,6 +10,7 @@ export function HeroHighlight () {
             alt="hero"
             fill
             priority
+            loading="eager"
             sizes="(min-width: 1024px) 1024px, 100vw"
         />
         <div className={cn("absolute inset-0 flex justify-center")}>

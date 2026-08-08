@@ -61,9 +61,9 @@ export function WaitlistCard() {
     <div className="mx-auto w-full max-w-120 overflow-hidden rounded-[32px] bg-white p-1.5 border">
       {/* Image / hero */}
       <div className="relative h-70 w-full overflow-hidden rounded-[26px] flex items-center justify-center">
-        <Image src="/warmmy-2.png" alt="Yuvly" fill sizes="(min-width: 480px) 480px, 100vw" className="object-cover" />
+        <Image src="/warmmy-2.png" alt="Yuvly" fill sizes="(min-width: 480px) 480px, 100vw" className="object-cover" loading="eager" />
         <div className={cn("relative z-10 flex items-center")}>
-          <Image src={"/yuvly_new.svg"} alt="logo" width={70} height={70} />
+          <Image src={"/yuvly_new.svg"} alt="logo" width={70} height={70} loading="eager" />
           <p className="font-sans text-4xl tracking-tighter font-medium text-black -ml-3.5">
             Yuvly
           </p>
