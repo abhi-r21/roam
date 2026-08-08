@@ -1,7 +1,7 @@
 import { WaitlistCard } from "@/components/landing/waitlist-card";
 
 export default function WaitlistPage () {
-    return <div className="flex items-center justify-center min-h-screen w-full bg-[#FCFCFD]">
+    return <div className="flex items-center justify-center min-h-screen w-full bg-[#FCFCFD] px-4 sm:px-6">
         <WaitlistCard />
     </div>
 }

@@ -24,7 +24,7 @@ const footerColumns = [
 
 export function Footer() {
     return (
-        <footer className="w-full bg-neutral-50 py-16 my-20">
+        <footer className="w-full bg-neutral-50 py-10 sm:py-16 my-10 sm:my-20">
             <div className="mx-auto flex max-w-7xl flex-col justify-between gap-12 md:flex-row items-start px-6">
                 <div className={cn("flex items-center relative")}>
                     <Image src={"/yuvly_new.svg"} alt="logo" width={50} height={50} loading="eager" />
