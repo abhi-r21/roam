@@ -67,17 +67,17 @@ export function ModesToUse() {
                         exit={{ opacity: 0, filter: "blur(8px)" }}
                         transition={{ duration: 0.2 }}
                         className="max-w-2xl mt-20 tracking-tight font-normal text-xl text-center flex flex-col gap-10 leading-7.5">
-                        <p>
-                            Ask Yuvly to take you to SF or any place around the globe — it plans
-                            the trip, books your flights and hotel, and puts everything
-                            together, no forms or endless tabs to compare.
-                        </p>
-                        <p>
-                            Plans change. Yuvly handles that too — rebooking around a delay,
-                            shifting a hotel date, sorting a cancellation — so you're not stuck
-                            on hold with an airline.
-                        </p>
-                        <p>You never travel alone from now on, Yuvly is always with you.</p>
+                            <p>
+                                Ask Yuvly to take you to SF or any place around the globe — it plans
+                                the trip, books your flights and hotel, and puts everything
+                                together, no forms or endless tabs to compare.
+                            </p>
+                            <p>
+                                Plans change. Yuvly handles that too — rebooking around a delay,
+                                shifting a hotel date, sorting a cancellation — so you're not stuck
+                                on hold with an airline.
+                            </p>
+                            <p>You never travel alone from now on, Yuvly is always with you.</p>
                     </motion.div>
                 ) : (
                     <motion.div

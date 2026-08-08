@@ -1,31 +1,63 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { motion } from "motion/react";
 import { AppStore, GooglePlay } from "@/components/icons";
 
 export function FooterHighlight() {
-    return <div className={cn("w-full aspect-video bg-neutral-950 mt-10 rounded-4xl mb-5 mx-auto relative overflow-hidden max-w-360")}>
-        <Image src={"/download.png"} alt="footer-image" fill />
-        <div className="absolute left-1/2 top-1/3 -translate-x-1/2 max-w-xl">
-            <h1 className="text-black font-is text-7xl">Launching soon on</h1>
-            <div className="flex items-center gap-4 justify-center mt-4">
-                <button className={cn(
-                    "flex items-center justify-center gap-2 bg-linear-to-b from-neutral-800 to-neutral-950 text-white w-fit",
-                    "px-6 py-3 rounded-full tracking-tight "
-                )}>
-                    <AppStore width={30} />
-                    <p className="font-sans text-xl font-medium tracking-tight">App Store</p>
-                </button>
+  return (
+    <div
+      className={cn(
+        "w-full aspect-video bg-neutral-950 mt-10 rounded-4xl mb-5 mx-auto relative overflow-hidden max-w-360",
+      )}
+    >
+      <Image src={"/download.png"} alt="footer-image" fill />
+      <div className="absolute left-1/2 top-1/3 -translate-x-1/2 max-w-xl pointer-events-none">
+        <motion.h1
+          initial={{ y: 20 }}
+          whileInView={{ y: 0 }}
+          className="text-[#6C572E] font-is text-7xl"
+        >
+          Launching soon on
+        </motion.h1>
 
-                <span className="text-5xl font-is  text-black">&</span>
+        <motion.div
+          initial={{
+            y: 20,
+          }}
+          whileInView={{
+            y: 0,
+          }}
+          className="flex items-center gap-4 justify-center mt-4"
+        >
+          <button
+            className={cn(
+              "flex items-center justify-center gap-2 bg-[#34270f] text-white w-fit",
+              "px-6 py-3 rounded-full tracking-tight ",
+            )}
+          >
+            <AppStore width={30} />
+            <p className="font-sans text-xl font-medium tracking-tight">
+              App Store
+            </p>
+          </button>
 
-                <button className={cn(
-                    "flex items-center justify-center gap-2 bg-linear-to-b from-neutral-800 to-neutral-950 text-white w-fit",
-                    "px-6 py-3 rounded-full tracking-tight "
-                )}>
-                    <GooglePlay width={30} />
-                    <p className="font-sans text-xl font-medium tracking-tight">Google Play</p>
-                </button>
-            </div>
-        </div>
+          <span className="text-5xl font-is  text-[#6C572E]">&</span>
+
+          <button
+            className={cn(
+              "flex items-center justify-center gap-2 bg-[#34270f] text-white w-fit",
+              "px-6 py-3 rounded-full tracking-tight ",
+            )}
+          >
+            <GooglePlay width={30} />
+            <p className="font-sans text-xl font-medium tracking-tight">
+              Google Play
+            </p>
+          </button>
+        </motion.div>
+      </div>
     </div>
+  );
 }

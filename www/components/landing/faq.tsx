@@ -109,9 +109,9 @@ function FAQAccordionItem({
             <AnimatePresence initial={false}>
                 {isOpen && (
                     <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
+                        initial={{ height: 0, opacity: 0, filter: "blur(10px)" }}
+                        animate={{ height: "auto", opacity: 1, filter: "blur(0px)" }}
+                        exit={{ height: 0, opacity: 0, filter: "blur(10px)" }}
                         transition={{ type: "spring", stiffness: 400, damping: 35, mass: 0.7 }}
                         className="overflow-hidden"
                     >
