@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import { IoChatbubbles } from "react-icons/io5";
+import { toast } from "sonner";
 
 export function Hero() {
     return (
@@ -18,6 +19,19 @@ export function Hero() {
 
             <div className="min-w-full">
                 <motion.button
+                    onClick={() => toast("Yuvly here!", {
+                        description: "Hey, thanks for stopping by — I'm still in active build. Join the waitlist and I'll be ready to handle your travel the moment I ship.",
+                        style: {
+                            background: "black",
+                            color: "white",
+                            borderColor: "black",
+                            padding: "15px",
+                            fontSize: "14px",
+                            borderRadius: "20px",
+                            fontWeight: "normal"
+                        },
+                        duration: 5000,
+                    })}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.99 }}
                     transition={{

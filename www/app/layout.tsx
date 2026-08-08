@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 const instrumentSerif = Instrument_Serif({
   variable: "--font-is",
   subsets: ["latin"],
-  weight: ["400"]
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
   description: "Your travel buddy",
   icons: {
     icon: "/yuvly_new.svg",
-  }
+  },
 };
 
 export default function RootLayout({
@@ -36,7 +37,10 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#FCFCFD] selection:bg-blue-500 selection:text-white">{children}</body>
+      <body className="min-h-full flex flex-col bg-[#FCFCFD] selection:bg-blue-500 selection:text-white">
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

@@ -7,7 +7,7 @@ export const personalFAQs: FAQItem[] = [
     {
         question: "What is Yuvly?",
         answer:
-            "Yuvly is an AI travel buddy that plans, books, and manages your trips end to end - flights, hotels, and everything in between - so you skip the endless tabs and back-and-forth with travel agencies.",
+            "Yuvly is an AI travel buddy that plans, books, and manages your travel end to end - flights, hotels, and everything in between - so you skip the endless tabs and back-and-forth with travel agencies.",
     },
     {
         question: "How is this different from a travel agency?",
