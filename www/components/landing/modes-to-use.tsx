@@ -74,7 +74,7 @@ export function ModesToUse() {
                             </p>
                             <p>
                                 Plans change. Yuvly handles that too — rebooking around a delay,
-                                shifting a hotel date, sorting a cancellation — so you're not stuck
+                                shifting a hotel date, sorting a cancellation — so you’re not stuck
                                 on hold with an airline.
                             </p>
                             <p>You never travel alone from now on, Yuvly is always with you.</p>
@@ -88,7 +88,7 @@ export function ModesToUse() {
                         transition={{ duration: 0.3 }}
                         className="max-w-2xl mt-20 tracking-tight font-normal text-lg sm:text-xl text-center flex flex-col gap-10 leading-7.5">
                         <p>
-                            Ask Yuvly to book the team's trip to SF or any place around the globe. It plans for every traveler, books within policy, and keeps finance in the loop — no portal, no spreadsheets, no chasing receipts.
+                            Ask Yuvly to book the team’s trip to SF or any place around the globe. It plans for every traveler, books within policy, and keeps finance in the loop — no portal, no spreadsheets, no chasing receipts.
                         </p>
                         <p>
                             One approval, not one per ticket — spend stays visible, and anything outside policy waits for a human first.

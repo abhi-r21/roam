@@ -61,7 +61,7 @@ export function WaitlistCard() {
     <div className="mx-auto w-full max-w-120 overflow-hidden rounded-[32px] bg-white p-1.5 border">
       {/* Image / hero */}
       <div className="relative h-70 w-full overflow-hidden rounded-[26px] flex items-center justify-center">
-        <Image src="/warmmy-2.png" alt="Yuvly" fill className="object-cover" />
+        <Image src="/warmmy-2.png" alt="Yuvly" fill sizes="(min-width: 480px) 480px, 100vw" className="object-cover" />
         <div className={cn("relative z-10 flex items-center")}>
           <Image src={"/yuvly_new.svg"} alt="logo" width={70} height={70} />
           <p className="font-sans text-4xl tracking-tighter font-medium text-black -ml-3.5">
@@ -107,12 +107,12 @@ export function WaitlistCard() {
         )}
         {status === "already" && (
           <p className="mt-2 text-xs text-neutral-500 ml-2">
-            You're already on the list.
+            You’re already on the list.
           </p>
         )}
         {status === "success" && (
           <p className="mt-2 text-xs text-green-600 ml-2">
-            You're on the list!
+            You’re on the list!
           </p>
         )}
       </div>

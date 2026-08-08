@@ -144,7 +144,7 @@ export function HowItWorks() {
                                     <div
                                         className="flex aspect-4/5 items-center justify-center p-6 shadow-lg relative rounded-3xl overflow-hidden"
                                     >
-                                        <Image src={s.image} fill alt={s.image} className="object-cover" />
+                                        <Image src={s.image} fill alt={s.image} sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
                                     </div>
 
                                     {/* Caption */}

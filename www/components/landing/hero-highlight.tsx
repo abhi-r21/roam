@@ -9,6 +9,8 @@ export function HeroHighlight () {
             src={"/hero-highlight.png"}
             alt="hero"
             fill
+            priority
+            sizes="(min-width: 1024px) 1024px, 100vw"
         />
         <div className={cn("absolute inset-0 flex justify-center")}>
             <FloatingMessageBubbles />
