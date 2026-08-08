@@ -7,54 +7,54 @@ export const personalFAQs: FAQItem[] = [
     {
         question: "What is Yuvly?",
         answer:
-            "Yuvly is an AI travel buddy that plans, books, and manages your travel end to end - flights, hotels, and everything in between - so you skip the endless tabs and back-and-forth with travel agencies.",
+            "Yuvly is an AI travel buddy that plans, books, and manages your travel end to end - flights, hotels, and everything in between - so you skip the endless tabs and back-and-forth.",
     },
     {
-        question: "How is this different from a travel agency?",
+        question: "Is Yuvly right for me?",
         answer:
-            "A travel agency works on your itinerary, then hands you links to book yourself. Yuvly does the planning and the booking - you just confirm what you want and it handles the rest, adjusting in real time if plans change.",
+            "Anyone who travels and would rather not do the searching, comparing, and booking themselves. Yuvly's built to be a travel buddy - you say where you're going, and it takes it from there.",
     },
     {
-        question: "How does Yuvly find and book flights or hotels?",
+        question: "Does Yuvly get to know my preferences over time?",
         answer:
-            "Yuvly searches across airlines and hotel sites, compares options against your preferences and budget, and books directly through trusted booking infrastructure - no manual copy-pasting of confirmation codes.",
+            "Yes. Every trip you book with Yuvly helps it understand what you actually want - not just the cheapest flight, but the one that fits you - so recommendations get sharper the more you use it.",
     },
     {
         question: "What happens if my flight gets delayed or cancelled?",
         answer:
-            "Yuvly monitors your bookings and proactively rebooks or adjusts your itinerary when disruptions happen, and lets you know what changed and why.",
+            "Yuvly's already on it before you have to ask - rebooking, adjusting your itinerary, sorting a cancellation. No calls, no waiting on hold, no chasing an airline yourself.",
     },
     {
-        question: "Is my payment and personal information safe?",
+        question: "Is my payment and booking information safe?",
         answer:
-            "Yes. Bookings go through secure, licensed travel infrastructure providers, and your payment details are never stored in plain text or shared beyond what's needed to complete a booking.",
+            "Yes. Every booking runs through a sandboxed, secure infrastructure layer, and at the point of booking you're notified and asked to approve it - nothing goes through without you seeing it first.",
     },
 ];
 
 export const enterpriseFAQs: FAQItem[] = [
     {
-        question: "Can Yuvly handle travel for a whole team?",
+        question: "How does Yuvly fit into how our company already works?",
         answer:
-            "Yes. Yuvly can manage bookings for multiple travelers under one account, with shared preferences, budgets, and approval flows for company travel.",
+            "Yuvly plugs into Slack and calendars from day one - no new dashboard, no separate portal for employees to learn. A mention in a thread or an invite on someone's calendar is enough for it to start working.",
     },
     {
-        question: "Does Yuvly integrate with our expense or HR tools?",
+        question: "Can Yuvly book travel for the whole team at once?",
         answer:
-            "Yuvly is built to plug into common expense and travel-management workflows so bookings and receipts flow into your existing systems without manual entry.",
+            "Yes. A single request like booking the team's trip to SF gets every traveler planned and booked together, built from context - a Slack mention, a calendar invite, an offsite already in motion.",
     },
     {
-        question: "Can we set travel policies and spending limits?",
+        question: "Can we set spending limits and travel policy?",
         answer:
-            "Yes. Admins can configure budget caps, preferred airlines or hotel chains, and approval requirements, and Yuvly books within those guardrails automatically.",
+            "Yes. Admins set a budget ceiling, preferred airlines or hotels, and cabin class defaults, and Yuvly books within those guardrails automatically - no one has to check each booking by hand.",
     },
     {
-        question: "Who do we contact for support on enterprise plans?",
+        question: "What happens when a booking goes outside policy?",
         answer:
-            "Enterprise accounts get a dedicated point of contact for onboarding, billing, and any travel issues that come up, separate from general customer support.",
+            "It waits for a single approval before going through - not a chain of them. Spend stays visible in one place the whole time, so finance never has to ask where something stands.",
     },
     {
         question: "How is pricing structured for teams?",
         answer:
-            "Enterprise pricing is based on the number of travelers and booking volume - reach out and we'll put together a plan that fits your team's travel needs.",
+            "Pricing depends on team size and how your company travels - reach out and let's talk through what fits.",
     },
 ];

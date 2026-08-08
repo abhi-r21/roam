@@ -7,66 +7,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { LuUserRound } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import { HiMiniBuildingStorefront } from "react-icons/hi2";
+import { enterpriseFooter, enterpriseHeader, enterpriseSteps, personalFooter, personalHeader, personalSteps } from "@/config/steps";
 
-const personalSteps = [
-    {
-        step: "STEP 1",
-        title: "Tell Yuvly where you're going",
-        description:
-            "A trip idea, a date range, a place is all it takes to get started. No forms to fill out, no filters to configure, no dropdown menus to click through one by one. Just say where you want to go, and Yuvly takes it from there.",
-        image: "/personal-step-1.png",
-        mockup: "chat",
-    },
-    {
-        step: "STEP 2",
-        title: "It finds and books for you",
-        description:
-            "Flights and hotels picked to fit what you actually asked for, not just the cheapest option on the list. Yuvly compares, chooses, and books — confirmed and ready before you've opened a single tab. The itinerary lands in your hands, done.",
-        image: "/personal-step-2.png",
-        mockup: "chat",
-    },
-    {
-        step: "STEP 3",
-        title: "You never travel alone",
-        description:
-            "Delays, cancellations, a plan that shifts at the last minute — Yuvly's already on it before you have to ask. No calls, no waiting on hold, no sorting it out yourself. You're never traveling alone again — Yuvly's with you, every trip.",
-        image: "/personal-step-3.png",
-        mockup: "email",
-    },
-];
 
-const enterpriseSteps = [
-    {
-        step: "STEP 1",
-        title: "Yuvly plugs into your company",
-        description:
-            "Connects to Slack and calendars from day one — no new dashboard, no separate portal to figure out. A mention or a calendar invite is enough for Yuvly to start working.",
-        image: "/enterprise-step-1.png",
-        mockup: "chat",
-    },
-    {
-        step: "STEP 2",
-        title: "It runs travel on autopilot",
-        description:
-            "Trips get built from context — a Slack mention, a calendar invite, an offsite in motion. Every traveler gets booked within policy, automatically, no manual checking required.",
-        image: "/enterprise-step-2.png",
-        mockup: "chat",
-    },
-    {
-        step: "STEP 3",
-        title: "You stay in control, without the work",
-        description:
-            "Spend stays within budget by default, nothing to chase down after. Anything outside policy waits for one approval, and every booking stays visible in one place.",
-        image: "/enterprise-step-3.png",
-        mockup: "email",
-    },
-];
-
-const personalHeader = "Not a tool you open — a buddy that's already planning, already booking, already handling it."
-const personalFooter = "Yuvly's your travel buddy, and you talk to it in plain English. Every booking, every change, every trip — you'll always know where things stand."
-
-const enterpriseHeader = "One system running travel for your whole company — booking, policy, and approvals, without a portal in sight."
-const enterpriseFooter = "Yuvly runs your company's travel, and someone still holds the wheel. Every booking, every approval, every dollar — visible in one place, all the time."
 
 export function HowItWorks() {
     const [active, setActive] = useState<"personal" | "enterprise">("personal");
@@ -133,7 +76,7 @@ export function HowItWorks() {
                     >
                         {/* Header */}
                         <p className="mx-auto max-w-2xl text-center text-sm mb-8  leading-relaxed text-gray-500">
-                            {active === 'personal' ? personalHeader : enterpriseHeader}
+                            {active === 'personal' ? personalHeader : enterpriseHeader }
                         </p>
 
                         {/* Grid */}
