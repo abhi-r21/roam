@@ -32,13 +32,13 @@ function MessageBubble({ text, top, left, delay }: Bubble) {
         >
             {text}
             <svg
-                width="20"
-                height="14"
-                viewBox="0 0 20 14"
-                className="absolute -bottom-[9px] left-2"
-            >
-                <path d="M0 0 L20 0 L4 13 Q0 14 0 8 Z" fill="#3b82f6" />
-            </svg>
+                    width="20"
+                    height="14"
+                    viewBox="0 0 20 14"
+                    className="absolute -bottom-[9px] right-2 -scale-x-100"
+                >
+                    <path d="M0 0 L20 0 L4 13 Q0 14 0 8 Z" fill="#3b82f6" />
+                </svg>
         </motion.div>
     );
 }

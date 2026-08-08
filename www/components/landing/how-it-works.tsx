@@ -49,7 +49,7 @@ const enterpriseSteps = [
         title: "It runs travel on autopilot",
         description:
             "Trips get built from context — a Slack mention, a calendar invite, an offsite in motion. Every traveler gets booked within policy, automatically, no manual checking required.",
-        image: "/download (3).png",
+        image: "/enterprise-step-2.png",
         mockup: "chat",
     },
     {

@@ -101,17 +101,17 @@ export function WaitlistCard() {
         </div>
 
         {status === "error" && (
-          <p className="mt-2 text-xs text-red-500">
+          <p className="mt-2 text-xs text-red-500 ml-2">
             {errorMessage}
           </p>
         )}
         {status === "already" && (
-          <p className="mt-2 text-xs text-neutral-500">
+          <p className="mt-2 text-xs text-neutral-500 ml-2">
             You're already on the list.
           </p>
         )}
         {status === "success" && (
-          <p className="mt-2 text-xs text-green-600">
+          <p className="mt-2 text-xs text-green-600 ml-2">
             You're on the list!
           </p>
         )}
