@@ -9,11 +9,11 @@ export function FooterHighlight() {
   return (
     <div
       className={cn(
-        "w-full aspect-video bg-neutral-950 mt-10 rounded-4xl mb-5 mx-auto relative overflow-hidden max-w-360",
+        "w-full aspect-video bg-neutral-950 mb-5 mx-auto relative overflow-hidden max-w-full max-h-140",
       )}
     >
-      <Image src={"/download.png"} alt="footer-image" fill />
-      <div className="absolute left-1/2 top-1/3 -translate-x-1/2 max-w-xl pointer-events-none">
+      <Image src={"/hands3.png"} alt="footer-image" fill className="object-cover" />
+      {/* <div className="absolute left-1/2 top-1/3 -translate-x-1/2 max-w-xl pointer-events-none">
         <motion.h1
           initial={{ y: 20 }}
           whileInView={{ y: 0 }}
@@ -57,7 +57,8 @@ export function FooterHighlight() {
             </p>
           </button>
         </motion.div>
-      </div>
+      </div> */}
+
     </div>
   );
 }

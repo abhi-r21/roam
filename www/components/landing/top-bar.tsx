@@ -1,6 +1,9 @@
+"use client"
+
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const links = [
   {
@@ -18,6 +21,8 @@ const links = [
 ]
 
 export function Topbar() {
+  const router = useRouter();
+
   return (
     <div className="w-full max-w-360 mx-auto">
       <div className={cn("flex items-center justify-between w-full bg-[#FCFCFD]")}>
@@ -37,6 +42,7 @@ export function Topbar() {
           {links.map(link => <a key={link.name} className="cursor-pointer hover:bg-neutral-100 px-4 py-2 rounded-lg transition-all">{link.name}</a>)}
           <Button
             size={"sm"}
+            onClick={() => router.push("/waitlist")}
             className={cn("rounded-full cursor-pointer")}
           >
             Join waitlist

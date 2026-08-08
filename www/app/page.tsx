@@ -1,3 +1,6 @@
+'use client'
+
+import 'lenis/dist/lenis.css'
 import { FAQ } from "@/components/landing/faq";
 import { Footer } from "@/components/landing/footer";
 import { FooterHighlight } from "@/components/landing/footer-highlight";
@@ -6,10 +9,13 @@ import { HeroHighlight } from "@/components/landing/hero-highlight";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { ModesToUse } from "@/components/landing/modes-to-use";
 import { Topbar } from "@/components/landing/top-bar";
+import { ReactLenis, useLenis } from 'lenis/react'
 
 export default function Home() {
+  const lenis = useLenis()
   return (
     <div className="flex flex-col flex-1 bg-[#FCFCFD] text-neutral-950 w-full scrollbar-none">
+      <ReactLenis root />
       <Topbar />
       <Hero />
       <HeroHighlight />
