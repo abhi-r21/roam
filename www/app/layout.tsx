@@ -23,7 +23,7 @@ const instrumentSerif = Instrument_Serif({
 export const metadata: Metadata = {
   title: "Yuvly - Your travel buddy",
   description: "Your travel buddy",
-  icons: {
+  icons: { 
     icon: "/yuvly_new.svg",
   },
 };
