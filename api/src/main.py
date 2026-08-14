@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from src.agents.orchestrator import orchestrator
-from src.state.yuvly_state import State
+
+from src.ai.agents.orchestrator import orchestrator
+from src.ai.state import State
 
 app = FastAPI(title="Yuvly Backend")
 
