@@ -25,7 +25,7 @@ load_dotenv()
 bb = Browserbase(api_key=os.environ["BROWSERBASE_API_KEY"])
 
 @tool
-def search(query: str) -> list:
+def search(query: str) -> list[SearchResult]:
     """Search the web and return list of search results.
 
     Each result includes title, URL, and a short snippet. Use this first
