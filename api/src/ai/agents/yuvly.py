@@ -25,7 +25,7 @@ load_dotenv()
 
 # Initailizing the llm, tools, and binding them
 model = os.getenv('AI_MODEL')
-tools = [search, fetch, hand_off_to_orchestrator]
+tools = [search, hand_off_to_orchestrator]
 tools_by_name = {tool.name: tool for tool in tools}
 llm = init_chat_model(model).bind_tools(tools)
 
@@ -33,7 +33,7 @@ llm = init_chat_model(model).bind_tools(tools)
 SYSTEM_PROMPT = """You are Yuvly, an AI travel companion.
 
 Handle simple, single-shot requests yourself — flight lookups, hotel
-lookups, general questions — using the search and fetch tools. Use both the search tool and fetch tool
+lookups, general questions — using the search tool.
 
 For complex task you can call hand_off_to_orchestrator tool for handing
 it to Orchestrator agent which gets the task done by using sub-agents.
