@@ -15,7 +15,6 @@ from langchain.chat_models import init_chat_model
 load_dotenv()
 
 
-
 # Shape of the output produced by the Classify Node
 class Classify(BaseModel):
     tasks: List[Task] = Field(

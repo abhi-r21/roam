@@ -1,9 +1,9 @@
 from fastapi import FastAPI
+from langchain_core.messages import HumanMessage
 from pydantic import BaseModel
 
 
-from src.ai.agents.orchestrator import orchestrator
-from src.ai.state import State
+from src.ai.agents.yuvly import yuvly_agent
 
 app = FastAPI(title="Yuvly Backend")
 
@@ -17,7 +17,8 @@ def health():
 
 @app.post("/chat")
 def chat(request: QueryRequest):
-    result = orchestrator.invoke(
-        State(messages=[request.query], tasks=None)
-    )
-    return {"tasks": result["tasks"]}
+    messages = [HumanMessage(content=request.query)]
+    result = yuvly_agent.invoke({ "messages": messages })
+
+    last_message = result["messages"][-1]
+    return { "response": last_message.content }

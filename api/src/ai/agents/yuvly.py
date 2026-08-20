@@ -7,86 +7,95 @@ tasks done.
 """
 
 import os
+from dotenv import load_dotenv
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import SystemMessage, ToolMessage
 
 from langgraph.graph import START, END, StateGraph
+from langgraph.types import Command
 
+
+from src.ai.agents.orchestrator import orchestrator
+from src.ai.tools.yuvly import hand_off_to_orchestrator
 from src.ai.state import YuvlyState
-from src.ai.tools.search import web_search
-from src.ai.tools.yuvly import is_complex
+from src.ai.tools.search import fetch, search
 
 
+load_dotenv()
 
 # Initailizing the llm, tools, and binding them
-model = os.getenv('AI_MODEL', 'google_genai:gemini-3.6-flash')
-tools = [web_search, is_complex]
+model = os.getenv('AI_MODEL')
+tools = [search, fetch, hand_off_to_orchestrator]
 tools_by_name = {tool.name: tool for tool in tools}
 llm = init_chat_model(model).bind_tools(tools)
 
 
+SYSTEM_PROMPT = """You are Yuvly, an AI travel companion.
 
-def llm_call(state: YuvlyState):
-    """LLM decides to spawn sub-agents or handle itself"""
+Handle simple, single-shot requests yourself — flight lookups, hotel
+lookups, general questions — using the search and fetch tools. Use both the search tool and fetch tool
 
-    return {
-        "messages": [
-            llm.invoke(
-                [
-                    SystemMessage(
-                        content="""Your are called as Yuvly an AI travel buddy. You have bunch of agents like book agent, schedule agents as sub-agents. You can delegate the task to orchestrator agent if you feel the task is complex else handle yourself.
-                        """
-                    )
-                ]
-                + state.messages
-            )
-        ]
-    }
+For complex task you can call hand_off_to_orchestrator tool for handing
+it to Orchestrator agent which gets the task done by using sub-agents.
+"""
 
-def should_continue(state: YuvlyState):
-    if state.messages[-1].tool_calls:
-        return "tool_node"
-    return END
-    
 
-def tool_node(state: YuvlyState):
-    """Performs the tool calls"""
+# LLM call Node
+def call_model(state: YuvlyState):
+    """"""
+    messages = [SystemMessage(content=SYSTEM_PROMPT), *state.messages]
+    response = llm.invoke(messages)
 
-    results = []
-    for tool_call in state.messages[-1].tool_calls:
+    return { "messages": [response] }
+
+# Tool calling Node
+def call_tools(state: YuvlyState):
+    """"""
+    last_message = state.messages[-1]
+    output = []
+
+    for tool_call in last_message.tool_calls:
         tool = tools_by_name[tool_call['name']]
-        observation = tool.invoke(tool_call['args'])
+        result = tool.invoke(tool_call['args'])
 
-        results.append(
+        if isinstance(result, Command):
+            return result
+
+        output.append(
             ToolMessage(
-                content=observation,
-                tool_call_id=tool_call["id"]
+                content=str(result),
+                name=tool_call['name'],
+                tool_call_id=tool_call['id']
             )
         )
-        print(f"observation: {observation}, tool_call: {tool}, result: {results}")
 
-    return {"messages": results }
+    return { "messages": output }
+
+def route_after_model(state: YuvlyState):
+    last_message = state.messages[-1]
+
+    if not getattr(last_message, "tool_calls", None):
+        return END
+
+    if state.iterations >= 10:
+        return END
+    
+    return "call_tools"
+
 
 
 graph = StateGraph(YuvlyState)
 
-graph.add_node("llm_call", llm_call)
-graph.add_node("tool_node", tool_node)
+graph.add_node("call_model", call_model)
+graph.add_node("call_tools", call_tools, destinations=["call_model", "orchestrator"])
+graph.add_node("orchestrator", orchestrator)
 
-graph.add_edge(START, "llm_call")
+graph.add_edge(START, "call_model")
 graph.add_conditional_edges(
-    "llm_call",
-    should_continue,
-    ['tool_node', END]
+    "call_model", route_after_model, {"call_tools": "call_tools", END: END }
 )
-graph.add_edge("tool_node", "llm_call")
-
-agent = graph.compile()
-
+graph.add_edge("call_tools", "call_model")
+graph.add_edge("orchestrator", END)
 
 
-
-
-
-
-
+yuvly_agent = graph.compile()
