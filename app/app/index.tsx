@@ -1,19 +1,7 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router";
+import { Redirect } from "expo-router";
+import { useAuth } from "@clerk/expo";
 
-export default function Home() {
-    const router = useRouter();
+export default function Index() {
 
-    return <SafeAreaView>
-        <View>
-            <TouchableOpacity
-                onPress={() => router.push("/(auth)/login")}
-            >
-                <Text>
-                    Login
-                </Text>
-            </TouchableOpacity>
-        </View>
-    </SafeAreaView>
+    return <Redirect href={"/(main)/home"} />
 }

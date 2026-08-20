@@ -6,7 +6,7 @@ import Checkbox from "expo-checkbox"
 import React, { useState } from "react"
 
 
-export default function Index() {
+export default function Login() {
   const [isChecked, setIsChecked] = useState(false);
 
   return (
