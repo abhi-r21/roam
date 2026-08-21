@@ -5,6 +5,7 @@ from langgraph.graph.message import add_messages
 
 
 class YuvlyState(BaseModel):
+    query: str
     messages: Annotated[List[AnyMessage], add_messages]
     iterations: int = 0
 
@@ -15,6 +16,7 @@ class Task(BaseModel):
 
 
 class State(BaseModel):
+    query: str
     messages: list[str] | None
     tasks: Optional[List[Task]] = Field(
         default=None,

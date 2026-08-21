@@ -3,6 +3,7 @@ from langchain_core.messages import HumanMessage
 from pydantic import BaseModel
 
 
+# pyrefly: ignore [missing-import]
 from src.ai.agents.yuvly import yuvly_agent
 
 app = FastAPI(title="Yuvly Backend")

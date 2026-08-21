@@ -7,6 +7,7 @@ the sub-agents.
 import os
 from typing import List
 from dotenv import load_dotenv
+
 from src.ai.config import AVAILABLE_AGENTS
 from src.ai.state import State, Task
 from pydantic import BaseModel, Field
@@ -33,7 +34,7 @@ def format_agent_roster(agents: dict) -> str:
 
 
 def classify(state: State) -> State:
-    query = state.messages[-1]
+    query = state.query
 
     agent_roster = format_agent_roster(AVAILABLE_AGENTS)
     valid_agent_names = ", ".join(AVAILABLE_AGENTS.keys())
@@ -58,5 +59,10 @@ def classify(state: State) -> State:
 
     response = llm.invoke(classify_prompt)
 
-    state.tasks = response.tasks
+    if isinstance(response, Classify):
+        state.tasks = response.tasks
+    elif isinstance(response, dict):
+        state.tasks = response.get("tasks")
+
     return state
+

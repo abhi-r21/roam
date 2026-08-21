@@ -23,3 +23,10 @@ dependencies = [
 
 [tool.fastapi]
 entrypoint = "src.main:app"
+
+[tool.pyrefly]
+project-includes = [
+    "**/*.py*",
+    "**/*.ipynb",
+]
+search-path = ["."]

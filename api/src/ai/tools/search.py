@@ -49,6 +49,7 @@ def search(query: str) -> list[SearchResult]:
     search_results: list[SearchResult] = []
 
     for result in response.results:
+        # pyrefly: ignore [bad-argument-type]
         search_results.append({
             "id": result.id,
             "title": result.title,
@@ -62,6 +63,7 @@ def search(query: str) -> list[SearchResult]:
     # For each search result we gonna fetch the content
     for search_result in search_results:
         response = bb.fetch_api.create(url=search_result.url)
+        # pyrefly: ignore [bad-assignment]
         search_result.content = response.content
     
     return search_results

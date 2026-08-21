@@ -9,16 +9,17 @@ tasks done.
 import os
 from dotenv import load_dotenv
 from langchain.chat_models import init_chat_model
-from langchain_core.messages import SystemMessage, ToolMessage
+from langchain_core.messages import AIMessage, SystemMessage, ToolMessage
 
 from langgraph.graph import START, END, StateGraph
 from langgraph.types import Command
 
 
+
 from src.ai.agents.orchestrator import orchestrator
 from src.ai.tools.yuvly import hand_off_to_orchestrator
 from src.ai.state import YuvlyState
-from src.ai.tools.search import fetch, search
+from src.ai.tools.search import search
 
 
 load_dotenv()
@@ -52,6 +53,9 @@ def call_model(state: YuvlyState):
 def call_tools(state: YuvlyState):
     """"""
     last_message = state.messages[-1]
+    if not isinstance(last_message, AIMessage) or not last_message.tool_calls:
+        return { "messages": state.messages }
+
     output = []
 
     for tool_call in last_message.tool_calls:
@@ -87,7 +91,8 @@ def route_after_model(state: YuvlyState):
 graph = StateGraph(YuvlyState)
 
 graph.add_node("call_model", call_model)
-graph.add_node("call_tools", call_tools, destinations=["call_model", "orchestrator"])
+
+graph.add_node("call_tools", call_tools, destinations={"call_model": "call_model", "orchestrator": "orchestrator"})
 graph.add_node("orchestrator", orchestrator)
 
 graph.add_edge(START, "call_model")
