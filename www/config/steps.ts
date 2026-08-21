@@ -17,7 +17,7 @@ export const personalSteps = [
         step: "STEP 3",
         title: "You never travel alone",
         description:
-            "Delays, cancellations, a plan that shifts at the last minute — Yuvly's already on it before you have to ask. No calls, no waiting on hold, no sorting it out yourself. You're never travel alone again — Yuvly's with you, every time.",
+            "Delays, cancellations, a plan that shifts at the last minute — Yuvly's already on it before you have to ask. No calls, no waiting on hold, no sorting it out yourself. You never travel alone again — Yuvly's with you, every time.",
         image: "/personal-step-3.png",
     },
 ];
