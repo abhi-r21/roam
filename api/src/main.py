@@ -18,8 +18,14 @@ def health():
 
 @app.post("/chat")
 def chat(request: QueryRequest):
-    messages = [HumanMessage(content=request.query)]
-    result = yuvly_agent.invoke({ "messages": messages })
+    result = yuvly_agent.invoke(
+        { 
+            "messages": [
+                HumanMessage(content=request.query)
+            ], 
+            "query": request.query 
+        }
+    )
 
     last_message = result["messages"][-1]
     return { "response": last_message.content }
