@@ -15,9 +15,9 @@ class SearchResult(BaseModel):
     id: str
     title: str
     url: str
-    image: str
-    favicon: str
-    content: str
+    image: str | None = None
+    favicon: str | None = None
+    content: dict[str, object] | str = ""
 
 
 load_dotenv()
@@ -49,21 +49,28 @@ def search(query: str) -> list[SearchResult]:
     search_results: list[SearchResult] = []
 
     for result in response.results:
-        # pyrefly: ignore [bad-argument-type]
-        search_results.append({
-            "id": result.id,
-            "title": result.title,
-            "url": result.url,
-            "image": result.image,
-            "favicon": result.favicon,
-        })
+
+        search_results.append(
+            SearchResult(
+                id=result.id,
+                title=result.title,
+                url=result.url,
+                image=result.image,
+                favicon=result.favicon,
+                content=""
+            )
+        )
 
     print(f"search_results_formatted: {search_results}")
 
     # For each search result we gonna fetch the content
     for search_result in search_results:
-        response = bb.fetch_api.create(url=search_result.url)
-        # pyrefly: ignore [bad-assignment]
+        response = bb.fetch_api.create(
+            url=search_result.url,
+            format="markdown",
+        )
+
+        print(f"response.content {response.content}")
         search_result.content = response.content
     
     return search_results
