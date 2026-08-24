@@ -8,13 +8,12 @@ tasks done.
 
 import os
 from dotenv import load_dotenv
+
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import AIMessage, SystemMessage, ToolMessage
 
 from langgraph.graph import START, END, StateGraph
 from langgraph.types import Command
-
-
 
 from src.ai.agents.orchestrator import orchestrator
 from src.ai.tools.yuvly import hand_off_to_orchestrator
@@ -36,6 +35,8 @@ SYSTEM_PROMPT = """You are Yuvly, an AI travel companion.
 Handle simple, single-shot requests yourself — flight lookups, hotel
 lookups, general questions — using the search tool.
 
+For now dont need to clarify with user, take default as one-person travelling and with return flight
+
 For complex task you can call hand_off_to_orchestrator tool for handing
 it to Orchestrator agent which gets the task done by using sub-agents.
 """
@@ -43,7 +44,7 @@ it to Orchestrator agent which gets the task done by using sub-agents.
 
 # LLM call Node
 def call_model(state: YuvlyState):
-    """"""
+    """Yuvly Agent brain"""
     messages = [SystemMessage(content=SYSTEM_PROMPT), *state.messages]
     response = llm.invoke(messages)
 
