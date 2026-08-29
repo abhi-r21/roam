@@ -22,7 +22,7 @@ export function FAQ() {
 
     return (
         <div id="faq" className={cn("w-full sm:max-w-7xl mx-auto mt-16 min-h-160 h-full px-4 sm:px-6")}>
-            <h3 className={cn("text-[34px] sm:text-[40px] font-is tracking-tight text-center mx-auto")}>
+            <h3 className={cn("text-[34px] sm:text-[40px] font-gp tracking-tight text-center mx-auto")}>
                 Questions, answered.
             </h3>
             {/* Toggle b/w Personal and Enterprise btns*/}

@@ -7,14 +7,13 @@ import { toast } from "sonner";
 
 export function Hero() {
     return (
-        <div className="max-w-3xl w-full mx-auto pt-32 px-4 sm:px-6">
-            <h1 className="font-medium text-4xl sm:text-6xl max-w-xs sm:max-w-lg mx-auto text-center font-is leading-10 sm:leading-16 tracking-tight">
-                From “where should I go?” to “you’re all booked.”
+        <div className="max-w-3xl w-full mx-auto pt-32 px-4 sm:px-6 z-10">
+            <h1 className="font-medium text-3xl sm:text-6xl max-w-xs sm:max-w-2xl mx-auto text-center font-gp leading-10 sm:leading-16 tracking-tight">
+                Hey there, I'm Yuvly.
             </h1>
 
-            <h2 className="text-center text-neutral-500 mt-8 max-w-sm md:max-w-md mx-auto tracking-tight font-medium">
-                Your travel buddy for every unsure moment, from planning the trip to
-                finding your way when plans change.
+            <h2 className="text-center text-neutral-500 mt-8 max-w-sm md:max-w-md mx-auto tracking-tight text-lg">
+            your travel buddy — I plan it, book it, fix it when things go sideways.
             </h2>
 
             <div className="min-w-full">

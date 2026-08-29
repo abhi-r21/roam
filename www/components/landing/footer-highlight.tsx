@@ -15,7 +15,7 @@ export function FooterHighlight() {
         <motion.h1
           initial={{ y: 20 }}
           whileInView={{ y: 0 }}
-          className="text-[#6C572E] font-is text-7xl"
+          className="text-[#6C572E] font-gp text-7xl"
         >
           Launching soon on
         </motion.h1>
@@ -41,7 +41,7 @@ export function FooterHighlight() {
             </p>
           </button>
 
-          <span className="text-5xl font-is  text-[#6C572E]">&</span>
+          <span className="text-5xl font-gp  text-[#6C572E]">&</span>
 
           <button
             className={cn(

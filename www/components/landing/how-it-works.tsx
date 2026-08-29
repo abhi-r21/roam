@@ -18,7 +18,7 @@ export function HowItWorks() {
 
     return (
         <div id="how-it-works" className="max-w-7xl mx-auto mt-16 min-h-screen px-4 sm:px-6">
-            <h3 className={cn("text-[34px] sm:text-[40px] font-is text-center mx-auto")}>
+            <h3 className={cn("text-[34px] sm:text-[40px] font-gp text-center mx-auto")}>
                 What it actually does
             </h3>
 

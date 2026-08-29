@@ -13,11 +13,13 @@ import { ReactLenis } from 'lenis/react'
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 bg-[#FCFCFD] text-neutral-950 w-full scrollbar-none">
+    <div className="flex flex-col flex-1 bg-[#FCFCFD] text-neutral-950 w-full scrollbar-none relative">
+      {/* <img src={"/blue-clouds.jpg"} className='absolute w-full'/> */}
       <ReactLenis root />
       <Topbar />
       <Hero />
-      <HeroHighlight />
+      {/* <HeroHighlight /> */}
+      <div className='h-screen'></div>
       <ModesToUse />
       <HowItWorks />
       <FAQ />

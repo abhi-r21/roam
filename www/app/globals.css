@@ -10,6 +10,8 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-is: var(--font-is);
+  --font-gp: var(--font-gp);
+  --font-poppins: var(--font-poppins);
   --font-heading: var(--font-geist-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -141,5 +143,5 @@ html, body {
   scrollbar-width: none;
 
   /* Hide scrollbar for older Internet Explorer and Legacy Edge */
-  -ms-overflow-style: none; 
+  -ms-overflow-style: none;
 }

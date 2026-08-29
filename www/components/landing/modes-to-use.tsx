@@ -12,7 +12,7 @@ export function ModesToUse() {
 
     return (
         <div className={cn("max-w-7xl mx-auto mt-16 min-h-140 h-full px-4 sm:px-6")}>
-            <h3 className={cn("text-[34px] sm:text-[40px] font-is mx-auto text-center")}>
+            <h3 className={cn("text-[34px] sm:text-[40px] font-gp mx-auto text-center")}>
                 It operates in two modes
             </h3>
             <div className="max-w-full flex justify-center mt-2">
