@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Instrument_Serif, Faculty_Glyphic, Poppins } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif, Faculty_Glyphic, Poppins, Libre_Franklin } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css";
@@ -26,6 +26,12 @@ const instrumentSerif = Instrument_Serif({
   weight: ["400"],
 });
 
+const libra = Libre_Franklin({
+  variable: "--font-lf",
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]
+})
+
 const facultyGlyphic = Faculty_Glyphic({
   variable: "--font-gp",
   subsets: ["latin"],
@@ -48,7 +54,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${facultyGlyphic.variable} ${poppins.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${facultyGlyphic.variable} ${poppins.variable} ${libra.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#FCFCFD] selection:bg-blue-500 selection:text-white font-poppins">
         {children}

@@ -28,7 +28,7 @@ export function Footer() {
             <div className="mx-auto flex max-w-7xl flex-col justify-between gap-12 md:flex-row items-start px-6">
                 <div className={cn("flex items-center relative")}>
                     <Image src={"/yuvly_new.svg"} alt="logo" width={50} height={50} loading="eager" />
-                    <p className="font-sans text-2xl tracking-tighter font-medium absolute -right-11">
+                    <p className="font-gp text-2xl tracking-tighter font-medium absolute -right-11">
                         Yuvly
                     </p>
                 </div>

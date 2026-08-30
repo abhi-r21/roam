@@ -16,7 +16,7 @@ export function Topbar() {
   };
 
   return (
-    <div className="w-full max-w-360 mx-auto px-4 sm:px-6">
+    <div className="w-full max-w-360 mx-auto px-4 sm:px-6 mt-2">
       <div className={cn("flex items-center justify-between w-full bg-[#FCFCFD]")}>
         <div className={cn("flex items-center relative")}>
           <Image src={"/yuvly_new.svg"} alt="logo" width={50} height={50} loading="eager" />
@@ -39,7 +39,7 @@ export function Topbar() {
           <Button
             size={"sm"}
             onClick={() => router.push("/waitlist")}
-            className={cn("rounded-full cursor-pointer")}
+            className={cn("rounded-full cursor-pointer bg-blue-500 border border-blue-400 text-white")}
           >
             Join waitlist
           </Button>
