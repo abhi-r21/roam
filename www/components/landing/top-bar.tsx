@@ -1,50 +1,31 @@
-"use client"
-
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { useLenis } from "lenis/react";
 
 export function Topbar() {
-  const router = useRouter();
-  const lenis = useLenis();
-
-  const scrollToSection = (id: string) => {
-    const target = id.startsWith("#") ? id : `#${id}`;
-    lenis?.scrollTo(target, { duration: 2 });
-  };
-
   return (
-    <div className="w-full max-w-360 mx-auto px-4 sm:px-6 mt-2">
-      <div className={cn("flex items-center justify-between w-full bg-[#FCFCFD]")}>
-        <div className={cn("flex items-center relative")}>
-          <Image src={"/yuvly_new.svg"} alt="logo" width={50} height={50} loading="eager" />
-          <p className="font-gp text-2xl tracking-tighter font-medium absolute -right-11">
-            Yuvly
+    <header className="w-full px-4 py-4 sm:px-6 sm:py-5">
+      <div className={cn("flex w-full items-center justify-between")}>
+        <div className="flex items-center gap-2">
+          <Image
+            src={"/oneworks-avatar-dog-256 (3).svg"}
+            alt="Yuvi logo"
+            width={40}
+            height={40}
+            loading="eager"
+          />
+          <p className="font-gp text-2xl font-medium tracking-tighter">
+            Yuvi
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div
-            className={cn(
-              "hidden sm:flex items-center gap-2",
-              "text-sm tracking-normal font-normal",
-            )}
-          >
-            <a href="#" className="cursor-pointer hover:bg-neutral-100 px-4 py-2 rounded-lg transition-all">Enterprise</a>
-            <button onClick={() => scrollToSection("#how-it-works")} className="cursor-pointer hover:bg-neutral-100 px-4 py-2 rounded-lg transition-all">How it works</button>
-            <button onClick={() => scrollToSection("#faq")} className="cursor-pointer hover:bg-neutral-100 px-4 py-2 rounded-lg transition-all">FAQ</button>
-          </div>
-          <Button
-            size={"sm"}
-            onClick={() => router.push("/waitlist")}
-            className={cn("rounded-full cursor-pointer bg-blue-500 border border-blue-400 text-white")}
-          >
-            Join waitlist
-          </Button>
-        </div>
+        <Button
+          size="sm"
+          className={cn("cursor-pointer rounded-full")}
+        >
+          Get Started
+        </Button>
       </div>
-    </div>
+    </header>
   );
 }

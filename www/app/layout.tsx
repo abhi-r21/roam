@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif, Faculty_Glyphic, Poppins, Libre_Franklin } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css";
 
@@ -39,10 +40,10 @@ const facultyGlyphic = Faculty_Glyphic({
 });
 
 export const metadata: Metadata = {
-  title: "Yuvly - Your travel buddy",
-  description: "Your travel buddy",
+  title: "Yuvi",
+  description: "Your travel agent",
   icons: {
-    icon: "/yuvly_new.svg",
+    icon: "/oneworks-avatar-dog-256 (3).svg",
   },
 };
 
@@ -56,10 +57,12 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${facultyGlyphic.variable} ${poppins.variable} ${libra.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#FCFCFD] selection:bg-blue-500 selection:text-white font-poppins">
-        {children}
-        <Toaster />
-        <Analytics />
+      <body className="min-h-full flex flex-col bg-background selection:bg-blue-500 selection:text-white font-poppins">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+          <Toaster />
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );
