@@ -52,7 +52,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${facultyGlyphic.variable} ${poppins.variable} ${libra.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-background selection:bg-blue-500 selection:text-white">
+      <body className="min-h-full flex flex-col bg-background selection:bg-blue-950 selection:text-blue-500">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
           <Toaster />

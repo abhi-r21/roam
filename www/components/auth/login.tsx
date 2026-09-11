@@ -80,7 +80,7 @@ export function Login() {
         <div className="h-px flex-1 bg-border" />
       </div>
 
-      <Button type="button" variant="secondary" className="h-10 w-full rounded-xl">
+      <Button type="button" variant="secondary" className="h-10 w-full rounded-xl font-gp">
         <FcGoogle aria-hidden="true" />
         Sign in with Google
       </Button>
