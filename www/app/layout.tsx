@@ -34,7 +34,7 @@ const facultyGlyphic = Faculty_Glyphic({
 });
 
 export const metadata: Metadata = {
-  title: "Yuvi",
+  title: "Yuvly",
   description: "Your travel agent",
   icons: {
     icon: "/oneworks-avatar-dog-256 (3).svg",
