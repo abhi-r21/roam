@@ -8,4 +8,4 @@ To run:
 bun run dev
 ```
 
-open http://localhost:3000
+API: http://localhost:8000

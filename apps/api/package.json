@@ -1,5 +1,6 @@
 {
-  "name": "api",
+  "name": "@yuvly/api",
+  "private": true,
   "scripts": {
     "dev": "bun run --hot src/index.ts"
   },

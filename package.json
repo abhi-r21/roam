@@ -1,0 +1,14 @@
+{
+  "name": "yuvly",
+  "private": true,
+  "packageManager": "bun@1.3.5",
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev": "bun run --workspaces dev",
+    "dev:web": "bun run --filter '@yuvly/web' dev",
+    "dev:api": "bun run --filter '@yuvly/api' dev",
+    "build": "bun run --filter '@yuvly/web' build",
+    "lint": "bun run --filter '@yuvly/web' lint"
+  },
+  "trustedDependencies": ["sharp", "unrs-resolver"]
+}
