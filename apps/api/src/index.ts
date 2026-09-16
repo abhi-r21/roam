@@ -2,7 +2,10 @@ import { Hono } from 'hono'
 import { clerkMiddleware, getAuth } from '@hono/clerk-auth'
 
 const app = new Hono()
-app.use("*", clerkMiddleware())
+
+const protectedRoute = new Hono()
+
+protectedRoute.use("*", clerkMiddleware())
 
 app.get("/health", (c) => {
   return c.text("healthy")
@@ -11,6 +14,9 @@ app.get("/health", (c) => {
 app.get("/", (c) => {
   return c.text('Hello Hono!')
 })
+
+app.route("/", protectedRoute)
+
 
 export default {
   port: 8000,

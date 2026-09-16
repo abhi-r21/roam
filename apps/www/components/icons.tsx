@@ -57,4 +57,18 @@ const GooglePlay = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export { GooglePlay, AppStore };
+function Triangle({ size = 100, color = '#fff' }) {
+  return (
+    <svg
+      width={size}
+      height={size * (1832 / 1932)}
+      viewBox="0 0 1932 1832"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M 966 1421 L 431 583 L 1501 583 Z" fill={color} />
+    </svg>
+  );
+}
+
+
+export { GooglePlay, AppStore, Triangle };

@@ -8,6 +8,7 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Triangle } from "@/components/icons";
 
 export function Login() {
   const router = useRouter();
@@ -25,14 +26,9 @@ export function Login() {
         Back
       </Button>
 
-      <div className="flex justify-center mb-15">
-        <Image
-          src="/oneworks-avatar-dog-256 (3).svg"
-          alt="Yuvi"
-          width={60}
-          height={60}
-          priority
-        />
+      <div className="flex justify-center items-center mb-15">
+        <Triangle size={50}/>
+        <h1 className="text-3xl font-medium font-gp">Roam</h1>
       </div>
 
       <form className="mt-8 space-y-5">
