@@ -1,14 +1,17 @@
 {
-  "name": "yuvly",
+  "name": "roam",
   "private": true,
   "packageManager": "bun@1.3.5",
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
     "dev": "bun run --workspaces dev",
-    "dev:web": "bun run --filter '@yuvly/www' dev",
-    "dev:api": "bun run --filter '@yuvly/api' dev",
-    "build": "bun run --filter '@yuvly/www' build",
-    "lint": "bun run --filter '@yuvly/www' lint"
+    "dev:web": "bun run --filter '@roam/www' dev",
+    "dev:api": "bun run --filter '@roam/api' dev",
+    "build": "bun run --filter '@roam/www' build"
   },
-  "trustedDependencies": ["sharp", "unrs-resolver"]
+  "trustedDependencies": ["sharp", "unrs-resolver"],
+  "devDependencies": {
+    "globals": "^17.12.0",
+    "typescript-eslint": "^8.70.0"
+  }
 }
