@@ -11,9 +11,9 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { Triangle } from "@/components/icons";
 import { Cog, MessagesCircle } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { TbNavigationFilled } from "react-icons/tb";
 import { motion } from "motion/react";
 
 
@@ -27,11 +27,11 @@ export function AppSidebar() {
   const pathName = usePathname();
 
   return (
-    <Sidebar variant="inset" className="bg-background">
+    <Sidebar variant="inset" className="bg-background select-none">
       <SidebarHeader className="bg-background">
         <div className={cn("flex items-center justify-between")}>
-          <div className="flex items-center">
-            <Triangle size={25}/>
+          <div className="flex items-center gap-1">
+            <TbNavigationFilled size={17}/>
             <div className={cn("flex flex-col")}>
               <h1 className="text-[14px] font-medium tracking-tight">Roam</h1>
             </div>

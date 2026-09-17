@@ -2,15 +2,13 @@ import { AgentInput } from "@/components/agent/agent-input";
 
 export default function AskPage() {
     return (
-        <div className="flex flex-col items-center justify-center px-4">
-            <div className="flex flex-col items-center gap-3 mb-10">
-                {/* <h1 className="text-4xl font-gp tracking-tight text-foreground">
-                    Hey yoo, lets plan a trip to SF?
-                </h1> */}
+        <div className="flex flex-col items-center justify-center px-4 h-full">
+            <div className="flex-1 h-full">
+
             </div>
-            {/* <div className="w-full max-w-2xl">
-                <AgentInput placeholder="Plan a trip, ask about visas..." />
-            </div> */}
+            <div className="w-full max-w-2xl">
+                <AgentInput  />
+            </div>
         </div>
     );
 }

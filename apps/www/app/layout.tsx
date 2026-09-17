@@ -27,9 +27,6 @@ const facultyGlyphic = Faculty_Glyphic({
 export const metadata: Metadata = {
   title: "Roam",
   description: "Your travel agent",
-  icons: {
-    icon: "/roam.png",
-  },
 };
 
 export default function RootLayout({

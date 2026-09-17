@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Triangle } from "@/components/icons";
 import { useAuth } from "@clerk/nextjs";
 import { ChevronRight } from "lucide-react";
+import { TbNavigationFilled } from "react-icons/tb";
 
 export function Topbar() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export function Topbar() {
     <header className="w-full px-4 py-4 sm:px-6 sm:py-5">
       <div className={cn("flex w-full items-center justify-between")}>
         <div className="flex items-center gap-2">
-          <Triangle size={50} />
+          <TbNavigationFilled />
         </div>
 
         {isSignedIn ? (
