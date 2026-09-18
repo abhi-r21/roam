@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Tool } from "@mastra/core/tools";
+import { createTool } from "@mastra/core/tools";
 import { browserbase } from "@browserbasehq/stagehand";
 
 const BROWSERBASE_SEARCH_RESULTS_LIMIT = 5
@@ -16,7 +16,7 @@ interface WebSearchResult {
     contentType: string,
 }
 
-export const webSearchTool = new Tool({
+export const webSearchTool = createTool({
     id: 'web-search-tool',
     description: 'Searches the web for a given query and fetches the full page content (as markdown) for each top result. Use this when you need current information, facts, or content not available in your training data — news, documentation, articles, or anything requiring up-to-date web content. Returns a list of results, each with title, URL, author, published date, and the fetched page content.',
     inputSchema: z.object({

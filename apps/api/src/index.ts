@@ -6,6 +6,8 @@ import {mastra} from "./mastra/index"
 const app = new Hono<{ Bindings: HonoBindings, Variables: HonoVariables }>()
 const mastraServer = new MastraServer({ app, mastra })
 
+await mastraServer.init()
+
 const protectedRoute = new Hono()
 
 protectedRoute.use("*", clerkMiddleware())

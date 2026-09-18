@@ -1,28 +1,22 @@
 
 import { Mastra } from '@mastra/core/mastra';
 import { PinoLogger } from '@mastra/loggers';
-import { LibSQLStore } from '@mastra/libsql';
-import { DuckDBStore } from "@mastra/duckdb";
-import { MastraCompositeStore } from '@mastra/core/storage';
-import { Observability, MastraStorageExporter, MastraPlatformExporter, SensitiveDataFilter } from '@mastra/observability';
-import { weatherWorkflow } from './workflows/weather-workflow';
-import { planAgent, weatherAgent } from './agents';
+import { PostgresStore } from '@mastra/pg';
+import { planWorkflow } from './workflows';
+import { Observability,
+  MastraStorageExporter,
+  MastraPlatformExporter,
+  SensitiveDataFilter
+} from '@mastra/observability';
+import { roamAgent } from './agents/roam-agent';
+
 
 export const mastra = new Mastra({
-  workflows: { weatherWorkflow },
-  agents: { weatherAgent, planAgent },
-  storage: new MastraCompositeStore({
-    id: 'composite-storage',
-    default: new LibSQLStore({
-      id: "mastra-storage",
-      // Uses a hosted database when deployed (mastra env db create --kind turso),
-      // and a local file during development.
-      url: process.env.TURSO_DATABASE_URL ?? "file:./mastra.db",
-      authToken: process.env.TURSO_AUTH_TOKEN,
-    }),
-    domains: {
-      observability: await new DuckDBStore().getStore('observability'),
-    }
+  workflows: { planWorkflow },
+  agents: { roamAgent },
+  storage: new PostgresStore({
+    id: 'supabase-storage',
+    connectionString: process.env.DIRECT_DATABASE_URL,
   }),
   logger: new PinoLogger({
     name: 'Mastra',
