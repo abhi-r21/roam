@@ -52,7 +52,7 @@ export function AgentInput() {
             "resize-none p-0! my-auto",
             "min-h-[20px] leading-5",
             "placeholder:text-neutral-500",
-            "rounded-none!",
+            "rounded-none! caret-blue-500",
           )}
         />
 
