@@ -8,44 +8,40 @@ import {
   SidebarHeader,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { Bell, Cog, MessagesCircle } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import { TbNavigationFilled } from "react-icons/tb";
 import { motion } from "motion/react";
-import { useUser } from "@clerk/nextjs";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { ProfileDropdown } from "./profile-dropdown";
+import { usePathname, useRouter } from "next/navigation";
+import { Bell, ChevronLeft, FingerprintPattern, UserRound } from "lucide-react";
+
 
 
 const ACCOUNT = [
-  { icon: MessagesCircle, label: "Ask", route: "/ask" },
-  { icon: Cog, label: "Settings", route: "/settings" }
+  { icon: UserRound, label: "Profile", route: "/account/profile" },
+  { icon: FingerprintPattern, label: "Security", route: "/account/security" }
 ]
 
 export function AccountSidebar() {
   const router = useRouter();
   const pathName = usePathname();
-  const { user } = useUser();
 
   return (
     <Sidebar variant="inset" className="bg-background select-none">
       <SidebarHeader className="bg-background">
-        <div className={cn("flex items-center justify-between")}>
-          <div className="flex items-center gap-1">
-            <TbNavigationFilled size={17}/>
-            <div className={cn("flex flex-col")}>
-              <h1 className="text-[14px] font-medium tracking-tight">Roam</h1>
-            </div>
-          </div>
-          <SidebarTrigger />
-        </div>
+        <Button
+          variant={"ghost"}
+          className={cn("justify-start")}
+          onClick={() => router.push("/ask")}
+        >
+          <ChevronLeft />
+          <div>Back</div>
+        </Button>
       </SidebarHeader>
       <SidebarContent className="bg-background">
         <SidebarGroup>
-          <SidebarGroupLabel>Interaction</SidebarGroupLabel>
+          <SidebarGroupLabel>Account</SidebarGroupLabel>
           {ACCOUNT.map(({ icon: Icon, label, route }) => {
             const isActive = pathName === route;
             return (
@@ -74,18 +70,18 @@ export function AccountSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="bg-background">
-          <div className="flex items-center justify-between cursor-pointer">
+        <div className="flex items-center justify-between cursor-pointer">
           <ProfileDropdown />
-            <div className="flex items-center gap-1.5">
-                <Button
-                  variant={"outline"}
-                  size={"icon-xs"}
-                  className={"rounded-full"}
-                >
-                  <Bell />
-                </Button>
-              </div>
+          <div className="flex items-center gap-1.5">
+            <Button
+              variant={"outline"}
+              size={"icon-xs"}
+              className={"rounded-full"}
+            >
+              <Bell />
+            </Button>
           </div>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );

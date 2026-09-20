@@ -35,7 +35,7 @@ export function AppSidebar() {
       <SidebarHeader className="bg-background">
         <div className={cn("flex items-center justify-between")}>
           <div className="flex items-center gap-1">
-            <TbNavigationFilled size={17}/>
+            <TbNavigationFilled size={17} />
             <div className={cn("flex flex-col")}>
               <h1 className="text-[14px] font-medium tracking-tight">Roam</h1>
             </div>
@@ -74,18 +74,18 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="bg-background">
-          <div className="flex items-center justify-between cursor-pointer">
+        <div className="flex items-center justify-between cursor-pointer">
           <ProfileDropdown />
-            <div className="flex items-center gap-1.5">
-                <Button
-                  variant={"outline"}
-                  size={"icon-xs"}
-                  className={"rounded-full"}
-                >
-                  <Bell />
-                </Button>
-              </div>
+          <div className="flex items-center gap-1.5">
+            <Button
+              variant={"outline"}
+              size={"icon-xs"}
+              className={"rounded-full"}
+            >
+              <Bell />
+            </Button>
           </div>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );

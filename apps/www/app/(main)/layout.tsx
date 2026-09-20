@@ -1,10 +1,10 @@
-import { AppSidebar } from "@/components/navigation/app-sidebar";
+import { SidebarSwitch } from "@/components/navigation/sidebar-switch";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
     return <SidebarProvider className="bg-background!">
-        <AppSidebar />
+        <SidebarSwitch />
         <SidebarInset className="border-t border-x overflow-hidden">
             <main className={cn("w-full h-full bg-neutral-100 dark:bg-neutral-950")}>
                 {children}
@@ -12,3 +12,4 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         </SidebarInset>
     </SidebarProvider>
 }
+

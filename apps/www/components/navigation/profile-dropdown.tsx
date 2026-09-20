@@ -19,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { useUser } from "@clerk/nextjs";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
@@ -29,7 +29,7 @@ const FOOTER_ITEMS = [
   {
     name: "Profile",
     icon: UserRound,
-    route: "/settings/profile",
+    route: "/account/profile",
   },
 ];
 
@@ -57,7 +57,7 @@ export function ProfileDropdown() {
       >
         <DropdownMenuGroup>
           <DropdownMenuItem
-            onClick={() => router.push("/account/settings")}
+            onClick={() => router.push("/account/profile")}
             className={cn(
               "flex items-center justify-between py-3 text-[13px] cursor-pointer rounded-lg",
               "hover:bg-neutral-900! [&:focus:not(:hover)]:bg-transparent!",
@@ -108,7 +108,7 @@ export function ProfileDropdown() {
             {isSignedIn && (
               <>
                 <LogOut className="text-neutral-400" />
-                Sign Out
+                <SignOutButton />
               </>
             )}
           </DropdownMenuItem>
