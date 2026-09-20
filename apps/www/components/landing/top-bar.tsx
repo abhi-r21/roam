@@ -7,16 +7,18 @@ import { Triangle } from "@/components/icons";
 import { useAuth } from "@clerk/nextjs";
 import { ChevronRight } from "lucide-react";
 import { TbNavigationFilled } from "react-icons/tb";
+import { useTheme } from "next-themes";
 
 export function Topbar() {
   const router = useRouter();
   const { isSignedIn } = useAuth();
+  const { theme } = useTheme();
 
   return (
     <header className="w-full px-4 py-4 sm:px-6 sm:py-5">
       <div className={cn("flex w-full items-center justify-between")}>
         <div className="flex items-center gap-2">
-          <TbNavigationFilled />
+          <TbNavigationFilled className={cn(theme === "system" ? "text-black" : "text-white")}/>
         </div>
 
         {isSignedIn ? (

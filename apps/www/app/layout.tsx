@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/next";
 import { shadcn } from "@clerk/ui/themes";
 import { localization } from "@/utils/localization";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -40,7 +41,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${facultyGlyphic.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-background selection:bg-blue-950 selection:text-blue-500">
+      <body className="min-h-full flex flex-col bg-background selection:bg-pink-950 selection:text-pink-500">
         <ClerkProvider
           localization={localization}
           appearance={{
@@ -48,8 +49,9 @@ export default function RootLayout({
           }}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
+            <TooltipProvider>{children}</TooltipProvider>
             <Toaster />
+
             <Analytics />
           </ThemeProvider>
         </ClerkProvider>

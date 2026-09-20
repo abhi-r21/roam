@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowUp, AudioLines, Plus } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 
 const MAX_LINES = 6;
 
@@ -27,61 +28,77 @@ export function AgentInput() {
   }, [value]);
 
   return (
-    <div className="flex items-end gap-1.5 max-w-lg w-full mb-2 mx-auto">
-      <Button className={cn("rounded-full size-10 shrink-0 mb-[3px] ", "dark:bg-[#101010] dark:text-neutral-100 dark:border-neutral-900 dark:hover:bg-[#101010]/50 dark:hover:border-[#101010]")}>
-        <Plus />
-      </Button>
-
-      <div className="flex items-end flex-1 bg-[#101010] rounded-[15px] pl-3 pr-1 py-1.5 min-h-10 border border-neutral-900">
-        <Textarea
-          ref={textareaRef}
-          rows={1}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              if (hasInput) {
-                setValue("");
-              }
-            }
-          }}
-          placeholder="Ask roam..."
+    <AnimatePresence mode="wait">
+      <motion.div
+        initial={{ y: 60 }}
+        animate={{ y: 0 }}
+        exit={{ y: 60 }}
+        transition={{
+          duration: 0.3,
+          ease: "easeOut"
+        }}
+        className="flex items-end gap-1.5 max-w-lg w-full mb-2 mx-auto"
+      >
+        <Button
           className={cn(
-            "bg-transparent! border-none outline-none! focus:ring-0!",
-            "resize-none p-0! my-auto",
-            "min-h-[20px] leading-5",
-            "placeholder:text-neutral-500",
-            "rounded-none! caret-blue-500",
+            "rounded-full size-10 shrink-0 mb-[3px] bg-background hover:bg-background/50",
+            "dark:bg-[#101010] dark:text-neutral-100 dark:border-neutral-900 dark:hover:bg-[#101010]/50 dark:hover:border-[#101010]",
           )}
-        />
+        >
+          <Plus className="text-foreground" />
+        </Button>
 
-        {!hasInput ? (
-          <Button
-            variant="ghost"
+        <div className="flex items-end flex-1 bg-background dark:bg-[#101010] rounded-[15px] pl-3 pr-1 py-1.5 min-h-10 border-neutral-200 border dark:border-neutral-900">
+          <Textarea
+            ref={textareaRef}
+            rows={1}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                if (hasInput) {
+                  setValue("");
+                }
+              }
+            }}
+            placeholder="Ask roam..."
             className={cn(
-              "rounded-full h-7 w-7 shrink-0 ml-1.5 mb-px",
-              "transition-opacity",
-              // !hasInput && "opacity-0 pointer-events-none w-0 ml-0",
+              "bg-transparent! border-none outline-none! focus:ring-0!",
+              "resize-none p-0! my-auto",
+              "min-h-[20px] leading-5",
+              "placeholder:text-neutral-500",
+              "rounded-none! caret-pink-500",
             )}
-          >
-            <AudioLines />
-          </Button>
-        ) : (
-          <Button
-            size="icon"
-            variant={hasInput ? "default" : "ghost"}
-            disabled={!hasInput}
-            className={cn(
-              "rounded-[12px] size-7 shrink-0 ml-1.5 mb-px px-4 bg-blue-500 border-blue-400 text-white",
-              "transition-opacity",
-              !hasInput && "opacity-0 pointer-events-none w-0 ml-0",
-            )}
-          >
-            <ArrowUp className="h-4 w-4" />
-          </Button>
-        )}
-      </div>
-    </div>
+          />
+
+          {!hasInput ? (
+            <Button
+              variant="ghost"
+              className={cn(
+                "rounded-full h-7 w-7 shrink-0 ml-1.5 mb-px",
+                "transition-opacity",
+                // !hasInput && "opacity-0 pointer-events-none w-0 ml-0",
+              )}
+            >
+              <AudioLines />
+            </Button>
+          ) : (
+            <Button
+              size="icon"
+              variant={hasInput ? "default" : "ghost"}
+              disabled={!hasInput}
+              className={cn(
+                "rounded-[12px] size-7 shrink-0 ml-1.5 mb-px px-4 bg-pink-500 border-pink-400 hover:bg-pink-500/90 text-white",
+                "transition-opacity",
+                !hasInput && "opacity-0 pointer-events-none w-0 ml-0",
+              )}
+            >
+              <ArrowUp className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
