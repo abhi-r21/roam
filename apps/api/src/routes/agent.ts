@@ -8,6 +8,4 @@ agentRouter.post("/ask", async (c) => {
 
     const mastra = c.get("mastra");
     const roamAgent = mastra.getAgentById("roam-agent");
-
-    
 });

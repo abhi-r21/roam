@@ -8,27 +8,69 @@ import {
   SidebarHeader,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { Bell, Cog, Ellipsis, MessagesCircle } from "lucide-react";
+import { Bell, Cog, ChevronRight, MessagesCircle, ScrollText, type LucideIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { TbNavigationFilled } from "react-icons/tb";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { useUser } from "@clerk/nextjs";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { ProfileDropdown } from "./profile-dropdown";
+import { useState } from "react";
 
+type SubItem = {
+  icon: LucideIcon;
+  label: string;
+  route: string;
+};
 
-const INTERACTION_GROUP_ITEMS = [
+type NavItem = {
+  icon: LucideIcon;
+  label: string;
+  route: string;
+  subItems?: SubItem[];
+};
+
+const INTERACTION_GROUP_ITEMS: NavItem[] = [
   { icon: MessagesCircle, label: "Ask", route: "/ask" },
-  { icon: Cog, label: "Settings", route: "/settings" }
-]
+  {
+    icon: Cog,
+    label: "Settings",
+    route: "/org/settings",
+    subItems: [
+      { icon: ScrollText, label: "Policy", route: "/org/policy" },
+    ],
+  },
+];
+
+function ActiveDot() {
+  return (
+    <motion.div
+      layoutId="active-tab-dot"
+      className="absolute right-3.5 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-pink-500"
+      transition={{ type: "spring", stiffness: 500, damping: 35 }}
+    />
+  );
+}
 
 export function AppSidebar() {
   const router = useRouter();
   const pathName = usePathname();
   const { user } = useUser();
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+
+  const toggleExpanded = (label: string) => {
+    setExpandedItems((prev) => ({ ...prev, [label]: !prev[label] }));
+  };
+
+  // Check if any sub-item is active for a given parent
+  const isSubItemActive = (item: NavItem) =>
+    item.subItems?.some((sub) => pathName === sub.route) ?? false;
 
   return (
     <Sidebar variant="inset" className="bg-background select-none">
@@ -46,33 +88,89 @@ export function AppSidebar() {
       <SidebarContent className="bg-background">
         <SidebarGroup>
           <SidebarGroupLabel>Interaction</SidebarGroupLabel>
-          {INTERACTION_GROUP_ITEMS.map(({ icon: Icon, label, route }) => {
-            const isActive = pathName === route;
+          {INTERACTION_GROUP_ITEMS.map((item) => {
+            const { icon: Icon, label, route, subItems } = item;
+            const hasSubItems = subItems && subItems.length > 0;
+            const isExpanded = expandedItems[label] ?? isSubItemActive(item);
+            const isActive = pathName === route && !isSubItemActive(item);
+
             return (
               <SidebarMenuItem key={label} className="relative">
                 <SidebarMenuButton
-                  onClick={() => router.push(route)}
+                  onClick={() => {
+                    if (hasSubItems) {
+                      toggleExpanded(label);
+                    } else {
+                      router.push(route);
+                    }
+                  }}
                   className={cn(
                     "relative hover:bg-neutral-100 dark:hover:bg-neutral-900 cursor-pointer",
-                    isActive ? "text-foreground" : "text-neutral-500"
+                    isActive || isSubItemActive(item)
+                      ? "text-foreground"
+                      : "text-neutral-500"
                   )}
                 >
                   <Icon />
                   {label}
-                  {isActive && (
+                  {hasSubItems && (
                     <motion.div
-                      layoutId="active-tab-dot"
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-pink-500"
-                      transition={{ type: "spring", stiffness: 500, damping: 35 }}
-                    />
+                      className="ml-auto"
+                      animate={{ rotate: isExpanded ? 90 : 0 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </motion.div>
                   )}
+                  {isActive && <ActiveDot />}
                 </SidebarMenuButton>
+
+                {/* Collapsible sub-items */}
+                {hasSubItems && (
+                  <AnimatePresence initial={false}>
+                    {isExpanded && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        style={{ overflow: "hidden" }}
+                      >
+                        <SidebarMenuSub>
+                          {subItems.map((sub) => {
+                            const SubIcon = sub.icon;
+                            const isSubActive = pathName === sub.route;
+                            return (
+                              <SidebarMenuSubItem
+                                key={sub.label}
+                                className="relative "
+                              >
+                                <SidebarMenuSubButton
+                                  onClick={() => router.push(sub.route)}
+                                  className={cn(
+                                    "cursor-pointer relative hover:bg-neutral-100 dark:hover:bg-neutral-900",
+                                    isSubActive
+                                      ? "text-foreground"
+                                      : "text-neutral-500"
+                                  )}
+                                >
+                                  <SubIcon />
+                                  {sub.label}
+                                  {isSubActive && <ActiveDot />}
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            );
+                          })}
+                        </SidebarMenuSub>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                )}
               </SidebarMenuItem>
             );
           })}
         </SidebarGroup>
       </SidebarContent>
-
       <SidebarFooter className="bg-background">
         <div className="flex items-center justify-between cursor-pointer">
           <ProfileDropdown />
