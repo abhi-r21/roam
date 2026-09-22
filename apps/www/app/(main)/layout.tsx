@@ -6,7 +6,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     return <SidebarProvider className="bg-background!">
         <SidebarSwitch />
         <SidebarInset className="border-t border-x overflow-hidden">
-            <main className={cn("w-full h-full bg-neutral-100 dark:bg-neutral-950")}>
+            <main className={cn("w-full h-full bg-neutral-50 dark:bg-neutral-950")}>
                 {children}
             </main>
         </SidebarInset>
