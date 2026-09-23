@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
 import {
   Cog,
   LogOut,
@@ -10,6 +12,11 @@ import {
   UserRound,
 } from "lucide-react";
 
+import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
+
+import { SignOutButton, useUser } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,12 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
-import { SignOutButton, useUser } from "@clerk/nextjs";
-import { useTheme } from "next-themes";
-import { useRouter } from "next/navigation";
-import { motion } from "motion/react";
-import { Button } from "../ui/button";
+
 
 const FOOTER_ITEMS = [
   {
@@ -41,7 +43,7 @@ export function ProfileDropdown() {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <div className="flex items-center justify-between gap-1.5 cursor-pointer">
-          <div className="bg-pink-500 w-4 h-4 rounded-full" />
+          <img src={"/shader.png"} className="w-4 h-4 rounded-full"/>
           <div className="text-[13px]">
             {user?.emailAddresses[0].emailAddress.split("@")[0]}
           </div>

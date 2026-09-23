@@ -143,7 +143,7 @@ export function AppSidebar() {
                             return (
                               <SidebarMenuSubItem
                                 key={sub.label}
-                                className="relative "
+                                className="relative"
                               >
                                 <SidebarMenuSubButton
                                   onClick={() => router.push(sub.route)}
@@ -154,7 +154,9 @@ export function AppSidebar() {
                                       : "text-neutral-500"
                                   )}
                                 >
-                                  <SubIcon />
+                                  <SubIcon className={isSubActive
+                                    ? "text-foreground"
+                                    : "text-neutral-500!"} />
                                   {sub.label}
                                   {isSubActive && <ActiveDot />}
                                 </SidebarMenuSubButton>
