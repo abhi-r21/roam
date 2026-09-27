@@ -68,7 +68,7 @@ export function ProfileDropdown() {
             onClick={() => router.push("/account/profile")}
             className={cn(
               "flex items-center justify-between py-3 text-[13px] cursor-pointer rounded-lg",
-              "focus:bg-transparent! group relative",
+              "focus:bg-transparent! relative",
             )}
           >
             {hoveredItem === "profile-header" && (
@@ -82,7 +82,7 @@ export function ProfileDropdown() {
             <span className="relative z-[1] flex items-center justify-between w-full">
               <div className="flex flex-col">
                 <p>yuvan</p>
-                <p className="text-neutral-500">
+                <p className="text-neutral-500!">
                   {user?.emailAddresses[0].emailAddress}
                 </p>
               </div>

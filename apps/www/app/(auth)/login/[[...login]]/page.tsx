@@ -1,12 +1,10 @@
-import { SignIn } from "@clerk/nextjs";
-import { BackButton } from "@/components/navigation/back-button";
-import { DotmCircular6 } from "@/components/ui/dotm-circular-6";
+
+import { SignIn } from "@/components/auth/signin";
 
 export default function LoginPage() {
   return (
-    <main className="flex min-h-screen w-full items-center justify-center px-4 py-10 sm:px-6">
-      <BackButton />
-      <SignIn
+    <main className="flex min-h-screen w-full items-center justify-center px-4 py-10 sm:px-6 bg-neutral-950">
+      {/* <SignIn
         fallback={
             <DotmCircular6
                 colorPreset="grad-fire"
@@ -21,7 +19,9 @@ export default function LoginPage() {
             unsafe_disableDevelopmentModeWarnings: true,
           },
         }}
-      />
+      /> */}
+
+      <SignIn />
     </main>
   );
 }
