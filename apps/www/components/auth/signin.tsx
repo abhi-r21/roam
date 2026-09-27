@@ -1,25 +1,33 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { useState } from "react";
+
+import { InputOTP } from "@heroui/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
 import { FcGoogle } from "react-icons/fc";
 import { PiArrowBendDownLeftBold } from "react-icons/pi";
 import { TbMailFilled, TbSquareRoundedChevronLeftFilled } from "react-icons/tb";
 
-import { useState } from "react";
-import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { InputOTP } from '@heroui/react';
-import Link from "next/link";
-import { ClerkError } from "@clerk/shared/errors/clerkError";
+import { useAuth, useSignIn, useSignUp } from "@clerk/nextjs";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
+
 
 export function SignIn() {
     const router = useRouter();
-
+    const { isSignedIn } = useAuth();
     const [showEmail, setShowEmail] = useState(false);
     const [showDefault, setSetShowDefault] = useState(true);
+
+
+    if (isSignedIn) {
+        router.push("/ask")
+        return
+    }
 
     const onBack = (cb: (v: boolean) => void) => {
         cb(false);
@@ -46,7 +54,8 @@ export function SignIn() {
                 )}
             >
                 {showDefault && (
-                    <div className="flex flex-col gap-0.5 tracking-tight">
+                    <div
+                    className="flex flex-col gap-0.5 tracking-tight">
                         <h1 className="text-sm font-medium">Welcome to Roam!</h1>
                         <h2 className="text-sm text-muted-foreground font-normal">
                             Roam is a 24/7 travel executive that works for your company.
@@ -96,28 +105,93 @@ export function SignIn() {
 }
 
 function EmailForm({ onBack }: { onBack: () => void }) {
-    const { signIn, errors, fetchStatus } = useSignIn();
-
+    const router = useRouter();
+    const {
+        signIn,
+        errors: signInErrors,
+        fetchStatus: signInFetchStatus,
+    } = useSignIn();
+    const {
+        signUp,
+        errors: signUpErrors,
+        fetchStatus: signUpFetchStatus,
+    } = useSignUp();
 
     const [showVerifyCode, setShowVerifyCode] = useState<boolean>(false);
+    const [emailCode, setEmailCode] = useState<string>("");
     const [emailAddress, setEmailAddress] = useState<string>("");
+    const [isNewUser, setIsNewUser] = useState<boolean>(false);
 
+    const busy =
+        signInFetchStatus === "fetching" || signUpFetchStatus === "fetching";
+    const activeErrors = isNewUser ? signUpErrors : signInErrors;
+
+    const goToApp = ({ session, decorateUrl }: any) => {
+        if (session?.currentTask) return; // route to a task screen here if you use session tasks
+        const url = decorateUrl("/");
+        url.startsWith("http") ? (window.location.href = url) : router.push(url);
+    };
 
     const handleSendCode = async () => {
-        if(!emailAddress) {
-            return
+        if (!emailAddress) {
+            return;
         }
 
-        const { error } = await signIn.create({ identifier: emailAddress })
-        if (error) {
-            // @ts-ignore
-            if (error?.errors?.[0].code === "form_identifier_not_found") {
-                signIn.create({
-                   
-                })
-            }
+        const { error } = await signIn.create({
+            identifier: emailAddress,
+        });
+
+        if (!error) {
+            await signIn.emailCode.sendCode();
+            setIsNewUser(false);
+            setShowVerifyCode(true);
+            return;
+        }
+
+        const noAccount =
+            isClerkAPIResponseError(error) &&
+            error.errors.some(({ code }) => code === "form_identifier_not_found");
+
+        if (!noAccount) {
+            console.error(error);
+            return;
+        }
+
+        const { error: signUpError } = await signUp.create({ emailAddress });
+        if (signUpError) {
+            console.error(signUpError);
+            return;
+        }
+
+        await signUp.verifications.sendEmailCode();
+        setIsNewUser(true);
+        setShowVerifyCode(true);
+    };
+
+    const handleVerifyCode = async () => {
+        if (!emailCode) {
+            return;
+        }
+
+        if (isNewUser) {
+            const { error } = await signUp.verifications.verifyEmailCode({
+                code: emailCode,
+            });
+            if (error) return console.error(error);
+            if (signUp.status === "complete")
+                await signUp.finalize({ navigate: goToApp });
+        } else {
+            const { error } = await signIn.emailCode.verifyCode({ code: emailCode });
+            if (error) return console.error(error);
+            if (signIn.status === "complete")
+                await signIn.finalize({ navigate: goToApp });
         }
     };
+
+    const handleResend = () =>
+        isNewUser
+            ? signUp.verifications.sendEmailCode()
+            : signIn.emailCode.sendCode();
 
     return (
         <div
@@ -134,12 +208,19 @@ function EmailForm({ onBack }: { onBack: () => void }) {
                     </h2>
 
                     <div className="mt-6 ml-3 flex-1 w-full">
-                        <InputOTP maxLength={4} className="font-mono" variant="secondary">
+                        <InputOTP
+                            maxLength={6}
+                            className="font-mono"
+                            variant="primary"
+                            onChange={setEmailCode}
+                        >
                             <InputOTP.Group>
                                 <InputOTP.Slot index={0} />
                                 <InputOTP.Slot index={1} />
                                 <InputOTP.Slot index={2} />
                                 <InputOTP.Slot index={3} />
+                                <InputOTP.Slot index={4} />
+                                <InputOTP.Slot index={5} />
                             </InputOTP.Group>
                         </InputOTP>
                     </div>
@@ -154,19 +235,13 @@ function EmailForm({ onBack }: { onBack: () => void }) {
                             Back
                         </Button>
                         <div className="flex items-center gap-2">
-                        <Button
-                            size={"sm"}
-                            variant={"outline"}
+                            <Button size={"sm"} variant={"outline"} onClick={handleResend}>
+                                Resend
+                            </Button>
 
-                        >
-                            Resend
-                        </Button>
-
-                        <Button
-                            size={"sm"}
-                        >
-                            Verify Code
-                        </Button>
+                            <Button size={"sm"} onClick={handleVerifyCode} disabled={busy}>
+                                {busy ? <Spinner /> : "Verify Code"}
+                            </Button>
                         </div>
                     </div>
                 </>
@@ -201,54 +276,26 @@ function EmailForm({ onBack }: { onBack: () => void }) {
                             size={"sm"}
                             variant={"outline"}
                             onClick={handleSendCode}
-                            className={cn("justify-start! flex-1")}
+                            className={cn(
+                                "flex-1",
+                                busy && "justify-start!"
+                            )}
+                            disabled={busy}
                         >
-                            Send code
+                            {busy ? <Spinner /> : "Send code"}
                         </Button>
                     </div>
                 </>
             )}
+            <div id="clerk-captcha" />
         </div>
     );
 }
 
-function VerifyEmailVerificationCode({ onBack }: { onBack: () => void }) {
-    return (
-        <div
-            className={cn(
-                "flex flex-col gap-0.5 tracking-tight w-full relative max-h-42 min-h-43",
-            )}
-        >
-            <h1 className="text-sm font-medium">Enter your email</h1>
-            <h2 className="text-sm text-muted-foreground font-normal">
-                We'll send a verification code to your email.
-            </h2>
-
-            <div className="mt-6 ml-3 flex-1">
-                <Input
-                    type="email"
-                    placeholder="yuvan@roam.com"
-                    className={cn("bg-transparent! border-none focus:ring-0!")}
-                />
-            </div>
-
-            <div className="flex items-center gap-2">
-                <Button
-                    size={"sm"}
-                    variant={"outline"}
-                    onClick={onBack}
-                    className={cn("bg-blue-800! border border-blue-700!")}
-                >
-                    Back
-                </Button>
-                <Button
-                    size={"sm"}
-                    variant={"outline"}
-                    className={cn("justify-start! flex-1")}
-                >
-                    Verfiy Code
-                </Button>
-            </div>
-        </div>
-    );
-}
+/**
+ * TODOS:
+ * 1. Display active errors
+ * 2. Handle other edge cases as well
+ * 3. Show proper loading states
+ * 4. Implement resend timer
+ */
