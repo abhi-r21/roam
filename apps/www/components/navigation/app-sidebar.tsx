@@ -21,7 +21,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { ProfileDropdown } from "./profile-dropdown";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 type SubItem = {
   icon: LucideIcon;
@@ -52,7 +52,7 @@ function ActiveDot() {
   return (
     <motion.div
       layoutId="active-tab-dot"
-      className="absolute right-3.5 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-pink-500"
+      className="absolute right-3.5 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-blue-500"
       transition={{ type: "spring", stiffness: 500, damping: 35 }}
     />
   );
@@ -62,7 +62,11 @@ export function AppSidebar() {
   const router = useRouter();
   const pathName = usePathname();
   const { user } = useUser();
+
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+
+  const handleMouseLeave = useCallback(() => setHoveredItem(null), []);
 
   const toggleExpanded = (label: string) => {
     setExpandedItems((prev) => ({ ...prev, [label]: !prev[label] }));
@@ -76,17 +80,17 @@ export function AppSidebar() {
     <Sidebar variant="inset" className="bg-background select-none">
       <SidebarHeader className="bg-background">
         <div className={cn("flex items-center justify-between")}>
-          <div className="flex items-center gap-1">
-            <TbNavigationFilled size={17} />
+          <div className="flex items-center gap-0.5">
+            <TbNavigationFilled size={16} />
             <div className={cn("flex flex-col")}>
-              <h1 className="text-[14px] font-medium tracking-tight">Roam</h1>
+              <h1 className="text-[15.5px] font-medium tracking-tight font-gp">Roam</h1>
             </div>
           </div>
           <SidebarTrigger />
         </div>
       </SidebarHeader>
       <SidebarContent className="bg-background">
-        <SidebarGroup>
+        <SidebarGroup onMouseLeave={handleMouseLeave}>
           <SidebarGroupLabel>Interaction</SidebarGroupLabel>
           {INTERACTION_GROUP_ITEMS.map((item) => {
             const { icon: Icon, label, route, subItems } = item;
@@ -95,35 +99,48 @@ export function AppSidebar() {
             const isActive = pathName === route && !isSubItemActive(item);
 
             return (
-              <SidebarMenuItem key={label} className="relative">
-                <SidebarMenuButton
-                  onClick={() => {
-                    if (hasSubItems) {
-                      toggleExpanded(label);
-                    } else {
-                      router.push(route);
-                    }
-                  }}
-                  className={cn(
-                    "relative hover:bg-neutral-100 dark:hover:bg-neutral-900 cursor-pointer",
-                    isActive || isSubItemActive(item)
-                      ? "text-foreground"
-                      : "text-neutral-500"
-                  )}
-                >
-                  <Icon />
-                  {label}
-                  {hasSubItems && (
+              <SidebarMenuItem
+                key={label}
+                className="relative"
+              >
+                <div className="relative" onMouseEnter={() => setHoveredItem(label)}>
+                  {hoveredItem === label && (
                     <motion.div
-                      className="ml-auto"
-                      animate={{ rotate: isExpanded ? 90 : 0 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    >
-                      <ChevronRight className="h-4 w-4" />
-                    </motion.div>
+                      layoutId="sidebar-hover-bg"
+                      className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
+                      transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                      style={{ zIndex: 0 }}
+                    />
                   )}
-                  {isActive && <ActiveDot />}
-                </SidebarMenuButton>
+                  <SidebarMenuButton
+                    onClick={() => {
+                      if (hasSubItems) {
+                        toggleExpanded(label);
+                      } else {
+                        router.push(route);
+                      }
+                    }}
+                    className={cn(
+                      "relative z-[1] cursor-pointer hover:bg-transparent! active:bg-transparent!",
+                      isActive || isSubItemActive(item)
+                        ? "text-foreground"
+                        : "text-neutral-500"
+                    )}
+                  >
+                    <Icon />
+                    {label}
+                    {hasSubItems && (
+                      <motion.div
+                        className="ml-auto"
+                        animate={{ rotate: isExpanded ? 90 : 0 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </motion.div>
+                    )}
+                    {isActive && <ActiveDot />}
+                  </SidebarMenuButton>
+                </div>
 
                 {/* Collapsible sub-items */}
                 {hasSubItems && (
@@ -145,21 +162,31 @@ export function AppSidebar() {
                                 key={sub.label}
                                 className="relative"
                               >
-                                <SidebarMenuSubButton
-                                  onClick={() => router.push(sub.route)}
-                                  className={cn(
-                                    "cursor-pointer relative hover:bg-neutral-100 dark:hover:bg-neutral-900",
-                                    isSubActive
-                                      ? "text-foreground"
-                                      : "text-neutral-500"
+                                <div className="relative" onMouseEnter={() => setHoveredItem(`sub-${sub.label}`)}>
+                                  {hoveredItem === `sub-${sub.label}` && (
+                                    <motion.div
+                                      layoutId="sidebar-hover-bg"
+                                      className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
+                                      transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                                      style={{ zIndex: 0 }}
+                                    />
                                   )}
-                                >
-                                  <SubIcon className={isSubActive
-                                    ? "text-foreground"
-                                    : "text-neutral-500!"} />
-                                  {sub.label}
-                                  {isSubActive && <ActiveDot />}
-                                </SidebarMenuSubButton>
+                                  <SidebarMenuSubButton
+                                    onClick={() => router.push(sub.route)}
+                                    className={cn(
+                                      "cursor-pointer relative z-[1] hover:bg-transparent! active:bg-transparent! hover:text-current! [&>svg]:text-current!",
+                                      isSubActive
+                                        ? "text-foreground"
+                                        : "text-neutral-500"
+                                    )}
+                                  >
+                                    <SubIcon className={isSubActive
+                                      ? "text-foreground"
+                                      : "text-neutral-500!"} />
+                                    {sub.label}
+                                    {isSubActive && <ActiveDot />}
+                                  </SidebarMenuSubButton>
+                                </div>
                               </SidebarMenuSubItem>
                             );
                           })}

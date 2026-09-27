@@ -68,7 +68,7 @@ export function AgentInput() {
               "resize-none p-0! my-auto",
               "min-h-[20px] leading-5",
               "placeholder:text-neutral-500",
-              "rounded-none! caret-pink-500",
+              "rounded-none! caret-blue-500",
             )}
           />
 
@@ -89,7 +89,7 @@ export function AgentInput() {
               variant={hasInput ? "default" : "ghost"}
               disabled={!hasInput}
               className={cn(
-                "rounded-[12px] size-7 shrink-0 ml-1.5 mb-px px-4 bg-pink-500 border-pink-400 hover:bg-pink-500/90 text-white",
+                "rounded-[12px] size-7 shrink-0 ml-1.5 mb-px px-4 bg-blue-500 border-blue-400 text-white",
                 "transition-opacity",
                 !hasInput && "opacity-0 pointer-events-none w-0 ml-0",
               )}

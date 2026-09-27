@@ -1,13 +1,13 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useMemo, useRef, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 
 import { AnimatePresence, motion } from "motion/react";
 
 import { FcGoogle } from "react-icons/fc";
-import { Ellipsis, Plus } from "lucide-react";
+import { AppleIcon, Ellipsis, Loader, Mail, Plus } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -20,15 +20,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { TbBrandGithub } from "react-icons/tb";
+
+const EXTERNAL_ACCOUNTS_ICON = {
+  google: FcGoogle,
+  apple: AppleIcon,
+  github: TbBrandGithub
+}
 
 export function Profile() {
   const { user } = useUser();
   const [showEditAvatar, setShowEditAvatar] = useState(false);
   const [showEditUsername, setShowEditUsername] = useState(false);
 
+  const userImage = useMemo(() => user?.imageUrl, [user])
+
   const handleUpdateAvatar = () => {
     setShowEditAvatar((p) => !p);
   };
+
 
   const handleEditUsername = () => {
     setShowEditUsername((p) => !p);
@@ -41,69 +51,69 @@ export function Profile() {
       </div>
       <Separator />
       {/* Main Area */}
-      <div className="overflow-scroll flex-1 flex flex-col items-center w-full pt-10 gap-16 max-w-7xl mx-auto">
+      <div className="overflow-scroll flex-1 flex flex-col items-center w-full pt-16 gap-14 max-w-6xl mx-auto px-10">
         {/* Avatar Section */}
-        <AnimatePresence>
-          {showEditAvatar ? (
-            <EditAvatar onCancel={handleUpdateAvatar} />
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{
-                duration: 0.3,
-                ease: "linear",
-              }}
-              className="w-full"
-            >
-              <h2 className="text-xs uppercase font-medium tracking-normal mb-3 text-muted-foreground">
-                AVATAR
-              </h2>
-              <div className="w-full flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <img
-                    src={user?.imageUrl}
-                    className="w-12 h-12 rounded-full"
-                  />
-                  <div className="flex flex-col text-sm tracking-tight text-neutral-400">
-                    <p>This is your avatar.</p>
-                    <p>Upload a custom avatar from your files.</p>
-                  </div>
-                </div>
-                <Button
-                  size={"xs"}
-                  variant={"ghost"}
-                  onClick={handleUpdateAvatar}
+        <div className="w-full">
+          <h2 className="text-xs uppercase font-medium tracking-normal mb-3 text-muted-foreground">
+            AVATAR
+          </h2>
+          <div className="w-full flex items-start gap-4">
+            <AnimatePresence mode="wait">
+              {showEditAvatar ? (
+                <motion.div
+                  key="edit-avatar"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="flex-1"
                 >
-                  Update
-                </Button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  <EditAvatar onCancel={handleUpdateAvatar} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="view-avatar"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="flex-1 flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={userImage}
+                      className="w-12 h-12 rounded-full object-cover object-top shrink-0"
+                    />
+                    <div className="flex flex-col text-[13.5px] tracking-tight text-neutral-500 dark:text-neutral-400">
+                      <p>This is your avatar.</p>
+                      <p>Upload a custom avatar from your files.</p>
+                    </div>
+                  </div>
+                  <Button
+                    size={"xs"}
+                    onClick={handleUpdateAvatar}
+                  >
+                    Update
+                  </Button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
 
+        <Separator className={"bg-neutral-200 dark:bg-neutral-900"}/>
         {/* Username section  */}
         <div className="w-full">
           <h2 className="text-xs uppercase font-medium tracking-normal mb-3 text-muted-foreground">
             username
           </h2>
-          {showEditUsername ? (
+          <div
+          >
             <EditUsername onCancel={handleEditUsername} />
-          ) : (
-            <div className="w-full flex items-center justify-between">
-              <p className="text-sm">{user?.username ?? "No username"}</p>
-              <Button
-                size={"xs"}
-                variant={"ghost"}
-                onClick={handleEditUsername}
-              >
-                Edit
-              </Button>
-            </div>
-          )}
+          </div>
         </div>
 
+        <Separator className={"bg-neutral-200 dark:bg-neutral-900"}/>
         {/* Email Addresses Section */}
         <div className="w-full flex flex-col">
           <h2 className="text-xs uppercase font-medium tracking-normal mb-3 text-muted-foreground">
@@ -116,7 +126,7 @@ export function Profile() {
                   <p className="text-sm">
                     {user.primaryEmailAddress?.emailAddress}
                   </p>
-                  <Badge variant={"secondary"} className="text-xs">
+                  <Badge variant={"lime"} className="text-xs">
                     Primary
                   </Badge>
                 </div>
@@ -137,13 +147,11 @@ export function Profile() {
                 <Plus />
                 <p>Add email address</p>
               </Button>
-              <Badge variant={"destructive"} className="text-[11px]">
-                Coming soon
-              </Badge>
+
             </div>
           </div>
         </div>
-
+        <Separator className={"bg-neutral-200 dark:bg-neutral-900"}/>
         {/*  Phone Number Section */}
         <div className="w-full flex flex-col">
           <h2 className="text-xs uppercase font-medium tracking-normal mb-3 text-muted-foreground">
@@ -168,13 +176,10 @@ export function Profile() {
                 <Plus />
                 <p>Add phone number</p>
               </Button>
-              <Badge variant={"destructive"} className="text-[11px]">
-                Coming soon
-              </Badge>
             </div>
           </div>
         </div>
-
+        <Separator className={"bg-neutral-200 dark:bg-neutral-900"}/>
         {/* Connected Accounts  */}
         <div className="w-full">
           <h2 className="text-xs uppercase font-medium tracking-normal mb-3 text-muted-foreground">
@@ -209,19 +214,19 @@ interface EditProps {
 interface EditAvatarProps extends EditProps { }
 interface EditUserNameProps extends EditProps { }
 
-function EditAvatar(props: EditAvatarProps) {
+function EditAvatar({ onCancel }: EditAvatarProps) {
   const { user } = useUser();
-  const [profileImage, setProfileImage] = useState<string | Blob | File | null>(
-    null,
-  );
+
+  const [profileImage, setProfileImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [uploading, setuploading] = useState<boolean>(false);
+  const [removing, setRemoving] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleOnUpload = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+    fileInputRef.current?.click();
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -229,8 +234,13 @@ function EditAvatar(props: EditAvatarProps) {
 
     if (!file) return;
 
-    if (file.size > 1024 * 1024 * 10) {
+    if (file.size > 10 * 1024 * 1024) {
       return;
+    }
+
+    // Clean up previous preview URL
+    if (previewImage) {
+      URL.revokeObjectURL(previewImage);
     }
 
     setProfileImage(file);
@@ -238,125 +248,169 @@ function EditAvatar(props: EditAvatarProps) {
   };
 
   const handleSave = async () => {
-    if (user) {
-      await user.setProfileImage({ file: profileImage });
+    if (!user || !profileImage) return;
+    setuploading(true)
+
+    await user.setProfileImage({
+      file: profileImage,
+    });
+
+    // Clear local preview after Clerk has updated the image
+    if (previewImage) {
+      URL.revokeObjectURL(previewImage);
     }
+
+    setProfileImage(null);
+    setPreviewImage(null);
+
+    setuploading(false)
+    onCancel();
   };
 
-  // TODO: should also remove the image from clerk.
-  const handleOnRemove = () => {
-    if (previewImage || profileImage) {
-      setPreviewImage(null);
-      setProfileImage(null);
+  const handleOnRemove = async () => {
+    setRemoving(true)
+    if (previewImage) {
+      URL.revokeObjectURL(previewImage);
     }
+
+    setProfileImage(null);
+    setPreviewImage(null);
+
+    if (user?.hasImage) {
+      await user.setProfileImage({
+        file: null,
+      });
+    }
+    setRemoving(false)
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{
-        duration: 0.3,
-        ease: "linear",
-      }}
-      className="flex flex-col gap-1.5 w-full"
-    >
-      <h2 className="text-xs uppercase font-medium tracking-normal mb-2 text-muted-foreground">
-        AVATAR
-      </h2>
-      <div className={cn("w-full flex items-end justify-between")}>
-        <div className="flex items-center gap-4">
-          <img
-            src={previewImage ?? user?.imageUrl}
-            className="w-12 h-12 rounded-full object-cover object-top"
-          />
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2">
-              <>
-                <Button
-                  size={"xs"}
-                  variant={"outline"}
-                  onClick={handleOnUpload}
-                >
-                  Upload
-                </Button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-              </>
-              <Button
-                size={"xs"}
-                variant={"destructive"}
-                onClick={handleOnRemove}
-                disabled={!user?.hasImage && !profileImage}
-              >
-                Remove
-              </Button>
-            </div>
+    <div className="flex items-start justify-between w-full">
+      <div className="flex items-center gap-4">
+        {/* Image preview */}
+        <img
+          src={previewImage ?? user?.imageUrl}
+          alt="Profile"
+          className="w-12 h-12 rounded-full object-cover object-top shrink-0"
+        />
 
-            <p className="text-xs text-muted-foreground tracking-tight">
-              Recommended size 1:1, up to 10MB.
-            </p>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <Button
+              size="xs"
+              variant="outline"
+              onClick={handleOnUpload}
+            >
+              Upload
+            </Button>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+
+            <Button
+              size="xs"
+              variant="destructive"
+              onClick={handleOnRemove}
+              disabled={!user?.hasImage && !profileImage}
+            >
+              {removing ? <Loader className="animate-spin" /> : "Remove"}
+            </Button>
           </div>
-        </div>
 
-        <div className="flex items-center gap-2">
-          <Button size={"xs"} variant={"outline"} onClick={props.onCancel}>
-            Cancel
-          </Button>
-          <Button size={"xs"} onClick={handleSave}>
-            Save
-          </Button>
+          <p className="text-xs text-muted-foreground tracking-tight">
+            Recommended size 1:1, up to 10MB.
+          </p>
         </div>
       </div>
-    </motion.div>
+
+      <div className="flex items-center gap-2">
+        <Button
+          size="xs"
+          variant="outline"
+          onClick={onCancel}
+        >
+          Cancel
+        </Button>
+
+        <Button
+          size="xs"
+          onClick={handleSave}
+          disabled={!profileImage}
+        >
+          {uploading ? <Loader className="animate-spin" /> : "Save"}
+        </Button>
+      </div>
+    </div>
   );
 }
 
-function EditUsername(props: EditUserNameProps) {
+function EditUsername({ onCancel }: EditUserNameProps) {
   const { user } = useUser();
-  const [username, setUsername] = useState<string>("");
+  const [username, setUsername] = useState<string>(user?.username ?? "");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSave = async () => {
-    if (!username) {
-      return;
-    }
+    try {
+      if (!username) {
+        return;
+      }
+      setLoading(true)
 
-    await user?.updateMetadata({
-      unsafeMetadata: {
-        username,
-      },
-    });
+      await user?.update({
+        username: username.trim().toLowerCase()
+      });
+    } catch (error) {
+      console.log("error", error);
+      setError("Failed to update username");
+    } finally {
+      setLoading(false)
+      onCancel()
+    }
   };
 
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
+
     setUsername(event.target.value);
   };
 
   return (
     <div className={cn("flex items-center justify-between")}>
-      <div className="flex items-center rounded-lg border border-neutral-100 dark:border-neutral-800 overflow-hidden">
+      <div className="flex items-center rounded-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden">
         <p className="text-sm text-muted-foreground px-4">heyroam.xyz/</p>
         <Separator orientation="vertical" />
         <Input
           placeholder="bob"
           className={cn("border-none focus:ring-0! rounded-none")}
           onChange={handleUsernameChange}
+          value={username}
         />
       </div>
 
       <div className="flex items-center gap-1.5">
-        <Button size={"xs"} variant={"ghost"} onClick={props.onCancel}>
-          Cancel
-        </Button>
+        <AnimatePresence>
+          {username && <motion.div
+            initial={{ filter: "blur(5px)" }}
+            animate={{ filter: "blur(0px)" }}
+            exit={{ filter: "blur(5px)" }}
+            transition={{
+              duration: 0.1,
+              ease: "easeIn"
+            }}
+          >
+            <Button size={"xs"} variant={"ghost"} onClick={onCancel} disabled={loading}>
+              Cancel
+            </Button>
+          </motion.div>}
+        </AnimatePresence>
 
-        <Button size={"xs"} onClick={handleSave}>
-          Save
+        <Button size={"xs"} onClick={handleSave} disabled={!username || loading}>
+          {loading ? <Loader className="animate-spin"/> : "Save"}
         </Button>
       </div>
     </div>

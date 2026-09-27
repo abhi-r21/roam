@@ -25,6 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useState, useCallback } from "react";
 
 
 const FOOTER_ITEMS = [
@@ -38,12 +39,15 @@ const FOOTER_ITEMS = [
 export function ProfileDropdown() {
   const router = useRouter();
   const { user, isSignedIn } = useUser();
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+
+  const handleMouseLeave = useCallback(() => setHoveredItem(null), []);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <div className="flex items-center justify-between gap-1.5 cursor-pointer">
-          <img src={"/shader.png"} className="w-4 h-4 rounded-full"/>
+          <div  className="w-4 h-4 rounded-full bg-blue-500"/>
           <div className="text-[13px]">
             {user?.emailAddresses[0].emailAddress.split("@")[0]}
           </div>
@@ -56,24 +60,36 @@ export function ProfileDropdown() {
         className={cn(
           "min-w-68 bg-background border border-neutral-100 dark:border-neutral-900 shadow-none! rounded-2xl",
         )}
+        onMouseLeave={handleMouseLeave}
       >
         <DropdownMenuGroup>
           <DropdownMenuItem
+            onMouseEnter={() => setHoveredItem("profile-header")}
             onClick={() => router.push("/account/profile")}
             className={cn(
               "flex items-center justify-between py-3 text-[13px] cursor-pointer rounded-lg",
-              "hover:bg-neutral-900! [&:focus:not(:hover)]:bg-transparent!",
+              "focus:bg-transparent! group relative",
             )}
           >
-            <div className="flex flex-col">
-              <p>yuvan</p>
-              <p className="text-neutral-500">
-                {user?.emailAddresses[0].emailAddress}
-              </p>
-            </div>
-            <Button size={"icon-xs"} variant={"ghost"}>
-              <Cog />
-            </Button>
+            {hoveredItem === "profile-header" && (
+              <motion.div
+                layoutId="dropdown-hover-bg"
+                className="absolute inset-0 rounded-lg bg-neutral-100 dark:bg-neutral-900"
+                transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                style={{ zIndex: 0 }}
+              />
+            )}
+            <span className="relative z-[1] flex items-center justify-between w-full">
+              <div className="flex flex-col">
+                <p>yuvan</p>
+                <p className="text-neutral-500">
+                  {user?.emailAddresses[0].emailAddress}
+                </p>
+              </div>
+              <Button size={"icon-xs"} variant={"ghost"}>
+                <Cog />
+              </Button>
+            </span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
@@ -84,11 +100,22 @@ export function ProfileDropdown() {
             return (
               <DropdownMenuItem
                 key={item.name}
+                onMouseEnter={() => setHoveredItem(item.name)}
                 onClick={() => router.push(item.route)}
-                className="text-sm hover:bg-neutral-100 dark:hover:bg-neutral-900"
+                className="text-sm relative focus:bg-transparent!"
               >
-                <Icon className="text-neutral-400" />
-                {item.name}
+                {hoveredItem === item.name && (
+                  <motion.div
+                    layoutId="dropdown-hover-bg"
+                    className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
+                    transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                    style={{ zIndex: 0 }}
+                  />
+                )}
+                <span className="relative z-1 flex items-center gap-1.5 w-full">
+                  <Icon className="text-neutral-400" />
+                  {item.name}
+                </span>
               </DropdownMenuItem>
             );
           })}
@@ -96,23 +123,45 @@ export function ProfileDropdown() {
 
         <DropdownMenuGroup className="space-y-1">
           <DropdownMenuItem
+            onMouseEnter={() => setHoveredItem("theme")}
             className={cn(
-              "text-sm flex items-center justify-between hover:bg-neutral-100 dark:hover:bg-neutral-900",
+              "text-sm flex items-center justify-between relative focus:bg-transparent!",
             )}
             onSelect={(e) => e.preventDefault()}
           >
-            <SelectTheme />
+            {hoveredItem === "theme" && (
+              <motion.div
+                layoutId="dropdown-hover-bg"
+                className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
+                transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                style={{ zIndex: 0 }}
+              />
+            )}
+            <span className="relative z-[1] flex items-center justify-between w-full">
+              <SelectTheme />
+            </span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="text-sm hover:bg-neutral-100 dark:hover:bg-neutral-900"
+            onMouseEnter={() => setHoveredItem("signout")}
+            className="text-sm relative focus:bg-transparent!"
             onClick={() => {}}
           >
-            {isSignedIn && (
-              <>
-                <LogOut className="text-neutral-400" />
-                <SignOutButton />
-              </>
+            {hoveredItem === "signout" && (
+              <motion.div
+                layoutId="dropdown-hover-bg"
+                className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
+                transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                style={{ zIndex: 0 }}
+              />
             )}
+            <span className="relative z-[1] flex items-center gap-1.5 w-full">
+              {isSignedIn && (
+                <>
+                  <LogOut className="text-neutral-400" />
+                  <SignOutButton />
+                </>
+              )}
+            </span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

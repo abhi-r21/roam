@@ -41,7 +41,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${facultyGlyphic.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-background selection:bg-pink-950 selection:text-pink-500">
+      <body className="min-h-full flex flex-col bg-background selection:bg-blue-200 dark:selection:bg-blue-950 selection:text-blue-500">
         <ClerkProvider
           localization={localization}
           appearance={{
