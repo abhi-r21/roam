@@ -43,6 +43,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-neutral-100 dark:bg-neutral-950 selection:bg-blue-200 dark:selection:bg-blue-950 selection:text-blue-500">
         <ClerkProvider
+          taskUrls={{
+            'choose-organization': '/choose-organization'
+          }}
           localization={localization}
           appearance={{
             theme: shadcn,

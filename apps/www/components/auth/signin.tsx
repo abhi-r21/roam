@@ -159,7 +159,10 @@ function EmailForm({ onBack }: { onBack: () => void }) {
         signInFetchStatus === "fetching" || signUpFetchStatus === "fetching";
 
     const goToApp = ({ session, decorateUrl }: any) => {
-        // if (session?.currentTask) return; // route to a task screen here if you use session tasks
+        if (session?.currentTask) {
+            console.log(session?.currentTask);
+            return
+        }
         const url = decorateUrl("/");
         url.startsWith("http") ? (window.location.href = url) : router.push(url);
     };
@@ -349,6 +352,7 @@ function EmailForm({ onBack }: { onBack: () => void }) {
 
                     <div className="mt-6 ml-3 flex-1 w-full flex flex-col">
                         <InputOTP
+                            autoFocus
                             maxLength={6}
                             className="font-mono"
                             variant="primary"
@@ -442,6 +446,7 @@ function EmailForm({ onBack }: { onBack: () => void }) {
                     <div className="mt-6 ml-3 flex-1 flex flex-col gap-1">
                         <Input
                             required
+                            autoFocus
                             type="email"
                             placeholder="yuvan@roam.com"
                             value={emailAddress}
