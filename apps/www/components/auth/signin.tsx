@@ -1,7 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 
 import { InputOTP } from "@heroui/react";
 import { Input } from "@/components/ui/input";
@@ -15,7 +16,7 @@ import { TbMailFilled, TbSquareRoundedChevronLeftFilled } from "react-icons/tb";
 import { useRouter } from "next/navigation";
 import { useAuth, useSignIn, useSignUp } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
-
+import { isValidEmail } from "@/utils/validate-email";
 
 export function SignIn() {
     const router = useRouter();
@@ -23,10 +24,9 @@ export function SignIn() {
     const [showEmail, setShowEmail] = useState(false);
     const [showDefault, setSetShowDefault] = useState(true);
 
-
     if (isSignedIn) {
-        router.push("/ask")
-        return
+        router.push("/ask");
+        return;
     }
 
     const onBack = (cb: (v: boolean) => void) => {
@@ -54,8 +54,7 @@ export function SignIn() {
                 )}
             >
                 {showDefault && (
-                    <div
-                    className="flex flex-col gap-0.5 tracking-tight">
+                    <div className="flex flex-col gap-0.5 tracking-tight">
                         <h1 className="text-sm font-medium">Welcome to Roam!</h1>
                         <h2 className="text-sm text-muted-foreground font-normal">
                             Roam is a 24/7 travel executive that works for your company.
@@ -121,20 +120,29 @@ function EmailForm({ onBack }: { onBack: () => void }) {
     const [emailCode, setEmailCode] = useState<string>("");
     const [emailAddress, setEmailAddress] = useState<string>("");
     const [isNewUser, setIsNewUser] = useState<boolean>(false);
+    const [customError, setCustomError] = useState<string | null>(null);
 
     const busy =
         signInFetchStatus === "fetching" || signUpFetchStatus === "fetching";
-    const activeErrors = isNewUser ? signUpErrors : signInErrors;
 
     const goToApp = ({ session, decorateUrl }: any) => {
-        if (session?.currentTask) return; // route to a task screen here if you use session tasks
+        // if (session?.currentTask) return; // route to a task screen here if you use session tasks
         const url = decorateUrl("/");
         url.startsWith("http") ? (window.location.href = url) : router.push(url);
     };
 
     const handleSendCode = async () => {
-        if (!emailAddress) {
+        if (!emailAddress.trim()) {
+            setEmailAddress("");
+            setCustomError("Please enter your email.");
             return;
+        }
+
+        // validate the email
+        if (!isValidEmail(emailAddress.trim())) {
+            setCustomError("Please enter a valid email address.")
+            setEmailAddress("")
+            return
         }
 
         const { error } = await signIn.create({
@@ -142,7 +150,13 @@ function EmailForm({ onBack }: { onBack: () => void }) {
         });
 
         if (!error) {
-            await signIn.emailCode.sendCode();
+            // handle sending code errors
+            const { error: signInCodeError } = await signIn.emailCode.sendCode();
+            if (signInCodeError) {
+                setCustomError(signInCodeError.message)
+                return
+            }
+
             setIsNewUser(false);
             setShowVerifyCode(true);
             return;
@@ -153,23 +167,35 @@ function EmailForm({ onBack }: { onBack: () => void }) {
             error.errors.some(({ code }) => code === "form_identifier_not_found");
 
         if (!noAccount) {
+            // handle the other error edge cases here.
             console.error(error);
+            setCustomError(error.message)
             return;
         }
 
         const { error: signUpError } = await signUp.create({ emailAddress });
+
+        // handle signup errors
         if (signUpError) {
             console.error(signUpError);
+            setCustomError(signUpError.message)
             return;
         }
 
-        await signUp.verifications.sendEmailCode();
+        // handle sending code errors
+        const { error: signUpCodeError } = await signUp.verifications.sendEmailCode();
+        if (signUpCodeError) {
+            setCustomError(signUpCodeError.message)
+            return
+        }
+
         setIsNewUser(true);
         setShowVerifyCode(true);
     };
 
     const handleVerifyCode = async () => {
         if (!emailCode) {
+            setCustomError("Please enter the code.")
             return;
         }
 
@@ -177,14 +203,45 @@ function EmailForm({ onBack }: { onBack: () => void }) {
             const { error } = await signUp.verifications.verifyEmailCode({
                 code: emailCode,
             });
-            if (error) return console.error(error);
-            if (signUp.status === "complete")
-                await signUp.finalize({ navigate: goToApp });
+
+            if (error) {
+                if (isClerkAPIResponseError(error)) {
+                    const errCode = error.errors[0].code
+
+                    if (errCode === "form_code_incorrect") {
+                        setCustomError("Incorrect code.")
+                        return
+                    } else if (errCode === "verification_code_expired") {
+                        setCustomError("Verification code expired.")
+                        return
+                    }
+                } else {
+                    console.error(error);
+                    return
+                }
+            }
+
+            if (signUp.status === "complete") await signUp.finalize({ navigate: goToApp });
         } else {
             const { error } = await signIn.emailCode.verifyCode({ code: emailCode });
-            if (error) return console.error(error);
-            if (signIn.status === "complete")
-                await signIn.finalize({ navigate: goToApp });
+            if (error) {
+                if (isClerkAPIResponseError(error)) {
+                    const errCode = error.errors[0].code
+
+                    if (errCode === "form_code_incorrect") {
+                        setCustomError("Incorrect code.")
+                        return
+                    } else if (errCode === "verification_code_expired") {
+                        setCustomError("Verification code expired.")
+                        return
+                    }
+                } else {
+                    console.error(error);
+                    return
+                }
+            }
+
+            if (signIn.status === "complete") await signIn.finalize({ navigate: goToApp });
         }
     };
 
@@ -192,6 +249,16 @@ function EmailForm({ onBack }: { onBack: () => void }) {
         isNewUser
             ? signUp.verifications.sendEmailCode()
             : signIn.emailCode.sendCode();
+
+    useEffect(() => {
+        if (!customError) return
+
+        const t = setTimeout(() => {
+            setCustomError(null);
+        }, 3000);
+
+        return () => clearTimeout(t);
+    }, [customError]);
 
     return (
         <div
@@ -207,7 +274,7 @@ function EmailForm({ onBack }: { onBack: () => void }) {
                         Enter the code sent to your email.
                     </h2>
 
-                    <div className="mt-6 ml-3 flex-1 w-full">
+                    <div className="mt-6 ml-3 flex-1 w-full flex flex-col">
                         <InputOTP
                             maxLength={6}
                             className="font-mono"
@@ -223,6 +290,21 @@ function EmailForm({ onBack }: { onBack: () => void }) {
                                 <InputOTP.Slot index={5} />
                             </InputOTP.Group>
                         </InputOTP>
+
+                        <AnimatePresence mode="wait">
+                            {customError && (
+                                <motion.p
+                                    key={customError}
+                                    initial={{ y: 5, opacity: 0, filter: "blur(10px)" }}
+                                    animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                                    exit={{ y: 5, opacity: 0, filter: "blur(10px)" }}
+                                    transition={{ duration: 0.2, ease: "easeIn" }}
+                                    className="text-[0.8rem] text-red-500 ml-auto"
+                                >
+                                    {customError}
+                                </motion.p>
+                            )}
+                        </AnimatePresence>
                     </div>
 
                     <div className="flex items-center justify-between gap-2">
@@ -253,14 +335,29 @@ function EmailForm({ onBack }: { onBack: () => void }) {
                         We'll send a verification code to your email.
                     </h2>
 
-                    <div className="mt-6 ml-3 flex-1">
+                    <div className="mt-6 ml-3 flex-1 flex flex-col gap-1">
                         <Input
                             required
                             type="email"
                             placeholder="yuvan@roam.com"
+                            value={emailAddress}
                             onChange={(e) => setEmailAddress(e.target.value)}
-                            className={cn("bg-transparent! border-none focus:ring-0!")}
+                            className={cn("bg-transparent! border-none focus:ring-0! p-0")}
                         />
+                        <AnimatePresence mode="wait">
+                            {customError && (
+                                <motion.p
+                                    key={customError}
+                                    initial={{ y: 5, opacity: 0, filter: "blur(10px)" }}
+                                    animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                                    exit={{ y: 5, opacity: 0, filter: "blur(10px)" }}
+                                    transition={{ duration: 0.2, ease: "easeIn" }}
+                                    className="text-[0.8rem] text-red-500 ml-auto"
+                                >
+                                    {customError}
+                                </motion.p>
+                            )}
+                        </AnimatePresence>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -276,10 +373,7 @@ function EmailForm({ onBack }: { onBack: () => void }) {
                             size={"sm"}
                             variant={"outline"}
                             onClick={handleSendCode}
-                            className={cn(
-                                "flex-1",
-                                busy && "justify-start!"
-                            )}
+                            className={cn("flex-1", !busy && "justify-start!")}
                             disabled={busy}
                         >
                             {busy ? <Spinner /> : "Send code"}
@@ -287,6 +381,7 @@ function EmailForm({ onBack }: { onBack: () => void }) {
                     </div>
                 </>
             )}
+
             <div id="clerk-captcha" />
         </div>
     );
