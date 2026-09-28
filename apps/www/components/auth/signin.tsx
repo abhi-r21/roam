@@ -21,6 +21,7 @@ import { isValidEmail } from "@/utils/validate-email";
 export function SignIn() {
     const router = useRouter();
     const { isSignedIn } = useAuth();
+    const { signIn } = useSignIn()
     const [showEmail, setShowEmail] = useState(false);
     const [showDefault, setSetShowDefault] = useState(true);
 
@@ -38,6 +39,18 @@ export function SignIn() {
         cb(false);
         setSetShowDefault(true);
     };
+
+    const handleSignInWithGoogle = async () => {
+        try {
+            await signIn.sso({
+                strategy: "oauth_google",
+                redirectCallbackUrl: "/sso-callback",
+                redirectUrl: "/ask",
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     useEffect(() => {
         if (!showDefault) return;
@@ -96,6 +109,7 @@ export function SignIn() {
                                 size={"sm"}
                                 variant={"outline"}
                                 className={cn("justify-start!")}
+                                onClick={handleSignInWithGoogle}
                             >
                                 <FcGoogle />
                                 Continue with Google
