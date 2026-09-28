@@ -354,7 +354,7 @@ function EmailForm({ onBack }: { onBack: () => void }) {
                   animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
                   exit={{ y: 5, opacity: 0, filter: "blur(10px)" }}
                   transition={{ duration: 0.2, ease: "easeIn" }}
-                  className="text-[0.8rem] text-green-500 ml-auto"
+                  className="text-[0.8rem] text-green-500 ml-auto pr-5"
                 >
                   {success}
                 </motion.p>
@@ -463,11 +463,3 @@ function EmailForm({ onBack }: { onBack: () => void }) {
     </div>
   );
 }
-
-/**
- * TODOS:
- * 1. Display active errors
- * 2. Handle other edge cases as well
- * 3. Show proper loading states
- * 4. Implement resend timer
- */
