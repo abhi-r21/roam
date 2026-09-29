@@ -20,15 +20,10 @@ import { isValidEmail } from "@/utils/validate-email";
 
 export function SignIn() {
     const router = useRouter();
-    const { isSignedIn } = useAuth();
+    const { isSignedIn, isLoaded } = useAuth();
     const { signIn } = useSignIn()
     const [showEmail, setShowEmail] = useState(false);
     const [showDefault, setSetShowDefault] = useState(true);
-
-    if (isSignedIn) {
-        router.push("/ask");
-        return;
-    }
 
     const goToEmail = () => {
         setSetShowDefault(false);
@@ -42,7 +37,7 @@ export function SignIn() {
 
     const handleSignInWithGoogle = async () => {
         try {
-            await signIn.sso({
+            await signIn?.sso({
                 strategy: "oauth_google",
                 redirectCallbackUrl: "/sso-callback",
                 redirectUrl: "/ask",
@@ -51,6 +46,12 @@ export function SignIn() {
             console.error(error);
         }
     }
+
+    useEffect(() => {
+        if (isSignedIn) {
+            router.push("/ask");
+        }
+    }, [isSignedIn, router]);
 
     useEffect(() => {
         if (!showDefault) return;
@@ -65,6 +66,10 @@ export function SignIn() {
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [showDefault]);
+
+    if(!isLoaded || isSignedIn) {
+        return <Spinner />
+    }
 
     return (
         <div

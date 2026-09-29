@@ -89,7 +89,7 @@ export function AgentInput() {
               variant={hasInput ? "default" : "ghost"}
               disabled={!hasInput}
               className={cn(
-                "rounded-[12px] size-7 shrink-0 ml-1.5 mb-px px-4 bg-blue-500 border-blue-400 text-white",
+                "rounded-[12px] size-7 shrink-0 ml-1.5 mb-px px-4 bg-blue-800 border-blue-700 text-white",
                 "transition-opacity",
                 !hasInput && "opacity-0 pointer-events-none w-0 ml-0",
               )}
