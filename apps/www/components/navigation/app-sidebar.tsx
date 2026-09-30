@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   Sidebar,
   SidebarContent,
@@ -14,7 +14,15 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { Bell, Cog, ChevronRight, MessagesCircle, ScrollText, type LucideIcon } from "lucide-react";
+import {
+  Bell,
+  Cog,
+  ChevronRight,
+  MessagesCircle,
+  ScrollText,
+  type LucideIcon,
+  Users,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { TbNavigationFilled } from "react-icons/tb";
 import { motion, AnimatePresence } from "motion/react";
@@ -38,13 +46,12 @@ type NavItem = {
 
 const INTERACTION_GROUP_ITEMS: NavItem[] = [
   { icon: MessagesCircle, label: "Ask", route: "/ask" },
+  { icon: Users, label: "Members", route: "/members" },
   {
     icon: Cog,
     label: "Settings",
     route: "/org/settings",
-    subItems: [
-      { icon: ScrollText, label: "Policy", route: "/org/policy" },
-    ],
+    subItems: [{ icon: ScrollText, label: "Policy", route: "/org/policy" }],
   },
 ];
 
@@ -63,7 +70,9 @@ export function AppSidebar() {
   const pathName = usePathname();
   const { user } = useUser();
 
-  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
+    {},
+  );
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const handleMouseLeave = useCallback(() => setHoveredItem(null), []);
@@ -83,7 +92,9 @@ export function AppSidebar() {
           <div className="flex items-center gap-0.5">
             <TbNavigationFilled size={16} />
             <div className={cn("flex flex-col")}>
-              <h1 className="text-[15.5px] font-medium tracking-tight font-gp">Roam</h1>
+              <h1 className="text-[15.5px] font-medium tracking-tight font-gp">
+                Roam
+              </h1>
             </div>
           </div>
           <SidebarTrigger />
@@ -99,16 +110,21 @@ export function AppSidebar() {
             const isActive = pathName === route && !isSubItemActive(item);
 
             return (
-              <SidebarMenuItem
-                key={label}
-                className="relative"
-              >
-                <div className="relative" onMouseEnter={() => setHoveredItem(label)}>
+              <SidebarMenuItem key={label} className="relative">
+                <div
+                  className="relative"
+                  onMouseEnter={() => setHoveredItem(label)}
+                >
                   {hoveredItem === label && (
                     <motion.div
                       layoutId="sidebar-hover-bg"
                       className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
-                      transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 35,
+                        mass: 0.8,
+                      }}
                       style={{ zIndex: 0 }}
                     />
                   )}
@@ -124,7 +140,7 @@ export function AppSidebar() {
                       "relative z-[1] cursor-pointer hover:bg-transparent! active:bg-transparent!",
                       isActive || isSubItemActive(item)
                         ? "text-foreground"
-                        : "text-neutral-500"
+                        : "text-neutral-500",
                     )}
                   >
                     <Icon />
@@ -133,7 +149,11 @@ export function AppSidebar() {
                       <motion.div
                         className="ml-auto"
                         animate={{ rotate: isExpanded ? 90 : 0 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 25,
+                        }}
                       >
                         <ChevronRight className="h-4 w-4" />
                       </motion.div>
@@ -150,7 +170,11 @@ export function AppSidebar() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 30,
+                        }}
                         style={{ overflow: "hidden" }}
                       >
                         <SidebarMenuSub>
@@ -162,12 +186,22 @@ export function AppSidebar() {
                                 key={sub.label}
                                 className="relative"
                               >
-                                <div className="relative" onMouseEnter={() => setHoveredItem(`sub-${sub.label}`)}>
+                                <div
+                                  className="relative"
+                                  onMouseEnter={() =>
+                                    setHoveredItem(`sub-${sub.label}`)
+                                  }
+                                >
                                   {hoveredItem === `sub-${sub.label}` && (
                                     <motion.div
                                       layoutId="sidebar-hover-bg"
                                       className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
-                                      transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                                      transition={{
+                                        type: "spring",
+                                        stiffness: 500,
+                                        damping: 35,
+                                        mass: 0.8,
+                                      }}
                                       style={{ zIndex: 0 }}
                                     />
                                   )}
@@ -177,12 +211,16 @@ export function AppSidebar() {
                                       "cursor-pointer relative z-[1] hover:bg-transparent! active:bg-transparent! hover:text-current! [&>svg]:text-current!",
                                       isSubActive
                                         ? "text-foreground"
-                                        : "text-neutral-500"
+                                        : "text-neutral-500",
                                     )}
                                   >
-                                    <SubIcon className={isSubActive
-                                      ? "text-foreground"
-                                      : "text-neutral-500!"} />
+                                    <SubIcon
+                                      className={
+                                        isSubActive
+                                          ? "text-foreground"
+                                          : "text-neutral-500!"
+                                      }
+                                    />
                                     {sub.label}
                                     {isSubActive && <ActiveDot />}
                                   </SidebarMenuSubButton>
