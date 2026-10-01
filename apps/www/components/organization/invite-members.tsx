@@ -9,17 +9,22 @@ import {
   Ellipsis,
   UserRoundPlus,
   ShieldCheck,
-  UserX,
 } from "lucide-react";
-import { FaCrown } from "react-icons/fa";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { FaCrown, FaTrash } from "react-icons/fa";
+import { CgArrowsExchange } from "react-icons/cg";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { TbArrowsExchange } from "react-icons/tb";
 import {
+
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { motion } from "motion/react";
+import { BsTrash2Fill } from "react-icons/bs";
 import { useEffect, useMemo, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 
@@ -43,6 +48,7 @@ export function MembersPanel() {
   const openModal = useModalStore((s) => s.open);
   const { user } = useUser();
   const [members, setMembers] = useState<Member[]>([]);
+  const [hoveredMenuItem, setHoveredMenuItem] = useState<string | null>(null);
 
   const sortedMembers = useMemo(() => {
     return [...members].sort((a, b) => {
@@ -142,24 +148,50 @@ export function MembersPanel() {
                   >
                     <Ellipsis className="h-3.5 w-3.5" />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" side="bottom" sideOffset={4}>
-                    {/* Extra member data */}
-                    <div className="px-1.5 py-1.5">
-                      <p className="text-xs font-medium truncate">{member.emailAddress}</p>
-                      <p className="text-[10px] text-muted-foreground capitalize">
-                        {member.role.replace("org:", "")}
-                      </p>
-                    </div>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <ShieldCheck className="h-4 w-4" />
-                      Change role
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem variant="destructive">
-                      <UserX className="h-4 w-4" />
-                      Remove member
-                    </DropdownMenuItem>
+                  <DropdownMenuContent
+                    align="end"
+                    side="bottom"
+                    sideOffset={8}
+                    className={cn(
+                      "min-w-50 bg-[#0E0E0E]! border border-neutral-100 dark:border-neutral-900 shadow-none! rounded-2xl",
+                    )}
+                    onMouseLeave={() => setHoveredMenuItem(null)}
+                  >
+                    <DropdownMenuGroup className="space-y-1">
+                      <DropdownMenuItem
+                        onMouseEnter={() => setHoveredMenuItem(`${member.memberId}-change-role`)}
+                        className="relative text-[0.79rem] focus:bg-transparent!"
+                      >
+                        {hoveredMenuItem === `${member.memberId}-change-role` && (
+                          <motion.div
+                            layoutId="member-menu-hover"
+                            className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
+                            transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                          />
+                        )}
+                        <span className="relative z-1 flex items-center gap-1.5 w-full">
+                          <TbArrowsExchange size={20} className="text-neutral-400" />
+                          Change role
+                        </span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        variant="destructive"
+                        onMouseEnter={() => setHoveredMenuItem(`${member.memberId}-remove`)}
+                        className="relative text-[0.79rem] focus:bg-transparent!"
+                      >
+                        {hoveredMenuItem === `${member.memberId}-remove` && (
+                          <motion.div
+                            layoutId="member-menu-hover"
+                            className="absolute inset-0 rounded-md bg-destructive/10"
+                            transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                          />
+                        )}
+                        <span className="relative z-1 flex items-center gap-1.5 w-full">
+                          <BsTrash2Fill size={20} className=""/>
+                          <p>Remove from organization</p>
+                        </span>
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>

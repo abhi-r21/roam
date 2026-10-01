@@ -1,12 +1,11 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useSlidePanelStore, type SlidePanelRegistry } from "@/stores/slide-panel-store";
-import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect } from "react";
-import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SidebarToggleIcon } from "../unlumen-ui/sidebar-toggle-icon";
+import { AnimatePresence, motion } from "motion/react";
+import { SidebarToggleIcon } from "@/components/unlumen-ui/sidebar-toggle-icon";
+import { useSlidePanelStore, type SlidePanelRegistry } from "@/stores/slide-panel-store";
 
 type PanelKey = keyof SlidePanelRegistry;
 
