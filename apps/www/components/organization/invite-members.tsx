@@ -8,10 +8,8 @@ import { SlidePanel } from "@/components/ui/slide-panel";
 import {
   Ellipsis,
   UserRoundPlus,
-  ShieldCheck,
 } from "lucide-react";
-import { FaCrown, FaTrash } from "react-icons/fa";
-import { CgArrowsExchange } from "react-icons/cg";
+import { FaCrown} from "react-icons/fa";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { TbArrowsExchange } from "react-icons/tb";
 import {
@@ -20,7 +18,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { motion } from "motion/react";

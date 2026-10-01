@@ -21,6 +21,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cn": "^0.3.0",
+    "dialkit": "^2.0.2",
+    "framer-motion": "^13.5.0",
     "input-otp": "^1.5.0",
     "lenis": "^1.3.26",
     "lucide-react": "^1.29.0",

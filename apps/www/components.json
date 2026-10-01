@@ -23,6 +23,7 @@
   "menuAccent": "subtle",
   "registries": {
     "@unlumen-ui": "https://ui.unlumen.com/r/{name}.json",
-    "@dotmatrix": "https://dotmatrix.zzzzshawn.cloud/r/{name}.json"
+    "@dotmatrix": "https://dotmatrix.zzzzshawn.cloud/r/{name}.json",
+    "@skiper-ui": "https://skiper-ui.com/registry/{name}.json"
   }
 }
