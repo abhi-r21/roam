@@ -37,14 +37,37 @@ type InviteRow = {
   email: string;
 };
 
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function normalizeEmail(value: string) {
+  return value.trim().toLowerCase();
+}
+
+const localPartPattern = /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+$/i;
+const domainPattern =
+  /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/i;
 
 function isEmail(value: string) {
-  return emailPattern.test(value.trim());
+  const email = normalizeEmail(value);
+  const atIndex = email.lastIndexOf("@");
+
+  if (email.length > 254 || atIndex <= 0 || atIndex !== email.indexOf("@")) {
+    return false;
+  }
+
+  const localPart = email.slice(0, atIndex);
+  const domain = email.slice(atIndex + 1);
+
+  return (
+    localPart.length <= 64 &&
+    !localPart.startsWith(".") &&
+    !localPart.endsWith(".") &&
+    !localPart.includes("..") &&
+    localPartPattern.test(localPart) &&
+    domainPattern.test(domain)
+  );
 }
 
 export function InviteModal() {
-  const { isOpen, close, data } = useModal("invite");
+  const { isOpen, close } = useModal("invite");
   const nextRowId = useRef(1);
   const [role, setRole] = useState<InviteRole>("member");
   const [loading, setLoading] = useState(false);
@@ -76,8 +99,8 @@ export function InviteModal() {
     const emails = event.clipboardData
       .getData("text")
       .split(/[\s,;]+/)
-      .map((email) => email.trim().toLowerCase())
-      .filter(isEmail);
+      .map(normalizeEmail)
+      .filter(Boolean);
 
     if (emails.length === 0) return;
 
@@ -89,7 +112,8 @@ export function InviteModal() {
       const existingEmails = new Set(
         current
           .filter((row) => row.id !== rowId)
-          .map((row) => row.email.toLowerCase()),
+          .map((row) => normalizeEmail(row.email))
+          .filter(Boolean),
       );
       const uniqueEmails = emails.filter(
         (email, index) =>
@@ -112,31 +136,33 @@ export function InviteModal() {
     });
   };
 
-  const hasValidEmail = rows.some((row) => isEmail(row.email));
+  const enteredRows = rows.filter((row) => row.email.trim());
+  const invalidRows = enteredRows.filter((row) => !isEmail(row.email));
+  const canSend = enteredRows.length > 0 && invalidRows.length === 0;
 
   const handleSend = async () => {
-    if (rows.length === 0) {
-      return
-    }
-    console.log("in send");
+    if (!canSend) return;
+
+    const invitations = enteredRows.map((row) => ({
+      role,
+      emailAddress: normalizeEmail(row.email),
+    }));
 
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await axios.post(
         `http://localhost:8000/api/v1/user/invite`,
+        { invitations },
         {
-          invitations: rows.map((row) => ({ role, emailAddress: row.email })),
+          withCredentials: true,
         },
-        {
-          withCredentials: true
-        }
       );
-      const { message } = response.data
-      toast.success(message)
-      close()
-    } catch (error) {
+      const { message } = response.data;
+      toast.success(message);
+      close();
+    } catch {
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -172,28 +198,45 @@ export function InviteModal() {
               </div>
             </div>
             <div className="flex-1 flex flex-col gap-2 h-full max-h-[30vh] overflow-y-auto no-scrollbar">
-              {rows.map((row) => (
-                <div key={row.id} className="flex items-center gap-x-2">
-                  <Input
-                    type="email"
-                    value={row.email}
-                    onChange={(event) => updateRow(row.id, event.target.value)}
-                    onPaste={(event) => handlePaste(event, row.id)}
-                    className="text-sm! focus:ring-0! border-none"
-                    placeholder="New email"
-                    aria-label="Email address"
-                  />
-                  <Button
-                    type="button"
-                    size="icon-sm"
-                    variant="destructive"
-                    onClick={() => removeRow(row.id)}
-                    aria-label={`Remove ${row.email || "email row"}`}
-                  >
-                    <FaTrash />
-                  </Button>
-                </div>
-              ))}
+              {rows.map((row) => {
+                const hasEmail = Boolean(row.email.trim());
+                const hasError = hasEmail && !isEmail(row.email);
+
+                return (
+                  <div key={row.id} className="flex items-start gap-x-2">
+                    <div className="flex-1">
+                      <Input
+                        type="email"
+                        value={row.email}
+                        onChange={(event) => updateRow(row.id, event.target.value)}
+                        onPaste={(event) => handlePaste(event, row.id)}
+                        className={cn(
+                          "text-sm! focus:ring-0! border-none",
+                          hasError && "border border-destructive!",
+                        )}
+                        placeholder="New email"
+                        aria-invalid={hasError}
+                        aria-describedby={hasError ? `${row.id}-error` : undefined}
+                        aria-label="Email address"
+                      />
+                      {hasError && (
+                        <p id={`${row.id}-error`} className="mt-1 text-xs text-destructive pl-1.5">
+                          Enter a valid email address.
+                        </p>
+                      )}
+                    </div>
+                    <Button
+                      type="button"
+                      size="icon-sm"
+                      variant="destructive"
+                      onClick={() => removeRow(row.id)}
+                      aria-label={`Remove ${row.email || "email row"}`}
+                    >
+                      <FaTrash />
+                    </Button>
+                  </div>
+                );
+              })}
               <Button
                 type="button"
                 size={"xs"}
@@ -219,7 +262,7 @@ export function InviteModal() {
           <Button
             size={"xs"}
             type="button"
-            disabled={!hasValidEmail}
+            disabled={!canSend || loading}
             onClick={handleSend}
             className={"flex-1 bg-blue-700! border border-blue-600! text-white relative"}
           >
@@ -231,4 +274,3 @@ export function InviteModal() {
     </Dialog>
   );
 }
-
