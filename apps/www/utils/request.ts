@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 
 
 
-export async function sendRequest(url: string, options: { method: string }) {
+export async function request(url: string, options: { method: string }) {
     try {
         const BACKEND_URL = process.env.BACKEND_URL
         if (!BACKEND_URL) {
@@ -15,11 +15,12 @@ export async function sendRequest(url: string, options: { method: string }) {
             baseURL: `${BACKEND_URL}/api/v1`,
             method: options.method,
             headers: {
+
             },
         }
         const response = await axios(config)
         return response.data
     } catch(e) {
-
+        console.log(e);
     }
 }
