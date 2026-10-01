@@ -1,4 +1,4 @@
 import { userRouter } from "./user";
+import { organizationRouter } from "./organization";
 
-
-export { userRouter }
+export { userRouter, organizationRouter }

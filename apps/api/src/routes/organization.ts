@@ -29,13 +29,24 @@ organizationRouter.get("/members", async (c) => {
         return c.json({
             message: "OK",
             data: {
-                members: data,
+                members: data.map((d) => ({
+                    memberId: d.id,
+                    orgId: d.organization.id,
+                    emailAddress: d.publicUserData?.identifier ?? "",
+                    userId: d.publicUserData?.userId ?? "",
+                    imageUrl: d.publicUserData?.imageUrl ?? "",
+                    role: d.role,
+                })),
             },
             metadata: {
                 totalCount
             }
         })
     } catch (error) {
-
+        console.error(error);
+        return c.json({ message: "Something went wrong"}, STATUS.INTERNAL_SERVER_ERROR)
     }
 });
+
+
+export { organizationRouter }

@@ -26,6 +26,7 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { TbNavigationFilled } from "react-icons/tb";
 import { motion, AnimatePresence } from "motion/react";
+import { useSlidePanelStore } from "@/stores/slide-panel-store";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { ProfileDropdown } from "./profile-dropdown";
@@ -42,17 +43,22 @@ type NavItem = {
   label: string;
   route: string;
   subItems?: SubItem[];
+  /** If set, clicking this item toggles a slide panel instead of navigating. */
+  panelKey?: string;
 };
 
 const INTERACTION_GROUP_ITEMS: NavItem[] = [
   { icon: MessagesCircle, label: "Ask", route: "/ask" },
-  { icon: Users, label: "Members", route: "/members" },
   {
     icon: Cog,
     label: "Settings",
     route: "/org/settings",
     subItems: [{ icon: ScrollText, label: "Policy", route: "/org/policy" }],
   },
+];
+
+const ORG_GROUP_ITEMS: NavItem[] = [
+  { icon: Users, label: "Members", route: "/members", panelKey: "members" },
 ];
 
 function ActiveDot() {
@@ -69,6 +75,7 @@ export function AppSidebar() {
   const router = useRouter();
   const pathName = usePathname();
   const { user } = useUser();
+  const togglePanel = useSlidePanelStore((s) => s.toggle);
 
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
     {},
@@ -132,6 +139,8 @@ export function AppSidebar() {
                     onClick={() => {
                       if (hasSubItems) {
                         toggleExpanded(label);
+                      } else if (item.panelKey) {
+                        togglePanel(item.panelKey as any);
                       } else {
                         router.push(route);
                       }
@@ -233,6 +242,51 @@ export function AppSidebar() {
                     )}
                   </AnimatePresence>
                 )}
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarGroup>
+
+        {/* Organization details – panels only, no page navigation */}
+        <SidebarGroup onMouseLeave={handleMouseLeave}>
+          <SidebarGroupLabel>Organization</SidebarGroupLabel>
+          {ORG_GROUP_ITEMS.map((item) => {
+            const { icon: Icon, label } = item;
+
+            return (
+              <SidebarMenuItem key={label} className="relative">
+                <div
+                  className="relative"
+                  onMouseEnter={() => setHoveredItem(label)}
+                >
+                  {hoveredItem === label && (
+                    <motion.div
+                      layoutId="sidebar-hover-bg"
+                      className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 35,
+                        mass: 0.8,
+                      }}
+                      style={{ zIndex: 0 }}
+                    />
+                  )}
+                  <SidebarMenuButton
+                    onClick={() => {
+                      if (item.panelKey) {
+                        togglePanel(item.panelKey as any);
+                      }
+                    }}
+                    className={cn(
+                      "relative z-[1] cursor-pointer hover:bg-transparent! active:bg-transparent!",
+                      "text-neutral-500",
+                    )}
+                  >
+                    <Icon />
+                    {label}
+                  </SidebarMenuButton>
+                </div>
               </SidebarMenuItem>
             );
           })}

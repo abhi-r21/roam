@@ -1,14 +1,16 @@
 import { cn } from "@/lib/utils";
 import { SidebarSwitch } from "@/components/navigation/sidebar-switch";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { MembersPanel } from "@/components/organization/invite-members";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
     return <SidebarProvider className="bg-background!">
         <SidebarSwitch />
-        <SidebarInset className="border-t border-x shadow-none! overflow-hidden">
-            <main className={cn("w-full h-full bg-neutral-50 dark:bg-neutral-950")}>
+        <SidebarInset className="border-t border-x shadow-none! overflow-hidden flex-row!">
+            <div className={cn("flex-1 min-w-0 flex flex-col bg-neutral-50 dark:bg-neutral-950")}>
                 {children}
-            </main>
+            </div>
+            <MembersPanel />
         </SidebarInset>
     </SidebarProvider>
 }

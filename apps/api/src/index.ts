@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { mastra } from "@/mastra"
 import { cors } from "hono/cors";
-import { userRouter } from '@/routes'
+import { organizationRouter, userRouter } from '@/routes'
 import { clerkMiddleware } from '@clerk/hono'
 import { HonoBindings, HonoVariables, MastraServer } from '@mastra/hono'
 import { authMiddleware } from './middleware'
@@ -34,8 +34,10 @@ app.get("/health", (c) => {
 })
 
 
-protectedRoute.route("/user", userRouter)
-app.route("/", protectedRoute)
+protectedRoute.route("/user", userRouter);
+protectedRoute.route("/organization", organizationRouter);
+
+app.route("/", protectedRoute);
 
 
 export default {
