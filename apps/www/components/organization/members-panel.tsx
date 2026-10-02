@@ -171,14 +171,16 @@ export function MembersPanel() {
       title="Members"
       width={300}
       headerAction={
-        <Button
-          size={"icon-sm"}
-          variant={"ghost"}
-          onClick={() => openModal("invite")}
-          className={"text-muted-foreground hover:text-foreground"}
-        >
-          <UserRoundPlus className="h-4 w-4" />
-        </Button>
+        orgRole === "org:admin" ? (
+          <Button
+            size={"icon-sm"}
+            variant={"ghost"}
+            onClick={() => openModal("invite")}
+            className={"text-muted-foreground hover:text-foreground"}
+          >
+            <UserRoundPlus className="h-4 w-4" />
+          </Button>
+        ) : null
       }
     >
       <div className={cn("flex flex-col w-full h-full px-2 py-2 bg-neutral-100 dark:bg-[#0D0D0D]")}>
