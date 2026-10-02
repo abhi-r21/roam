@@ -27,7 +27,7 @@ import {
 import { motion } from "motion/react";
 import { BsTrash2Fill } from "react-icons/bs";
 import { useEffect, useMemo, useState } from "react";
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 
 
@@ -49,6 +49,7 @@ interface Member {
 export function MembersPanel() {
   const openModal = useModalStore((s) => s.open);
   const { user } = useUser();
+  const { orgRole } = useAuth();
   const [members, setMembers] = useState<Member[]>([]);
   const [hoveredMenuItem, setHoveredMenuItem] = useState<string | null>(null);
 
@@ -180,7 +181,7 @@ export function MembersPanel() {
         </Button>
       }
     >
-      <div className={cn("flex flex-col w-full h-full px-2 py-2 bg-neutral-100 dark:bg-[#0E0E0E]")}>
+      <div className={cn("flex flex-col w-full h-full px-2 py-2 bg-neutral-100 dark:bg-[#0D0D0D]")}>
         <div className={cn("flex flex-col gap-0.5")}>
           {sortedMembers.map((member) => {
             const displayName = member.emailAddress.split("@")[0];
@@ -223,7 +224,8 @@ export function MembersPanel() {
                   </div>
                 </div>
 
-                {/* Ellipsis — visible only on hover */}
+                {/* Ellipsis — visible only on hover, admin only, not on self */}
+                {orgRole === "org:admin" && member.userId !== user?.id && (
                 <DropdownMenu>
                   <DropdownMenuTrigger
                     render={
@@ -323,6 +325,7 @@ export function MembersPanel() {
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
+                )}
               </div>
             );
           })}

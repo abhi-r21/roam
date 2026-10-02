@@ -74,7 +74,7 @@ export function SlidePanel({
         >
           {/* Inner container — fixed width so content doesn't reflow during animation */}
           <div
-            className="h-full flex flex-col border-l border-border/50 bg-neutral-100 dark:bg-[#0E0E0E]"
+            className="h-full flex flex-col border-l border-border/50 bg-neutral-100 dark:bg-[#0D0D0D]"
             style={{ width: `${width}px` }}
           >
             {/* Header */}

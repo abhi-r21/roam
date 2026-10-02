@@ -35,23 +35,27 @@ user.post("/invite", async (c) => {
             return c.json({ message: "Invalid Access" }, STATUS.FORBIDDEN);
         }
 
-        invitations = invitations.map(
-            (i: { role: string; inviterUserId: string; emailAddress: string }) => ({
-                inviterUserId: userId,
-                emailAddress: i.emailAddress,
-                role: `org:${i.role}`,
-            }),
+        invitations = invitations
+            .map((i:
+                {
+                    role: string;
+                    inviterUserId: string;
+                    emailAddress: string
+                }) => ({
+                    inviterUserId: userId,
+                    emailAddress: i.emailAddress,
+                    role: `org:${i.role}`,
+                    redirectUrl: "http://localhost:3000/accept-invitation"
+                }
+            ),
         );
 
-        const { data } =
-            await clerkClient.organizations.createOrganizationInvitationBulk(
-                orgId,
-                invitations,
-            );
+        const { data } = await clerkClient.organizations.createOrganizationInvitationBulk(orgId, invitations);
 
-        return c.json(
-            {
-                message: `Successfully sent ${invitations.length > 1 ? "invitations" : "invitation"}`,
+        return c.json({
+                message: `Successfully sent ${invitations.length > 1
+                    ? "invitations"
+                     : "invitation"}`,
             },
             STATUS.OK,
         );

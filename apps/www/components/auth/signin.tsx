@@ -224,8 +224,7 @@ function EmailForm({ onBack }: { onBack: () => void }) {
         }
 
         // handle sending code errors
-        const { error: signUpCodeError } =
-            await signUp.verifications.sendEmailCode();
+        const { error: signUpCodeError } = await signUp.verifications.sendEmailCode();
         if (signUpCodeError) {
             setCustomError(signUpCodeError.message);
             return;
