@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { SidebarSwitch } from "@/components/navigation/sidebar-switch";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { MembersPanel } from "@/components/organization/invite-members";
+import { MembersPanel } from "@/components/organization/members-panel";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
     return <SidebarProvider className="bg-background!">

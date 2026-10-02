@@ -11,11 +11,12 @@ import {
   Sun,
   UserRound,
 } from "lucide-react";
+import { IoCaretBackOutline } from "react-icons/io5";
 
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 
-import { SignOutButton, useUser } from "@clerk/nextjs";
+import { SignOutButton, useAuth, useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -38,6 +39,7 @@ const FOOTER_ITEMS = [
 
 export function ProfileDropdown() {
   const router = useRouter();
+  const { signOut } = useAuth()
   const { user, isSignedIn } = useUser();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
@@ -144,7 +146,7 @@ export function ProfileDropdown() {
           <DropdownMenuItem
             onMouseEnter={() => setHoveredItem("signout")}
             className="text-sm relative focus:bg-transparent!"
-            onClick={() => {}}
+            onClick={() => signOut()}
           >
             {hoveredItem === "signout" && (
               <motion.div
@@ -157,8 +159,8 @@ export function ProfileDropdown() {
             <span className="relative z-[1] flex items-center gap-1.5 w-full">
               {isSignedIn && (
                 <>
-                  <LogOut className="text-neutral-400" />
-                  <SignOutButton />
+                  <IoCaretBackOutline className="text-neutral-400" />
+                  Logout
                 </>
               )}
             </span>

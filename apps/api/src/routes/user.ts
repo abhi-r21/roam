@@ -1,13 +1,13 @@
 import { Hono } from "hono";
 import { STATUS } from "@/utils/status-codes";
 
-const userRouter = new Hono();
+const user = new Hono();
 
-userRouter.patch("/update", async (c) => {
+user.patch("/update", async (c) => {
     const clerkClient = c.get("clerk");
 });
 
-userRouter.post("/invite", async (c) => {
+user.post("/invite", async (c) => {
     const auth = c.get("clerkAuth");
     const { has, orgId, userId } = auth();
 
@@ -65,4 +65,4 @@ userRouter.post("/invite", async (c) => {
 });
 
 
-export { userRouter };
+export { user };

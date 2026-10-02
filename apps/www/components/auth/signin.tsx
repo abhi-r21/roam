@@ -362,6 +362,12 @@ function EmailForm({ onBack }: { onBack: () => void }) {
                             className="font-mono"
                             variant="primary"
                             onChange={setEmailCode}
+                            onKeyDown={(e: React.KeyboardEvent) => {
+                                if (e.key === "Enter" && !verifying) {
+                                    e.preventDefault();
+                                    handleVerifyCode();
+                                }
+                            }}
                         >
                             <InputOTP.Group>
                                 <InputOTP.Slot index={0} />
@@ -456,6 +462,12 @@ function EmailForm({ onBack }: { onBack: () => void }) {
                             placeholder="yuvan@roam.com"
                             value={emailAddress}
                             onChange={(e) => setEmailAddress(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && !busy) {
+                                    e.preventDefault();
+                                    handleSendCode();
+                                }
+                            }}
                             className={cn("bg-transparent! border-none focus:ring-0! p-0")}
                         />
                         <AnimatePresence mode="wait">
