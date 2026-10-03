@@ -1,40 +1,40 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono, Faculty_Glyphic } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
-import { Toaster } from "@/components/ui/sonner";
-import { ModalProvider } from "@/components/providers/modal-provider";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Analytics } from "@vercel/analytics/next";
-import { shadcn } from "@clerk/ui/themes";
-import { localization } from "@/utils/localization";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import "./globals.css";
+import type { Metadata } from 'next'
+import { Geist, Geist_Mono, Faculty_Glyphic } from 'next/font/google'
+import { ClerkProvider } from '@clerk/nextjs'
+import { Toaster } from '@/components/ui/sonner'
+import { ModalProvider } from '@/components/providers/modal-provider'
+import { ThemeProvider } from '@/components/theme-provider'
+import { Analytics } from '@vercel/analytics/next'
+import { shadcn } from '@clerk/ui/themes'
+import { localization } from '@/utils/localization'
+import { TooltipProvider } from '@/components/ui/tooltip'
+import './globals.css'
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+})
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+})
 
 const facultyGlyphic = Faculty_Glyphic({
-  variable: "--font-gp",
-  subsets: ["latin"],
-  weight: ["400"],
-});
+  variable: '--font-gp',
+  subsets: ['latin'],
+  weight: ['400'],
+})
 
 export const metadata: Metadata = {
-  title: "Roam",
-  description: "Your travel agent",
-};
+  title: 'Roam',
+  description: 'Your travel agent',
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html
@@ -45,7 +45,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-neutral-100 dark:bg-neutral-950 selection:bg-blue-200 dark:selection:bg-blue-950 selection:text-blue-500">
         <ClerkProvider
           taskUrls={{
-            'choose-organization': '/choose-organization'
+            'choose-organization': '/choose-organization',
           }}
           localization={localization}
           appearance={{
@@ -62,5 +62,5 @@ export default function RootLayout({
         </ClerkProvider>
       </body>
     </html>
-  );
+  )
 }

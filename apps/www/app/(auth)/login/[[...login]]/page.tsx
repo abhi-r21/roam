@@ -1,4 +1,4 @@
-import { SignIn } from "@/components/auth/signin";
+import { SignIn } from '@/components/auth/signin'
 
 export default function LoginPage() {
   return (
@@ -8,5 +8,5 @@ export default function LoginPage() {
         <div id="clerk-captcha" />
       </div>
     </main>
-  );
+  )
 }

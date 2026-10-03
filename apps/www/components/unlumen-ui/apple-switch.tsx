@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
-import { forwardRef, useEffect, useId, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { motion, useMotionValue, useSpring, useTransform } from 'motion/react'
+import { forwardRef, useEffect, useId, useRef, useState } from 'react'
+import { cn } from '@/lib/utils'
 
 const switchSizes = {
   sm: {
@@ -26,55 +26,54 @@ const switchSizes = {
     thumbY: 28,
     padding: 5,
   },
-} as const;
+} as const
 
 const switchTones = {
   neutral: {
-    off: "color-mix(in srgb, var(--muted) 82%, transparent)",
-    on: "#34c759",
-    thumb: "#ffffff",
-    glow: "color-mix(in srgb, #34c759 32%, transparent)",
+    off: 'color-mix(in srgb, var(--muted) 82%, transparent)',
+    on: '#34c759',
+    thumb: '#ffffff',
+    glow: 'color-mix(in srgb, #34c759 32%, transparent)',
   },
   accent: {
-    off: "color-mix(in srgb, var(--muted) 82%, transparent)",
-    on: "var(--foreground)",
-    thumb: "#ffffff",
-    glow: "color-mix(in srgb, var(--accent) 42%, transparent)",
+    off: 'color-mix(in srgb, var(--muted) 82%, transparent)',
+    on: 'var(--foreground)',
+    thumb: '#ffffff',
+    glow: 'color-mix(in srgb, var(--accent) 42%, transparent)',
   },
-} as const;
+} as const
 
 const thumbSpring = {
   stiffness: 700,
   damping: 48,
   mass: 0.55,
-};
+}
 
 const grabSpring = {
   stiffness: 500,
   damping: 25,
-};
+}
 
-interface AppleSwitchProps
-  extends Omit<
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
-    "onChange" | "role"
-  > {
-  checked?: boolean;
-  defaultChecked?: boolean;
-  onCheckedChange?: (checked: boolean) => void;
-  label?: React.ReactNode;
-  description?: React.ReactNode;
+interface AppleSwitchProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'onChange' | 'role'
+> {
+  checked?: boolean
+  defaultChecked?: boolean
+  onCheckedChange?: (checked: boolean) => void
+  label?: React.ReactNode
+  description?: React.ReactNode
   /** @default "md" */
-  size?: keyof typeof switchSizes;
+  size?: keyof typeof switchSizes
   /** @default "neutral" */
-  tone?: keyof typeof switchTones;
+  tone?: keyof typeof switchTones
   /** @default "right" */
-  labelSide?: "left" | "right";
+  labelSide?: 'left' | 'right'
 }
 
 const clamp = (value: number, min: number, max: number) => {
-  return Math.min(Math.max(value, min), max);
-};
+  return Math.min(Math.max(value, min), max)
+}
 
 const AppleSwitch = forwardRef<HTMLButtonElement, AppleSwitchProps>(
   (
@@ -83,15 +82,15 @@ const AppleSwitch = forwardRef<HTMLButtonElement, AppleSwitchProps>(
       onCheckedChange,
       label,
       description,
-      size = "md",
-      tone = "neutral",
-      labelSide = "right",
+      size = 'md',
+      tone = 'neutral',
+      labelSide = 'right',
       className,
       style,
       disabled,
       defaultChecked,
       id,
-      type = "button",
+      type = 'button',
       onClick,
       onPointerCancel,
       onPointerDown,
@@ -100,178 +99,178 @@ const AppleSwitch = forwardRef<HTMLButtonElement, AppleSwitchProps>(
       onPointerUp,
       ...props
     },
-    ref,
+    ref
   ) => {
-    const generatedId = useId();
-    const switchId = id ?? generatedId;
+    const generatedId = useId()
+    const switchId = id ?? generatedId
     const [uncontrolledChecked, setUncontrolledChecked] = useState(
-      Boolean(defaultChecked),
-    );
-    const currentChecked = checked ?? uncontrolledChecked;
-    const metrics = switchSizes[size];
-    const colors = switchTones[tone];
-    const thumbTravel = metrics.trackX - metrics.thumbX - metrics.padding * 2;
-    const targetX = useMotionValue(currentChecked ? thumbTravel : 0);
-    const thumbX = useSpring(targetX, thumbSpring);
-    const grabTarget = useMotionValue(0);
-    const grabProgress = useSpring(grabTarget, grabSpring);
+      Boolean(defaultChecked)
+    )
+    const currentChecked = checked ?? uncontrolledChecked
+    const metrics = switchSizes[size]
+    const colors = switchTones[tone]
+    const thumbTravel = metrics.trackX - metrics.thumbX - metrics.padding * 2
+    const targetX = useMotionValue(currentChecked ? thumbTravel : 0)
+    const thumbX = useSpring(targetX, thumbSpring)
+    const grabTarget = useMotionValue(0)
+    const grabProgress = useSpring(grabTarget, grabSpring)
     const thumbWidth = useTransform(
       grabProgress,
       [0, 1],
-      [metrics.thumbX, metrics.thumbX + metrics.padding * 4.5],
-    );
+      [metrics.thumbX, metrics.thumbX + metrics.padding * 4.5]
+    )
     const thumbHeight = useTransform(
       grabProgress,
       [0, 1],
-      [metrics.thumbY, metrics.thumbY + metrics.padding * 2.3],
-    );
+      [metrics.thumbY, metrics.thumbY + metrics.padding * 2.3]
+    )
     const thumbOffsetX = useTransform(
-      () => thumbX.get() - (thumbWidth.get() - metrics.thumbX) / 2,
-    );
-    const liquidOpacity = useTransform(grabProgress, [0, 1], [0, 0.76]);
-    const liquidScale = useTransform(grabProgress, [0, 1], [0.82, 1.08]);
-    const thumbOpacity = useTransform(grabProgress, [0, 1], [1, 0.2]);
-    const dragStartX = useRef(0);
-    const dragStartThumbX = useRef(0);
-    const isDragging = useRef(false);
-    const activePointerId = useRef<number | null>(null);
-    const suppressNextClick = useRef(false);
-    const activeProgress = useTransform(thumbX, [0, thumbTravel], [0, 1]);
-    const fillOpacity = useTransform(activeProgress, [0, 1], [0, 1]);
+      () => thumbX.get() - (thumbWidth.get() - metrics.thumbX) / 2
+    )
+    const liquidOpacity = useTransform(grabProgress, [0, 1], [0, 0.76])
+    const liquidScale = useTransform(grabProgress, [0, 1], [0.82, 1.08])
+    const thumbOpacity = useTransform(grabProgress, [0, 1], [1, 0.2])
+    const dragStartX = useRef(0)
+    const dragStartThumbX = useRef(0)
+    const isDragging = useRef(false)
+    const activePointerId = useRef<number | null>(null)
+    const suppressNextClick = useRef(false)
+    const activeProgress = useTransform(thumbX, [0, thumbTravel], [0, 1])
+    const fillOpacity = useTransform(activeProgress, [0, 1], [0, 1])
     const glowOpacity = useTransform(
       activeProgress,
       [0, 0.7, 1],
-      [0, 0.18, 0.2],
-    );
-    const glowScale = useTransform(activeProgress, [0, 1], [0.82, 1]);
+      [0, 0.18, 0.2]
+    )
+    const glowScale = useTransform(activeProgress, [0, 1], [0.82, 1])
 
     useEffect(() => {
-      if (activePointerId.current !== null) return;
-      targetX.set(currentChecked ? thumbTravel : 0);
-    }, [currentChecked, thumbTravel, targetX]);
+      if (activePointerId.current !== null) return
+      targetX.set(currentChecked ? thumbTravel : 0)
+    }, [currentChecked, thumbTravel, targetX])
 
     const setChecked = (next: boolean) => {
       if (next === currentChecked) {
-        targetX.set(next ? thumbTravel : 0);
-        return;
+        targetX.set(next ? thumbTravel : 0)
+        return
       }
 
       if (checked === undefined) {
-        setUncontrolledChecked(next);
+        setUncontrolledChecked(next)
       }
 
-      targetX.set(next ? thumbTravel : 0);
-      onCheckedChange?.(next);
-    };
+      targetX.set(next ? thumbTravel : 0)
+      onCheckedChange?.(next)
+    }
 
     const handlePointerDown = (
-      event: React.PointerEvent<HTMLButtonElement>,
+      event: React.PointerEvent<HTMLButtonElement>
     ) => {
-      onPointerDown?.(event);
-      if (event.defaultPrevented || disabled) return;
-      if (event.pointerType === "mouse" && event.button !== 0) return;
-      event.currentTarget.setPointerCapture(event.pointerId);
-      activePointerId.current = event.pointerId;
-      grabTarget.set(1);
-      dragStartX.current = event.clientX;
-      dragStartThumbX.current = thumbX.get();
-      targetX.set(dragStartThumbX.current);
-      isDragging.current = false;
-    };
+      onPointerDown?.(event)
+      if (event.defaultPrevented || disabled) return
+      if (event.pointerType === 'mouse' && event.button !== 0) return
+      event.currentTarget.setPointerCapture(event.pointerId)
+      activePointerId.current = event.pointerId
+      grabTarget.set(1)
+      dragStartX.current = event.clientX
+      dragStartThumbX.current = thumbX.get()
+      targetX.set(dragStartThumbX.current)
+      isDragging.current = false
+    }
 
     const handlePointerMove = (
-      event: React.PointerEvent<HTMLButtonElement>,
+      event: React.PointerEvent<HTMLButtonElement>
     ) => {
-      onPointerMove?.(event);
-      if (event.defaultPrevented || disabled) return;
+      onPointerMove?.(event)
+      if (event.defaultPrevented || disabled) return
       if (
         activePointerId.current !== null &&
         event.pointerId !== activePointerId.current
       ) {
-        return;
+        return
       }
-      if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
+      if (!event.currentTarget.hasPointerCapture(event.pointerId)) return
 
-      const deltaX = event.clientX - dragStartX.current;
+      const deltaX = event.clientX - dragStartX.current
 
       if (Math.abs(deltaX) > 3) {
-        isDragging.current = true;
+        isDragging.current = true
       }
 
-      if (!isDragging.current) return;
-      event.preventDefault();
+      if (!isDragging.current) return
+      event.preventDefault()
 
-      const nextX = dragStartThumbX.current + deltaX;
-      targetX.set(clamp(nextX, 0, thumbTravel));
-    };
+      const nextX = dragStartThumbX.current + deltaX
+      targetX.set(clamp(nextX, 0, thumbTravel))
+    }
 
     const handlePointerUp = (event: React.PointerEvent<HTMLButtonElement>) => {
-      onPointerUp?.(event);
+      onPointerUp?.(event)
       if (
         activePointerId.current !== null &&
         event.pointerId !== activePointerId.current
       ) {
-        return;
+        return
       }
       if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-        event.currentTarget.releasePointerCapture(event.pointerId);
+        event.currentTarget.releasePointerCapture(event.pointerId)
       }
 
-      activePointerId.current = null;
-      grabTarget.set(0);
+      activePointerId.current = null
+      grabTarget.set(0)
 
-      if (!isDragging.current) return;
+      if (!isDragging.current) return
 
-      isDragging.current = false;
-      suppressNextClick.current = true;
-      setChecked(targetX.get() >= thumbTravel / 2);
-    };
+      isDragging.current = false
+      suppressNextClick.current = true
+      setChecked(targetX.get() >= thumbTravel / 2)
+    }
 
     const handlePointerCancel = (
-      event: React.PointerEvent<HTMLButtonElement>,
+      event: React.PointerEvent<HTMLButtonElement>
     ) => {
-      onPointerCancel?.(event);
-      activePointerId.current = null;
-      isDragging.current = false;
-      grabTarget.set(0);
-      targetX.set(currentChecked ? thumbTravel : 0);
-    };
+      onPointerCancel?.(event)
+      activePointerId.current = null
+      isDragging.current = false
+      grabTarget.set(0)
+      targetX.set(currentChecked ? thumbTravel : 0)
+    }
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-      onClick?.(event);
-      if (event.defaultPrevented || disabled) return;
+      onClick?.(event)
+      if (event.defaultPrevented || disabled) return
 
       if (suppressNextClick.current) {
-        suppressNextClick.current = false;
-        event.preventDefault();
-        return;
+        suppressNextClick.current = false
+        event.preventDefault()
+        return
       }
 
-      setChecked(!currentChecked);
-    };
+      setChecked(!currentChecked)
+    }
 
     useEffect(() => {
       const stopFromWindow = () => {
-        if (!isDragging.current && activePointerId.current === null) return;
-        const wasDragging = isDragging.current;
-        isDragging.current = false;
-        activePointerId.current = null;
-        grabTarget.set(0);
-        if (!wasDragging) return;
-        suppressNextClick.current = true;
-        setChecked(targetX.get() >= thumbTravel / 2);
-      };
+        if (!isDragging.current && activePointerId.current === null) return
+        const wasDragging = isDragging.current
+        isDragging.current = false
+        activePointerId.current = null
+        grabTarget.set(0)
+        if (!wasDragging) return
+        suppressNextClick.current = true
+        setChecked(targetX.get() >= thumbTravel / 2)
+      }
 
-      window.addEventListener("pointerup", stopFromWindow);
-      window.addEventListener("pointercancel", stopFromWindow);
-      window.addEventListener("blur", stopFromWindow);
+      window.addEventListener('pointerup', stopFromWindow)
+      window.addEventListener('pointercancel', stopFromWindow)
+      window.addEventListener('blur', stopFromWindow)
 
       return () => {
-        window.removeEventListener("pointerup", stopFromWindow);
-        window.removeEventListener("pointercancel", stopFromWindow);
-        window.removeEventListener("blur", stopFromWindow);
-      };
-    });
+        window.removeEventListener('pointerup', stopFromWindow)
+        window.removeEventListener('pointercancel', stopFromWindow)
+        window.removeEventListener('blur', stopFromWindow)
+      }
+    })
 
     const switchEl = (
       <button
@@ -286,21 +285,21 @@ const AppleSwitch = forwardRef<HTMLButtonElement, AppleSwitchProps>(
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
-        onPointerLeave={(event) => {
-          onPointerLeave?.(event);
+        onPointerLeave={event => {
+          onPointerLeave?.(event)
         }}
-        aria-label={typeof label === "string" ? label : props["aria-label"]}
+        aria-label={typeof label === 'string' ? label : props['aria-label']}
         className={cn(
-          "relative inline-flex shrink-0 cursor-pointer items-center rounded-full active:cursor-grabbing",
-          "border border-white/35 bg-white/10 shadow-inner backdrop-blur-md",
-          "outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-          "disabled:cursor-not-allowed disabled:opacity-45",
-          className,
+          'relative inline-flex shrink-0 cursor-pointer items-center rounded-full active:cursor-grabbing',
+          'border border-white/35 bg-white/10 shadow-inner backdrop-blur-md',
+          'outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+          'disabled:cursor-not-allowed disabled:opacity-45',
+          className
         )}
         style={{
           width: metrics.trackX,
           height: metrics.trackY,
-          touchAction: "pan-y",
+          touchAction: 'pan-y',
           ...style,
         }}
         {...props}
@@ -320,7 +319,7 @@ const AppleSwitch = forwardRef<HTMLButtonElement, AppleSwitchProps>(
             style={{
               backgroundColor: colors.off,
               boxShadow:
-                "inset 0 1px 1px rgba(255,255,255,0.34), inset 0 -1px 2px rgba(0,0,0,0.08)",
+                'inset 0 1px 1px rgba(255,255,255,0.34), inset 0 -1px 2px rgba(0,0,0,0.08)',
             }}
           />
 
@@ -339,16 +338,16 @@ const AppleSwitch = forwardRef<HTMLButtonElement, AppleSwitchProps>(
             width: thumbWidth,
             height: thumbHeight,
             x: thumbOffsetX,
-            top: "50%",
-            y: "-50%",
+            top: '50%',
+            y: '-50%',
             marginLeft: metrics.padding,
             background:
-              "color-mix(in srgb, var(--background) 82%, transparent)",
+              'color-mix(in srgb, var(--background) 82%, transparent)',
             opacity: liquidOpacity,
             scale: liquidScale,
-            filter: "blur(9px)",
-            backdropFilter: "blur(10px)",
-            WebkitBackdropFilter: "blur(10px)",
+            filter: 'blur(9px)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
           }}
         />
 
@@ -361,26 +360,26 @@ const AppleSwitch = forwardRef<HTMLButtonElement, AppleSwitchProps>(
             marginLeft: metrics.padding,
             backgroundColor: colors.thumb,
             opacity: thumbOpacity,
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
             boxShadow:
-              "0 3px 11px rgba(0,0,0,0.24), 0 1px 1px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.78), inset 0 -1px 1px rgba(0,0,0,0.05)",
+              '0 3px 11px rgba(0,0,0,0.24), 0 1px 1px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.78), inset 0 -1px 1px rgba(0,0,0,0.05)',
           }}
         />
       </button>
-    );
+    )
 
-    if (!label) return switchEl;
+    if (!label) return switchEl
 
     return (
       <label
         htmlFor={switchId}
         className={cn(
-          "inline-flex cursor-pointer select-none items-center gap-3",
-          disabled && "cursor-not-allowed opacity-50",
+          'inline-flex cursor-pointer select-none items-center gap-3',
+          disabled && 'cursor-not-allowed opacity-50'
         )}
       >
-        {labelSide === "left" && (
+        {labelSide === 'left' && (
           <span className="flex flex-col gap-0.5 text-right">
             <span className="text-sm font-medium text-foreground">{label}</span>
             {description && (
@@ -391,7 +390,7 @@ const AppleSwitch = forwardRef<HTMLButtonElement, AppleSwitchProps>(
           </span>
         )}
         {switchEl}
-        {labelSide === "right" && (
+        {labelSide === 'right' && (
           <span className="flex flex-col gap-0.5">
             <span className="text-sm font-medium text-foreground">{label}</span>
             {description && (
@@ -402,10 +401,10 @@ const AppleSwitch = forwardRef<HTMLButtonElement, AppleSwitchProps>(
           </span>
         )}
       </label>
-    );
-  },
-);
+    )
+  }
+)
 
-AppleSwitch.displayName = "AppleSwitch";
+AppleSwitch.displayName = 'AppleSwitch'
 
-export { AppleSwitch, type AppleSwitchProps };
+export { AppleSwitch, type AppleSwitchProps }

@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { InviteModal } from "@/components/organization/modals/invite-modal";
+import { InviteModal } from '@/components/organization/modals/invite-modal'
 
 /**
  * ModalProvider — mount this once in your root layout.
@@ -13,5 +13,5 @@ export function ModalProvider() {
       <InviteModal />
       {/* Add new modals here as they are created */}
     </>
-  );
+  )
 }

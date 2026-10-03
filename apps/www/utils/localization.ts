@@ -1,8 +1,7 @@
-
 export const localization = {
-    signIn: {
-        start: {
-            titleCombined: ""
-        }
-    }
+  signIn: {
+    start: {
+      titleCombined: '',
+    },
+  },
 }

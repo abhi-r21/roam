@@ -1,15 +1,15 @@
-"use client"
+'use client'
 
-import { usePathname } from "next/navigation";
-import { AppSidebar } from "./app-sidebar";
-import { AccountSidebar } from "./account-sidebar";
+import { usePathname } from 'next/navigation'
+import { AppSidebar } from './app-sidebar'
+import { AccountSidebar } from './account-sidebar'
 
 export function SidebarSwitch() {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
-  if (pathname.startsWith("/account")) {
-    return <AccountSidebar />;
+  if (pathname.startsWith('/account')) {
+    return <AccountSidebar />
   }
 
-  return <AppSidebar />;
+  return <AppSidebar />
 }

@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import { cn } from "@/lib/utils";
-import { motion } from "motion/react";
+import { cn } from '@/lib/utils'
+import { motion } from 'motion/react'
 import {
   Cog,
   LogOut,
@@ -10,14 +10,14 @@ import {
   Palette,
   Sun,
   UserRound,
-} from "lucide-react";
-import { IoCaretBackOutline } from "react-icons/io5";
+} from 'lucide-react'
+import { IoCaretBackOutline } from 'react-icons/io5'
 
-import { useTheme } from "next-themes";
-import { useRouter } from "next/navigation";
+import { useTheme } from 'next-themes'
+import { useRouter } from 'next/navigation'
 
-import { SignOutButton, useAuth, useUser } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
+import { SignOutButton, useAuth, useUser } from '@clerk/nextjs'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,33 +25,32 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useState, useCallback } from "react";
-
+} from '@/components/ui/dropdown-menu'
+import { useState, useCallback } from 'react'
 
 const FOOTER_ITEMS = [
   {
-    name: "Profile",
+    name: 'Profile',
     icon: UserRound,
-    route: "/account/profile",
+    route: '/account/profile',
   },
-];
+]
 
 export function ProfileDropdown() {
-  const router = useRouter();
+  const router = useRouter()
   const { signOut } = useAuth()
-  const { user, isSignedIn } = useUser();
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const { user, isSignedIn } = useUser()
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null)
 
-  const handleMouseLeave = useCallback(() => setHoveredItem(null), []);
+  const handleMouseLeave = useCallback(() => setHoveredItem(null), [])
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <div className="flex items-center justify-between gap-1.5 cursor-pointer">
-          <div  className="w-4 h-4 rounded-full bg-blue-500"/>
+          <div className="w-4 h-4 rounded-full bg-blue-500" />
           <div className="text-[13px]">
-            {user?.emailAddresses[0].emailAddress.split("@")[0]}
+            {user?.emailAddresses[0].emailAddress.split('@')[0]}
           </div>
         </div>
       </DropdownMenuTrigger>
@@ -60,24 +59,29 @@ export function ProfileDropdown() {
         sideOffset={12}
         alignOffset={-8}
         className={cn(
-          "min-w-68 bg-background border border-neutral-100 dark:border-neutral-900 shadow-none! rounded-2xl",
+          'min-w-68 bg-background border border-neutral-100 dark:border-neutral-900 shadow-none! rounded-2xl'
         )}
         onMouseLeave={handleMouseLeave}
       >
         <DropdownMenuGroup>
           <DropdownMenuItem
-            onMouseEnter={() => setHoveredItem("profile-header")}
-            onClick={() => router.push("/account/profile")}
+            onMouseEnter={() => setHoveredItem('profile-header')}
+            onClick={() => router.push('/account/profile')}
             className={cn(
-              "flex items-center justify-between py-3 text-[13px] cursor-pointer rounded-lg",
-              "focus:bg-transparent! relative",
+              'flex items-center justify-between py-3 text-[13px] cursor-pointer rounded-lg',
+              'focus:bg-transparent! relative'
             )}
           >
-            {hoveredItem === "profile-header" && (
+            {hoveredItem === 'profile-header' && (
               <motion.div
                 layoutId="dropdown-hover-bg"
                 className="absolute inset-0 rounded-lg bg-neutral-100 dark:bg-neutral-900"
-                transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 500,
+                  damping: 35,
+                  mass: 0.8,
+                }}
                 style={{ zIndex: 0 }}
               />
             )}
@@ -88,7 +92,7 @@ export function ProfileDropdown() {
                   {user?.emailAddresses[0].emailAddress}
                 </p>
               </div>
-              <Button size={"icon-xs"} variant={"ghost"}>
+              <Button size={'icon-xs'} variant={'ghost'}>
                 <Cog />
               </Button>
             </span>
@@ -97,8 +101,8 @@ export function ProfileDropdown() {
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup className="space-y-1">
-          {FOOTER_ITEMS.map((item) => {
-            const Icon = item.icon;
+          {FOOTER_ITEMS.map(item => {
+            const Icon = item.icon
             return (
               <DropdownMenuItem
                 key={item.name}
@@ -110,7 +114,12 @@ export function ProfileDropdown() {
                   <motion.div
                     layoutId="dropdown-hover-bg"
                     className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
-                    transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 500,
+                      damping: 35,
+                      mass: 0.8,
+                    }}
                     style={{ zIndex: 0 }}
                   />
                 )}
@@ -119,23 +128,28 @@ export function ProfileDropdown() {
                   {item.name}
                 </span>
               </DropdownMenuItem>
-            );
+            )
           })}
         </DropdownMenuGroup>
 
         <DropdownMenuGroup className="space-y-1">
           <DropdownMenuItem
-            onMouseEnter={() => setHoveredItem("theme")}
+            onMouseEnter={() => setHoveredItem('theme')}
             className={cn(
-              "text-sm flex items-center justify-between relative focus:bg-transparent!",
+              'text-sm flex items-center justify-between relative focus:bg-transparent!'
             )}
-            onSelect={(e) => e.preventDefault()}
+            onSelect={e => e.preventDefault()}
           >
-            {hoveredItem === "theme" && (
+            {hoveredItem === 'theme' && (
               <motion.div
                 layoutId="dropdown-hover-bg"
                 className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
-                transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 500,
+                  damping: 35,
+                  mass: 0.8,
+                }}
                 style={{ zIndex: 0 }}
               />
             )}
@@ -144,15 +158,20 @@ export function ProfileDropdown() {
             </span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            onMouseEnter={() => setHoveredItem("signout")}
+            onMouseEnter={() => setHoveredItem('signout')}
             className="text-sm relative focus:bg-transparent!"
             onClick={() => signOut()}
           >
-            {hoveredItem === "signout" && (
+            {hoveredItem === 'signout' && (
               <motion.div
                 layoutId="dropdown-hover-bg"
                 className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
-                transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 500,
+                  damping: 35,
+                  mass: 0.8,
+                }}
                 style={{ zIndex: 0 }}
               />
             )}
@@ -168,11 +187,11 @@ export function ProfileDropdown() {
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }
 
 const SelectTheme = () => {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme()
   return (
     <>
       <div className="flex items-center gap-2">
@@ -182,31 +201,31 @@ const SelectTheme = () => {
 
       <div
         className={cn(
-          "rounded-full border border-border bg-background flex items-center gap-0.5 p-0.5 relative shrink-0",
+          'rounded-full border border-border bg-background flex items-center gap-0.5 p-0.5 relative shrink-0'
         )}
       >
         {[
           {
-            value: "system",
+            value: 'system',
             icon: Monitor,
-            label: "System",
+            label: 'System',
           },
-          { value: "light", icon: Sun, label: "Light" },
+          { value: 'light', icon: Sun, label: 'Light' },
           {
-            value: "dark",
+            value: 'dark',
             icon: MoonStar,
-            label: "Dark",
+            label: 'Dark',
           },
-        ].map((item) => {
-          const Icon = item.icon;
-          const isActive = theme === item.value;
+        ].map(item => {
+          const Icon = item.icon
+          const isActive = theme === item.value
           return (
             <div
               key={item.label}
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                setTheme(item.value);
+              onClick={e => {
+                e.stopPropagation()
+                e.preventDefault()
+                setTheme(item.value)
               }}
               className="relative z-10 cursor-pointer rounded-full p-1"
             >
@@ -215,7 +234,7 @@ const SelectTheme = () => {
                   layoutId="theme-indicator"
                   className="absolute inset-0 rounded-full border bg-background shadow-sm z-0"
                   transition={{
-                    type: "spring",
+                    type: 'spring',
                     stiffness: 400,
                     damping: 30,
                   }}
@@ -223,14 +242,14 @@ const SelectTheme = () => {
               )}
               <Icon
                 className={cn(
-                  "relative z-10 transition-colors size-3",
-                  isActive ? "text-foreground" : "text-neutral-400",
+                  'relative z-10 transition-colors size-3',
+                  isActive ? 'text-foreground' : 'text-neutral-400'
                 )}
               />
             </div>
-          );
+          )
         })}
       </div>
     </>
-  );
-};
+  )
+}

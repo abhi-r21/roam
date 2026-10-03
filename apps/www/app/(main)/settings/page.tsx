@@ -1,7 +1,5 @@
-import { OrganizationProfile } from "@clerk/nextjs";
+import { OrganizationProfile } from '@clerk/nextjs'
 
 export default function SettingsPage() {
-    return <div className="w-full h-full">
-        
-    </div>
+  return <div className="w-full h-full"></div>
 }

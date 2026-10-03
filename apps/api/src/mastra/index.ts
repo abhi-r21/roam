@@ -1,15 +1,14 @@
-
-import { Mastra } from '@mastra/core/mastra';
-import { PinoLogger } from '@mastra/loggers';
-import { PostgresStore } from '@mastra/pg';
-import { planWorkflow } from './workflows';
-import { Observability,
+import { Mastra } from '@mastra/core/mastra'
+import { PinoLogger } from '@mastra/loggers'
+import { PostgresStore } from '@mastra/pg'
+import { planWorkflow } from './workflows'
+import {
+  Observability,
   MastraStorageExporter,
   MastraPlatformExporter,
-  SensitiveDataFilter
-} from '@mastra/observability';
-import { roamAgent } from './agents/roam-agent';
-
+  SensitiveDataFilter,
+} from '@mastra/observability'
+import { roamAgent } from './agents/roam-agent'
 
 export const mastra = new Mastra({
   workflows: { planWorkflow },
@@ -36,4 +35,4 @@ export const mastra = new Mastra({
       },
     },
   }),
-});
+})
