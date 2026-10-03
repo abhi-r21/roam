@@ -1,11 +1,7 @@
-"use client"
+"use client";
 
 import { cn } from "@/lib/utils";
 
 export function Policy() {
-    return <div className={cn(
-        "w-full h-full"
-    )}>
-
-    </div>
+  return <div className={cn("h-full w-full")}></div>;
 }

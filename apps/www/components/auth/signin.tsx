@@ -19,475 +19,479 @@ import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { isValidEmail } from "@/utils/validate-email";
 
 export function SignIn() {
-    const router = useRouter();
-    const { isSignedIn } = useAuth();
-    const { signIn } = useSignIn()
-    const [showEmail, setShowEmail] = useState(false);
-    const [showDefault, setSetShowDefault] = useState(true);
+  const router = useRouter();
+  const { isSignedIn } = useAuth();
+  const { signIn } = useSignIn();
+  const [showEmail, setShowEmail] = useState(false);
+  const [showDefault, setSetShowDefault] = useState(true);
 
-    if (isSignedIn) {
-        router.push("/ask");
-        return;
+  if (isSignedIn) {
+    router.push("/ask");
+    return;
+  }
+
+  const goToEmail = () => {
+    setSetShowDefault(false);
+    setShowEmail(true);
+  };
+
+  const onBack = (cb: (v: boolean) => void) => {
+    cb(false);
+    setSetShowDefault(true);
+  };
+
+  const handleSignInWithGoogle = async () => {
+    try {
+      await signIn.sso({
+        strategy: "oauth_google",
+        redirectCallbackUrl: "/sso-callback",
+        redirectUrl: "/ask",
+      });
+    } catch (error) {
+      console.error(error);
     }
+  };
 
-    const goToEmail = () => {
-        setSetShowDefault(false);
-        setShowEmail(true);
+  useEffect(() => {
+    if (!showDefault) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        goToEmail();
+      }
     };
 
-    const onBack = (cb: (v: boolean) => void) => {
-        cb(false);
-        setSetShowDefault(true);
-    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [showDefault]);
 
-    const handleSignInWithGoogle = async () => {
-        try {
-            await signIn.sso({
-                strategy: "oauth_google",
-                redirectCallbackUrl: "/sso-callback",
-                redirectUrl: "/ask",
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    }
+  return (
+    <div
+      className={cn(
+        "relative flex min-h-120 w-full max-w-lg flex-col overflow-hidden rounded-xl p-0.5",
+      )}
+    >
+      <img
+        src={"/train-people-1024.jpg"}
+        className="absolute inset-0 z-0 h-full w-full object-cover"
+      />
+      <div className="z-1 mb-9 flex w-full flex-1 items-center justify-center sm:mb-12">
+        <p className="font-gp text-6xl text-white">Roam</p>
+      </div>
 
-    useEffect(() => {
-        if (!showDefault) return;
+      <main
+        className={cn(
+          "z-1 w-full max-w-lg rounded-xl border p-4 dark:border-neutral-900 dark:bg-[#121212]",
+        )}
+      >
+        {showDefault && (
+          <div className="flex flex-col gap-0.5 tracking-tight">
+            <h1 className="text-sm font-medium">Welcome to Roam!</h1>
+            <h2 className="text-muted-foreground text-sm font-normal">
+              Roam is a 24/7 travel executive that works for your company.
+            </h2>
 
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                goToEmail();
-            }
-        };
+            <div className="mt-6 ml-auto flex w-fit flex-col gap-2.5">
+              <Button
+                size={"sm"}
+                variant={"outline"}
+                onClick={goToEmail}
+                className={cn("justify-start!")}
+              >
+                <TbMailFilled />
+                Continue with Email
+                <div className="-mr-1.5 rounded-sm border bg-neutral-600 px-1 py-px">
+                  <PiArrowBendDownLeftBold className="text-neutral-400" />
+                </div>
+              </Button>
+              <Button
+                size={"sm"}
+                variant={"outline"}
+                className={cn("justify-start!")}
+                onClick={handleSignInWithGoogle}
+              >
+                <FcGoogle />
+                Continue with Google
+              </Button>
 
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [showDefault]);
-
-    return (
-        <div
-            className={cn(
-                "max-w-lg min-h-120 w-full rounded-xl relative flex flex-col  p-0.5 overflow-hidden",
-            )}
-        >
-            <img
-                src={"/train-people-1024.jpg"}
-                className="absolute inset-0 z-0 w-full h-full object-cover"
-            />
-            <div className="z-1 flex flex-1 items-center justify-center w-full mb-9 sm:mb-12">
-                <p className=" text-6xl font-gp text-white">Roam</p>
+              <Button
+                size={"sm"}
+                variant={"outline"}
+                onClick={() => router.push("/")}
+                className={cn("justify-start!")}
+              >
+                <TbSquareRoundedChevronLeftFilled />
+                Back to Home
+              </Button>
             </div>
-
-            <main
-                className={cn(
-                    "max-w-lg w-full rounded-xl border dark:border-neutral-900 dark:bg-[#121212] p-4 z-1",
-                )}
-            >
-                {showDefault && (
-                    <div className="flex flex-col gap-0.5 tracking-tight">
-                        <h1 className="text-sm font-medium">Welcome to Roam!</h1>
-                        <h2 className="text-sm text-muted-foreground font-normal">
-                            Roam is a 24/7 travel executive that works for your company.
-                        </h2>
-
-                        <div className="flex flex-col gap-2.5 ml-auto w-fit mt-6">
-                            <Button
-                                size={"sm"}
-                                variant={"outline"}
-                                onClick={goToEmail}
-                                className={cn("justify-start!")}
-                            >
-                                <TbMailFilled />
-                                Continue with Email
-                                <div className="rounded-sm px-1 py-px border bg-neutral-600 -mr-1.5">
-                                    <PiArrowBendDownLeftBold className="text-neutral-400" />
-                                </div>
-                            </Button>
-                            <Button
-                                size={"sm"}
-                                variant={"outline"}
-                                className={cn("justify-start!")}
-                                onClick={handleSignInWithGoogle}
-                            >
-                                <FcGoogle />
-                                Continue with Google
-                            </Button>
-
-                            <Button
-                                size={"sm"}
-                                variant={"outline"}
-                                onClick={() => router.push("/")}
-                                className={cn("justify-start!")}
-                            >
-                                <TbSquareRoundedChevronLeftFilled />
-                                Back to Home
-                            </Button>
-                        </div>
-                    </div>
-                )}
-                {showEmail && <EmailForm onBack={() => onBack(setShowEmail)} />}
-            </main>
-        </div>
-    );
+          </div>
+        )}
+        {showEmail && <EmailForm onBack={() => onBack(setShowEmail)} />}
+      </main>
+    </div>
+  );
 }
 
 function EmailForm({ onBack }: { onBack: () => void }) {
-    const router = useRouter();
-    const {
-        signIn,
-        errors: signInErrors,
-        fetchStatus: signInFetchStatus,
-    } = useSignIn();
-    const {
-        signUp,
-        errors: signUpErrors,
-        fetchStatus: signUpFetchStatus,
-    } = useSignUp();
+  const router = useRouter();
+  const {
+    signIn,
+    errors: signInErrors,
+    fetchStatus: signInFetchStatus,
+  } = useSignIn();
+  const {
+    signUp,
+    errors: signUpErrors,
+    fetchStatus: signUpFetchStatus,
+  } = useSignUp();
 
-    const [showVerifyCode, setShowVerifyCode] = useState<boolean>(false);
-    const [emailCode, setEmailCode] = useState<string>("");
-    const [emailAddress, setEmailAddress] = useState<string>("");
-    const [isNewUser, setIsNewUser] = useState<boolean>(false);
-    const [customError, setCustomError] = useState<string | null>(null);
-    const [resend, setResend] = useState<number>(0);
-    const [verifying, setVerifying] = useState<boolean>(false);
-    const [success, setSuccess] = useState<string | null>(null);
+  const [showVerifyCode, setShowVerifyCode] = useState<boolean>(false);
+  const [emailCode, setEmailCode] = useState<string>("");
+  const [emailAddress, setEmailAddress] = useState<string>("");
+  const [isNewUser, setIsNewUser] = useState<boolean>(false);
+  const [customError, setCustomError] = useState<string | null>(null);
+  const [resend, setResend] = useState<number>(0);
+  const [verifying, setVerifying] = useState<boolean>(false);
+  const [success, setSuccess] = useState<string | null>(null);
 
-    const busy =
-        signInFetchStatus === "fetching" || signUpFetchStatus === "fetching";
+  const busy =
+    signInFetchStatus === "fetching" || signUpFetchStatus === "fetching";
 
-    const goToApp = ({ session, decorateUrl }: any) => {
-        // if (session?.currentTask) return; // route to a task screen here if you use session tasks
-        const url = decorateUrl("/");
-        url.startsWith("http") ? (window.location.href = url) : router.push(url);
-    };
+  const goToApp = ({ session, decorateUrl }: any) => {
+    // if (session?.currentTask) return; // route to a task screen here if you use session tasks
+    const url = decorateUrl("/");
+    url.startsWith("http") ? (window.location.href = url) : router.push(url);
+  };
 
-    const handleSendCode = async () => {
-        if (!emailAddress.trim()) {
-            setEmailAddress("");
-            setCustomError("Please enter your email.");
-            return;
-        }
+  const handleSendCode = async () => {
+    if (!emailAddress.trim()) {
+      setEmailAddress("");
+      setCustomError("Please enter your email.");
+      return;
+    }
 
-        // validate the email
-        if (!isValidEmail(emailAddress.trim())) {
-            setCustomError("Please enter a valid email address.");
-            setEmailAddress("");
-            return;
-        }
+    // validate the email
+    if (!isValidEmail(emailAddress.trim())) {
+      setCustomError("Please enter a valid email address.");
+      setEmailAddress("");
+      return;
+    }
 
-        const { error } = await signIn.create({
-            identifier: emailAddress,
+    const { error } = await signIn.create({
+      identifier: emailAddress,
+    });
+
+    if (!error) {
+      // handle sending code errors
+      const { error: signInCodeError } = await signIn.emailCode.sendCode();
+      if (signInCodeError) {
+        setCustomError(signInCodeError.message);
+        return;
+      }
+
+      setIsNewUser(false);
+      setShowVerifyCode(true);
+      return;
+    }
+
+    const noAccount =
+      isClerkAPIResponseError(error) &&
+      error.errors.some(({ code }) => code === "form_identifier_not_found");
+
+    if (!noAccount) {
+      // handle the other error edge cases here.
+      console.error(error);
+      setCustomError(error.message);
+      return;
+    }
+
+    const { error: signUpError } = await signUp.create({ emailAddress });
+
+    // handle signup errors
+    if (signUpError) {
+      console.error(signUpError);
+      setCustomError(signUpError.message);
+      return;
+    }
+
+    // handle sending code errors
+    const { error: signUpCodeError } =
+      await signUp.verifications.sendEmailCode();
+    if (signUpCodeError) {
+      setCustomError(signUpCodeError.message);
+      return;
+    }
+
+    setIsNewUser(true);
+    setShowVerifyCode(true);
+  };
+
+  const handleVerifyCode = async () => {
+    if (!emailCode) {
+      setCustomError("Please enter the code.");
+      return;
+    }
+
+    setVerifying(true);
+    try {
+      if (isNewUser) {
+        const { error } = await signUp.verifications.verifyEmailCode({
+          code: emailCode,
         });
 
-        if (!error) {
-            // handle sending code errors
-            const { error: signInCodeError } = await signIn.emailCode.sendCode();
-            if (signInCodeError) {
-                setCustomError(signInCodeError.message);
-                return;
+        if (error) {
+          if (isClerkAPIResponseError(error)) {
+            const errCode = error.errors[0].code;
+
+            if (errCode === "form_code_incorrect") {
+              setCustomError("Incorrect code.");
+              return;
+            } else if (errCode === "verification_code_expired") {
+              setCustomError("Verification code expired.");
+              return;
             }
-
-            setIsNewUser(false);
-            setShowVerifyCode(true);
-            return;
-        }
-
-        const noAccount =
-            isClerkAPIResponseError(error) &&
-            error.errors.some(({ code }) => code === "form_identifier_not_found");
-
-        if (!noAccount) {
-            // handle the other error edge cases here.
+          } else {
             console.error(error);
-            setCustomError(error.message);
             return;
+          }
         }
 
-        const { error: signUpError } = await signUp.create({ emailAddress });
+        if (signUp.status === "complete")
+          await signUp.finalize({ navigate: goToApp });
+      } else {
+        const { error } = await signIn.emailCode.verifyCode({
+          code: emailCode,
+        });
+        if (error) {
+          if (isClerkAPIResponseError(error)) {
+            const errCode = error.errors[0].code;
 
-        // handle signup errors
-        if (signUpError) {
-            console.error(signUpError);
-            setCustomError(signUpError.message);
-            return;
-        }
-
-        // handle sending code errors
-        const { error: signUpCodeError } =
-            await signUp.verifications.sendEmailCode();
-        if (signUpCodeError) {
-            setCustomError(signUpCodeError.message);
-            return;
-        }
-
-        setIsNewUser(true);
-        setShowVerifyCode(true);
-    };
-
-    const handleVerifyCode = async () => {
-        if (!emailCode) {
-            setCustomError("Please enter the code.");
-            return;
-        }
-
-        setVerifying(true);
-        try {
-            if (isNewUser) {
-                const { error } = await signUp.verifications.verifyEmailCode({
-                    code: emailCode,
-                });
-
-                if (error) {
-                    if (isClerkAPIResponseError(error)) {
-                        const errCode = error.errors[0].code;
-
-                        if (errCode === "form_code_incorrect") {
-                            setCustomError("Incorrect code.");
-                            return;
-                        } else if (errCode === "verification_code_expired") {
-                            setCustomError("Verification code expired.");
-                            return;
-                        }
-                    } else {
-                        console.error(error);
-                        return;
-                    }
-                }
-
-                if (signUp.status === "complete")
-                    await signUp.finalize({ navigate: goToApp });
-            } else {
-                const { error } = await signIn.emailCode.verifyCode({ code: emailCode });
-                if (error) {
-                    if (isClerkAPIResponseError(error)) {
-                        const errCode = error.errors[0].code;
-
-                        if (errCode === "form_code_incorrect") {
-                            setCustomError("Incorrect verification code.");
-                            return;
-                        } else if (errCode === "verification_code_expired") {
-                            setCustomError("Verification code expired.");
-                            return;
-                        }
-                    } else {
-                        console.error(error);
-                        return;
-                    }
-                }
-
-                if (signIn.status === "complete")
-                    await signIn.finalize({ navigate: goToApp });
+            if (errCode === "form_code_incorrect") {
+              setCustomError("Incorrect verification code.");
+              return;
+            } else if (errCode === "verification_code_expired") {
+              setCustomError("Verification code expired.");
+              return;
             }
-        } finally {
-            setVerifying(false);
+          } else {
+            console.error(error);
+            return;
+          }
         }
-    };
 
-    const handleResend = () => {
-        if (resend > 0) return;
+        if (signIn.status === "complete")
+          await signIn.finalize({ navigate: goToApp });
+      }
+    } finally {
+      setVerifying(false);
+    }
+  };
 
-        isNewUser
-            ? signUp.verifications.sendEmailCode()
-            : signIn.emailCode.sendCode();
+  const handleResend = () => {
+    if (resend > 0) return;
 
-        setSuccess("Verfication code sent.")
-        setResend(30);
-    };
+    isNewUser
+      ? signUp.verifications.sendEmailCode()
+      : signIn.emailCode.sendCode();
 
-    useEffect(() => {
-        if (resend <= 0) return;
+    setSuccess("Verfication code sent.");
+    setResend(30);
+  };
 
-        const interval = setInterval(() => {
-            setResend((c) => {
-                if (c <= 1) {
-                    clearInterval(interval);
-                    return 0;
-                }
-                return c - 1;
-            });
-        }, 1000);
+  useEffect(() => {
+    if (resend <= 0) return;
 
-        return () => clearInterval(interval);
-    }, [resend > 0]);
+    const interval = setInterval(() => {
+      setResend((c) => {
+        if (c <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return c - 1;
+      });
+    }, 1000);
 
-    useEffect(() => {
-        if (!customError) return;
+    return () => clearInterval(interval);
+  }, [resend > 0]);
 
-        const t = setTimeout(() => {
-            setCustomError(null);
-        }, 3000);
+  useEffect(() => {
+    if (!customError) return;
 
-        return () => clearTimeout(t);
-    }, [customError]);
+    const t = setTimeout(() => {
+      setCustomError(null);
+    }, 3000);
 
-    useEffect(() => {
-        if (!success) return;
+    return () => clearTimeout(t);
+  }, [customError]);
 
-        const t = setTimeout(() => {
-            setSuccess(null);
-        }, 3000);
+  useEffect(() => {
+    if (!success) return;
 
-        return () => clearTimeout(t);
-    }, [success]);
+    const t = setTimeout(() => {
+      setSuccess(null);
+    }, 3000);
 
-    return (
-        <div
-            className={cn(
-                "flex flex-col gap-0.5 tracking-tight w-full relative max-h-42 min-h-43",
-            )}
-        >
-            {showVerifyCode ? (
-                // Verification block
-                <>
-                    <h1 className="text-sm font-medium">Verify code</h1>
-                    <h2 className="text-sm text-muted-foreground font-normal">
-                        Enter the code sent to your email.
-                    </h2>
+    return () => clearTimeout(t);
+  }, [success]);
 
-                    <div className="mt-6 ml-3 flex-1 w-full flex flex-col">
-                        <InputOTP
-                            maxLength={6}
-                            className="font-mono"
-                            variant="primary"
-                            onChange={setEmailCode}
-                        >
-                            <InputOTP.Group>
-                                <InputOTP.Slot index={0} />
-                                <InputOTP.Slot index={1} />
-                                <InputOTP.Slot index={2} />
-                                <InputOTP.Slot index={3} />
-                                <InputOTP.Slot index={4} />
-                                <InputOTP.Slot index={5} />
-                            </InputOTP.Group>
-                        </InputOTP>
+  return (
+    <div
+      className={cn(
+        "relative flex max-h-42 min-h-43 w-full flex-col gap-0.5 tracking-tight",
+      )}
+    >
+      {showVerifyCode ? (
+        // Verification block
+        <>
+          <h1 className="text-sm font-medium">Verify code</h1>
+          <h2 className="text-muted-foreground text-sm font-normal">
+            Enter the code sent to your email.
+          </h2>
 
-                        <AnimatePresence mode="wait">
-                            {customError && (
-                                <motion.p
-                                    key={customError}
-                                    initial={{ y: 5, opacity: 0, filter: "blur(10px)" }}
-                                    animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-                                    exit={{ y: 5, opacity: 0, filter: "blur(10px)" }}
-                                    transition={{ duration: 0.2, ease: "easeIn" }}
-                                    className="text-[0.8rem] text-red-500 ml-auto pr-5"
-                                >
-                                    {customError}
-                                </motion.p>
-                            )}
-                            {success && (
-                                <motion.p
-                                    key={success}
-                                    initial={{ y: 5, opacity: 0, filter: "blur(10px)" }}
-                                    animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-                                    exit={{ y: 5, opacity: 0, filter: "blur(10px)" }}
-                                    transition={{ duration: 0.2, ease: "easeIn" }}
-                                    className="text-[0.8rem] text-green-500 ml-auto pr-5"
-                                >
-                                    {success}
-                                </motion.p>
-                            )}
-                        </AnimatePresence>
-                    </div>
+          <div className="mt-6 ml-3 flex w-full flex-1 flex-col">
+            <InputOTP
+              maxLength={6}
+              className="font-mono"
+              variant="primary"
+              onChange={setEmailCode}
+            >
+              <InputOTP.Group>
+                <InputOTP.Slot index={0} />
+                <InputOTP.Slot index={1} />
+                <InputOTP.Slot index={2} />
+                <InputOTP.Slot index={3} />
+                <InputOTP.Slot index={4} />
+                <InputOTP.Slot index={5} />
+              </InputOTP.Group>
+            </InputOTP>
 
-                    <div className="flex items-center justify-between gap-2">
-                        <Button
-                            size={"sm"}
-                            variant={"outline"}
-                            onClick={() => setShowVerifyCode(false)}
-                            className={cn("bg-blue-800! border border-blue-700!")}
-                        >
-                            Back
-                        </Button>
-                        <div className="flex items-center gap-2">
-                            <Button
-                                size={"sm"}
-                                variant={"outline"}
-                                onClick={handleResend}
-                                disabled={resend > 0}
-                                className="relative"
-                            >
-                                {resend > 0 && (
-                                    <span className="absolute inset-0 flex items-center justify-center">
-                                        {resend}
-                                    </span>
-                                )}
-                                <span className={cn(resend > 0 && "invisible")}>Resend</span>
-                            </Button>
+            <AnimatePresence mode="wait">
+              {customError && (
+                <motion.p
+                  key={customError}
+                  initial={{ y: 5, opacity: 0, filter: "blur(10px)" }}
+                  animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                  exit={{ y: 5, opacity: 0, filter: "blur(10px)" }}
+                  transition={{ duration: 0.2, ease: "easeIn" }}
+                  className="ml-auto pr-5 text-[0.8rem] text-red-500"
+                >
+                  {customError}
+                </motion.p>
+              )}
+              {success && (
+                <motion.p
+                  key={success}
+                  initial={{ y: 5, opacity: 0, filter: "blur(10px)" }}
+                  animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                  exit={{ y: 5, opacity: 0, filter: "blur(10px)" }}
+                  transition={{ duration: 0.2, ease: "easeIn" }}
+                  className="ml-auto pr-5 text-[0.8rem] text-green-500"
+                >
+                  {success}
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </div>
 
-                            <Button
-                                size={"sm"}
-                                onClick={handleVerifyCode}
-                                disabled={verifying}
-                                className="relative"
-                            >
-                                {verifying && (
-                                    <Spinner className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2" />
-                                )}
-                                <span className={cn(verifying && "invisible")}>Verify Code</span>
-                            </Button>
-                        </div>
-                    </div>
-                </>
-            ) : (
-                //Email Entering Block
-                <>
-                    <h1 className="text-sm font-medium">Enter your email</h1>
-                    <h2 className="text-sm text-muted-foreground font-normal">
-                        We'll send a verification code to your email.
-                    </h2>
+          <div className="flex items-center justify-between gap-2">
+            <Button
+              size={"sm"}
+              variant={"outline"}
+              onClick={() => setShowVerifyCode(false)}
+              className={cn("border border-blue-700! bg-blue-800!")}
+            >
+              Back
+            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                size={"sm"}
+                variant={"outline"}
+                onClick={handleResend}
+                disabled={resend > 0}
+                className="relative"
+              >
+                {resend > 0 && (
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    {resend}
+                  </span>
+                )}
+                <span className={cn(resend > 0 && "invisible")}>Resend</span>
+              </Button>
 
-                    <div className="mt-6 ml-3 flex-1 flex flex-col gap-1">
-                        <Input
-                            required
-                            type="email"
-                            placeholder="yuvan@roam.com"
-                            value={emailAddress}
-                            onChange={(e) => setEmailAddress(e.target.value)}
-                            className={cn("bg-transparent! border-none focus:ring-0! p-0")}
-                        />
-                        <AnimatePresence mode="wait">
-                            {customError && (
-                                <motion.p
-                                    key={customError}
-                                    initial={{ y: 5, opacity: 0, filter: "blur(10px)" }}
-                                    animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-                                    exit={{ y: 5, opacity: 0, filter: "blur(10px)" }}
-                                    transition={{ duration: 0.2, ease: "easeIn" }}
-                                    className="text-[0.8rem] text-red-500 ml-auto"
-                                >
-                                    {customError}
-                                </motion.p>
-                            )}
-                        </AnimatePresence>
-                    </div>
+              <Button
+                size={"sm"}
+                onClick={handleVerifyCode}
+                disabled={verifying}
+                className="relative"
+              >
+                {verifying && (
+                  <Spinner className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                )}
+                <span className={cn(verifying && "invisible")}>
+                  Verify Code
+                </span>
+              </Button>
+            </div>
+          </div>
+        </>
+      ) : (
+        //Email Entering Block
+        <>
+          <h1 className="text-sm font-medium">Enter your email</h1>
+          <h2 className="text-muted-foreground text-sm font-normal">
+            We'll send a verification code to your email.
+          </h2>
 
-                    <div className="flex items-center gap-2">
-                        <Button
-                            size={"sm"}
-                            variant={"outline"}
-                            onClick={onBack}
-                            className={cn("bg-blue-800! border border-blue-700!")}
-                        >
-                            Back
-                        </Button>
-                        <Button
-                            size={"sm"}
-                            variant={"outline"}
-                            onClick={handleSendCode}
-                            className={cn("flex-1 justify-start! relative")}
-                            disabled={busy}
-                        >
-                            {busy && (
-                                <Spinner className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2" />
-                            )}
-                            <span className={cn(busy && "invisible")}>Send code</span>
-                        </Button>
-                    </div>
-                </>
-            )}
-        </div>
-    );
+          <div className="mt-6 ml-3 flex flex-1 flex-col gap-1">
+            <Input
+              required
+              type="email"
+              placeholder="yuvan@roam.com"
+              value={emailAddress}
+              onChange={(e) => setEmailAddress(e.target.value)}
+              className={cn("border-none bg-transparent! p-0 focus:ring-0!")}
+            />
+            <AnimatePresence mode="wait">
+              {customError && (
+                <motion.p
+                  key={customError}
+                  initial={{ y: 5, opacity: 0, filter: "blur(10px)" }}
+                  animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                  exit={{ y: 5, opacity: 0, filter: "blur(10px)" }}
+                  transition={{ duration: 0.2, ease: "easeIn" }}
+                  className="ml-auto text-[0.8rem] text-red-500"
+                >
+                  {customError}
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button
+              size={"sm"}
+              variant={"outline"}
+              onClick={onBack}
+              className={cn("border border-blue-700! bg-blue-800!")}
+            >
+              Back
+            </Button>
+            <Button
+              size={"sm"}
+              variant={"outline"}
+              onClick={handleSendCode}
+              className={cn("relative flex-1 justify-start!")}
+              disabled={busy}
+            >
+              {busy && (
+                <Spinner className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+              )}
+              <span className={cn(busy && "invisible")}>Send code</span>
+            </Button>
+          </div>
+        </>
+      )}
+    </div>
+  );
 }

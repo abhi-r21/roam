@@ -1,6 +1,5 @@
 import type { SVGProps } from "react";
 
-
 const AppStore = (props: SVGProps<SVGSVGElement>) => (
   <svg {...props} xmlSpace="preserve" viewBox="0 0 800 800">
     <linearGradient
@@ -25,7 +24,6 @@ const AppStore = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
-
 
 const GooglePlay = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -58,7 +56,7 @@ const GooglePlay = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-function Triangle({ size = 100, color = '#fff' }) {
+function Triangle({ size = 100, color = "#fff" }) {
   return (
     <svg
       width={size}
@@ -70,7 +68,5 @@ function Triangle({ size = 100, color = '#fff' }) {
     </svg>
   );
 }
-
-
 
 export { GooglePlay, AppStore, Triangle };

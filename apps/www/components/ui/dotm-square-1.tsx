@@ -11,7 +11,14 @@ import type { DotMatrixCommonProps } from "@/lib/dotmatrix-core";
 
 export type DotmSquare1Props = DotMatrixCommonProps;
 
-const animationResolver: DotAnimationResolver = ({ isActive, index, row, col, reducedMotion, phase }) => {
+const animationResolver: DotAnimationResolver = ({
+  isActive,
+  index,
+  row,
+  col,
+  reducedMotion,
+  phase,
+}) => {
   if (!isActive) {
     return { className: "dmx-inactive" };
   }
@@ -21,15 +28,15 @@ const animationResolver: DotAnimationResolver = ({ isActive, index, row, col, re
   const parity = slice % 2;
   const style = {
     "--dmx-path": path,
-    "--dmx-diagonal-parity": parity
+    "--dmx-diagonal-parity": parity,
   } as CSSProperties;
 
   if (reducedMotion || phase === "idle") {
     return {
       style: {
         ...style,
-        opacity: parity === 0 ? 0.88 : 0.14
-      }
+        opacity: parity === 0 ? 0.88 : 0.14,
+      },
     };
   }
 
@@ -44,10 +51,14 @@ export function DotmSquare1({
   ...rest
 }: DotmSquare1Props) {
   const reducedMotion = usePrefersReducedMotion();
-  const { phase: matrixPhase, onMouseEnter, onMouseLeave } = useDotMatrixPhases({
+  const {
+    phase: matrixPhase,
+    onMouseEnter,
+    onMouseLeave,
+  } = useDotMatrixPhases({
     animated: Boolean(animated && !reducedMotion),
     hoverAnimated: Boolean(hoverAnimated && !reducedMotion),
-    speed
+    speed,
   });
 
   return (

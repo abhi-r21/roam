@@ -7,7 +7,13 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function findRegistryPath() {
-  const rel = join('node_modules', '@mastra', 'core', 'dist', 'provider-registry.json');
+  const rel = join(
+    "node_modules",
+    "@mastra",
+    "core",
+    "dist",
+    "provider-registry.json",
+  );
   // Walk up from script location to find project root with node_modules
   let dir = __dirname;
   for (let i = 0; i < 10; i++) {
@@ -67,15 +73,19 @@ function extractVersion(name) {
     parts = parts.filter((p) => p < 2020);
     if (parts.length === 0) continue;
     // Skip very large standalone numbers (parameter counts, IDs)
-    if (parts.length === 1 && parts[0] >= 100 && candidates.length > 1) continue;
+    if (parts.length === 1 && parts[0] >= 100 && candidates.length > 1)
+      continue;
     // Skip trailing date-like patterns (MM-DD) in the latter half of the name
     if (
       parts.length === 2 &&
-      parts[0] >= 1 && parts[0] <= 12 &&
-      parts[1] >= 1 && parts[1] <= 31 &&
+      parts[0] >= 1 &&
+      parts[0] <= 12 &&
+      parts[1] >= 1 &&
+      parts[1] <= 31 &&
       c.index > name.length / 2 &&
       candidates.length > 1
-    ) continue;
+    )
+      continue;
     processed.push(parts);
   }
 
@@ -127,11 +137,17 @@ function listProviders(registry) {
   const maxKey = Math.max(...entries.map((e) => e.key.length));
   const maxName = Math.max(...entries.map((e) => e.name.length));
 
-  console.log(`${"PROVIDER".padEnd(maxKey)}  ${"NAME".padEnd(maxName)}  MODELS`);
-  console.log(`${"─".repeat(maxKey)}  ${"─".repeat(maxName)}  ${"─".repeat(6)}`);
+  console.log(
+    `${"PROVIDER".padEnd(maxKey)}  ${"NAME".padEnd(maxName)}  MODELS`,
+  );
+  console.log(
+    `${"─".repeat(maxKey)}  ${"─".repeat(maxName)}  ${"─".repeat(6)}`,
+  );
   for (const entry of entries) {
     const modelCount = registry.providers[entry.key].models.length;
-    console.log(`${entry.key.padEnd(maxKey)}  ${entry.name.padEnd(maxName)}  ${modelCount}`);
+    console.log(
+      `${entry.key.padEnd(maxKey)}  ${entry.name.padEnd(maxName)}  ${modelCount}`,
+    );
   }
   console.log(`\n${entries.length} providers`);
 }

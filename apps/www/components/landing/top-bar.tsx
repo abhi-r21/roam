@@ -15,10 +15,12 @@ export function Topbar() {
   const { theme } = useTheme();
 
   return (
-    <header className="w-full px-4 py-4 sm:px-6 sm:py-5">
+    <header className="w-full max-w-6xl px-4 py-3 sm:px-6 sm:py-3">
       <div className={cn("flex w-full items-center justify-between")}>
         <div className="flex items-center gap-2">
-          <TbNavigationFilled className={cn(theme === "system" ? "text-black" : "text-white")}/>
+          <TbNavigationFilled
+            className={cn(theme === "system" ? "text-black" : "text-white")}
+          />
         </div>
 
         {isSignedIn ? (

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   Sidebar,
   SidebarContent,
@@ -17,12 +17,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { Bell, ChevronLeft, FingerprintPattern, UserRound } from "lucide-react";
 import { useState, useCallback } from "react";
 
-
-
 const ACCOUNT = [
   { icon: UserRound, label: "Profile", route: "/account/profile" },
-  { icon: FingerprintPattern, label: "Security", route: "/account/security" }
-]
+  { icon: FingerprintPattern, label: "Security", route: "/account/security" },
+];
 
 export function AccountSidebar() {
   const router = useRouter();
@@ -58,7 +56,12 @@ export function AccountSidebar() {
                   <motion.div
                     layoutId="account-sidebar-hover-bg"
                     className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
-                    transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 35,
+                      mass: 0.8,
+                    }}
                     style={{ zIndex: 0 }}
                   />
                 )}
@@ -66,7 +69,7 @@ export function AccountSidebar() {
                   onClick={() => router.push(route)}
                   className={cn(
                     "relative z-[1] cursor-pointer hover:bg-transparent! active:bg-transparent!",
-                    isActive ? "text-foreground" : "text-neutral-500"
+                    isActive ? "text-foreground" : "text-neutral-500",
                   )}
                 >
                   <Icon />
@@ -74,8 +77,12 @@ export function AccountSidebar() {
                   {isActive && (
                     <motion.div
                       layoutId="active-tab-dot"
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-pink-500"
-                      transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                      className="absolute top-1/2 right-3.5 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-pink-500"
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 35,
+                      }}
                     />
                   )}
                 </SidebarMenuButton>
@@ -86,7 +93,7 @@ export function AccountSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="bg-background">
-        <div className="flex items-center justify-between cursor-pointer">
+        <div className="flex cursor-pointer items-center justify-between">
           <ProfileDropdown />
           <div className="flex items-center gap-1.5">
             <Button

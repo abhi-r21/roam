@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useState, useCallback } from "react";
 
-
 const FOOTER_ITEMS = [
   {
     name: "Profile",
@@ -46,8 +45,8 @@ export function ProfileDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <div className="flex items-center justify-between gap-1.5 cursor-pointer">
-          <div  className="w-4 h-4 rounded-full bg-blue-500"/>
+        <div className="flex cursor-pointer items-center justify-between gap-1.5">
+          <div className="h-4 w-4 rounded-full bg-blue-500" />
           <div className="text-[13px]">
             {user?.emailAddresses[0].emailAddress.split("@")[0]}
           </div>
@@ -58,7 +57,7 @@ export function ProfileDropdown() {
         sideOffset={12}
         alignOffset={-8}
         className={cn(
-          "min-w-68 bg-background border border-neutral-100 dark:border-neutral-900 shadow-none! rounded-2xl",
+          "bg-background min-w-68 rounded-2xl border border-neutral-100 shadow-none! dark:border-neutral-900",
         )}
         onMouseLeave={handleMouseLeave}
       >
@@ -67,19 +66,24 @@ export function ProfileDropdown() {
             onMouseEnter={() => setHoveredItem("profile-header")}
             onClick={() => router.push("/account/profile")}
             className={cn(
-              "flex items-center justify-between py-3 text-[13px] cursor-pointer rounded-lg",
-              "focus:bg-transparent! relative",
+              "flex cursor-pointer items-center justify-between rounded-lg py-3 text-[13px]",
+              "relative focus:bg-transparent!",
             )}
           >
             {hoveredItem === "profile-header" && (
               <motion.div
                 layoutId="dropdown-hover-bg"
                 className="absolute inset-0 rounded-lg bg-neutral-100 dark:bg-neutral-900"
-                transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 500,
+                  damping: 35,
+                  mass: 0.8,
+                }}
                 style={{ zIndex: 0 }}
               />
             )}
-            <span className="relative z-[1] flex items-center justify-between w-full">
+            <span className="relative z-[1] flex w-full items-center justify-between">
               <div className="flex flex-col">
                 <p>yuvan</p>
                 <p className="text-neutral-500!">
@@ -102,17 +106,22 @@ export function ProfileDropdown() {
                 key={item.name}
                 onMouseEnter={() => setHoveredItem(item.name)}
                 onClick={() => router.push(item.route)}
-                className="text-sm relative focus:bg-transparent!"
+                className="relative text-sm focus:bg-transparent!"
               >
                 {hoveredItem === item.name && (
                   <motion.div
                     layoutId="dropdown-hover-bg"
                     className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
-                    transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 35,
+                      mass: 0.8,
+                    }}
                     style={{ zIndex: 0 }}
                   />
                 )}
-                <span className="relative z-1 flex items-center gap-1.5 w-full">
+                <span className="relative z-1 flex w-full items-center gap-1.5">
                   <Icon className="text-neutral-400" />
                   {item.name}
                 </span>
@@ -125,7 +134,7 @@ export function ProfileDropdown() {
           <DropdownMenuItem
             onMouseEnter={() => setHoveredItem("theme")}
             className={cn(
-              "text-sm flex items-center justify-between relative focus:bg-transparent!",
+              "relative flex items-center justify-between text-sm focus:bg-transparent!",
             )}
             onSelect={(e) => e.preventDefault()}
           >
@@ -133,28 +142,38 @@ export function ProfileDropdown() {
               <motion.div
                 layoutId="dropdown-hover-bg"
                 className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
-                transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 500,
+                  damping: 35,
+                  mass: 0.8,
+                }}
                 style={{ zIndex: 0 }}
               />
             )}
-            <span className="relative z-[1] flex items-center justify-between w-full">
+            <span className="relative z-[1] flex w-full items-center justify-between">
               <SelectTheme />
             </span>
           </DropdownMenuItem>
           <DropdownMenuItem
             onMouseEnter={() => setHoveredItem("signout")}
-            className="text-sm relative focus:bg-transparent!"
+            className="relative text-sm focus:bg-transparent!"
             onClick={() => {}}
           >
             {hoveredItem === "signout" && (
               <motion.div
                 layoutId="dropdown-hover-bg"
                 className="absolute inset-0 rounded-md bg-neutral-100 dark:bg-neutral-900"
-                transition={{ type: "spring", stiffness: 500, damping: 35, mass: 0.8 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 500,
+                  damping: 35,
+                  mass: 0.8,
+                }}
                 style={{ zIndex: 0 }}
               />
             )}
-            <span className="relative z-[1] flex items-center gap-1.5 w-full">
+            <span className="relative z-[1] flex w-full items-center gap-1.5">
               {isSignedIn && (
                 <>
                   <LogOut className="text-neutral-400" />
@@ -180,7 +199,7 @@ const SelectTheme = () => {
 
       <div
         className={cn(
-          "rounded-full border border-border bg-background flex items-center gap-0.5 p-0.5 relative shrink-0",
+          "border-border bg-background relative flex shrink-0 items-center gap-0.5 rounded-full border p-0.5",
         )}
       >
         {[
@@ -211,7 +230,7 @@ const SelectTheme = () => {
               {isActive && (
                 <motion.div
                   layoutId="theme-indicator"
-                  className="absolute inset-0 rounded-full border bg-background shadow-sm z-0"
+                  className="bg-background absolute inset-0 z-0 rounded-full border shadow-sm"
                   transition={{
                     type: "spring",
                     stiffness: 400,
@@ -221,7 +240,7 @@ const SelectTheme = () => {
               )}
               <Icon
                 className={cn(
-                  "relative z-10 transition-colors size-3",
+                  "relative z-10 size-3 transition-colors",
                   isActive ? "text-foreground" : "text-neutral-400",
                 )}
               />

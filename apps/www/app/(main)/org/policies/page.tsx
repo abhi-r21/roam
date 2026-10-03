@@ -1,5 +1,3 @@
 export default function PoliciesPage() {
-    return <div>
-        
-    </div>
+  return <div></div>;
 }

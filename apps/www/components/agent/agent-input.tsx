@@ -35,20 +35,20 @@ export function AgentInput() {
         exit={{ y: 60 }}
         transition={{
           duration: 0.3,
-          ease: "easeOut"
+          ease: "easeOut",
         }}
-        className="flex items-end gap-1.5 max-w-lg w-full mb-2 mx-auto"
+        className="mx-auto mb-2 flex w-full max-w-lg items-end gap-1.5"
       >
         <Button
           className={cn(
-            "rounded-full size-10 shrink-0 mb-[3px] bg-background hover:bg-background/50",
-            "dark:bg-[#101010] dark:text-neutral-100 dark:border-neutral-900 dark:hover:bg-[#101010]/50 dark:hover:border-[#101010]",
+            "bg-background hover:bg-background/50 mb-[3px] size-10 shrink-0 rounded-full",
+            "dark:border-neutral-900 dark:bg-[#101010] dark:text-neutral-100 dark:hover:border-[#101010] dark:hover:bg-[#101010]/50",
           )}
         >
           <Plus className="text-foreground" />
         </Button>
 
-        <div className="flex items-end flex-1 bg-background dark:bg-[#101010] rounded-[15px] pl-3 pr-1 py-1.5 min-h-10 border-neutral-200 border dark:border-neutral-900">
+        <div className="bg-background flex min-h-10 flex-1 items-end rounded-[15px] border border-neutral-200 py-1.5 pr-1 pl-3 dark:border-neutral-900 dark:bg-[#101010]">
           <Textarea
             ref={textareaRef}
             rows={1}
@@ -64,8 +64,8 @@ export function AgentInput() {
             }}
             placeholder="Ask roam..."
             className={cn(
-              "bg-transparent! border-none outline-none! focus:ring-0!",
-              "resize-none p-0! my-auto",
+              "border-none bg-transparent! outline-none! focus:ring-0!",
+              "my-auto resize-none p-0!",
               "min-h-[20px] leading-5",
               "placeholder:text-neutral-500",
               "rounded-none! caret-blue-500",
@@ -76,7 +76,7 @@ export function AgentInput() {
             <Button
               variant="ghost"
               className={cn(
-                "rounded-full h-7 w-7 shrink-0 ml-1.5 mb-px",
+                "mb-px ml-1.5 h-7 w-7 shrink-0 rounded-full",
                 "transition-opacity",
                 // !hasInput && "opacity-0 pointer-events-none w-0 ml-0",
               )}
@@ -89,9 +89,9 @@ export function AgentInput() {
               variant={hasInput ? "default" : "ghost"}
               disabled={!hasInput}
               className={cn(
-                "rounded-[12px] size-7 shrink-0 ml-1.5 mb-px px-4 bg-blue-500 border-blue-400 text-white",
+                "mb-px ml-1.5 size-7 shrink-0 rounded-[12px] border-blue-400 bg-blue-500 px-4 text-white",
                 "transition-opacity",
-                !hasInput && "opacity-0 pointer-events-none w-0 ml-0",
+                !hasInput && "pointer-events-none ml-0 w-0 opacity-0",
               )}
             >
               <ArrowUp className="h-4 w-4" />

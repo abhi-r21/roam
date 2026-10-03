@@ -7,7 +7,10 @@ import { useDotMatrixPhases } from "@/lib/dotmatrix-hooks";
 import { isWithinCircularMask } from "@/lib/dotmatrix-core";
 import { useCyclePhase } from "@/lib/dotmatrix-hooks";
 import { usePrefersReducedMotion } from "@/lib/dotmatrix-hooks";
-import type { DotAnimationResolver, DotMatrixCommonProps } from "@/lib/dotmatrix-core";
+import type {
+  DotAnimationResolver,
+  DotMatrixCommonProps,
+} from "@/lib/dotmatrix-core";
 
 export type DotmCircular6Props = DotMatrixCommonProps;
 
@@ -22,15 +25,19 @@ export function DotmCircular6({
   ...rest
 }: DotmCircular6Props) {
   const reducedMotion = usePrefersReducedMotion();
-  const { phase: matrixPhase, onMouseEnter, onMouseLeave } = useDotMatrixPhases({
+  const {
+    phase: matrixPhase,
+    onMouseEnter,
+    onMouseLeave,
+  } = useDotMatrixPhases({
     animated: Boolean(animated && !reducedMotion),
     hoverAnimated: Boolean(hoverAnimated && !reducedMotion),
-    speed
+    speed,
   });
   const phase = useCyclePhase({
     active: !reducedMotion && matrixPhase !== "idle",
     cycleMsBase: 1700,
-    speed
+    speed,
   });
 
   const resolver = useMemo<DotAnimationResolver>(() => {
@@ -41,11 +48,13 @@ export function DotmCircular6({
 
       const x = col - 2;
       const y = row - 2;
-      const t = reducedMotion || p === "idle" ? 0 : (phase) * Math.PI * 2;
+      const t = reducedMotion || p === "idle" ? 0 : phase * Math.PI * 2;
       const angle = Math.atan2(y, x);
       const ring = Math.sqrt(x * x + y * y);
 
-      const angularPhase = ((angle - t * 0.95 + Math.PI * 4) % (Math.PI * 2)) / ((Math.PI * 2) / 3);
+      const angularPhase =
+        ((angle - t * 0.95 + Math.PI * 4) % (Math.PI * 2)) /
+        ((Math.PI * 2) / 3);
       const sectorPos = angularPhase - Math.floor(angularPhase);
       const sectorPulse = Math.max(0, 1 - Math.abs(sectorPos - 0.5) * 2);
       const ringPhase = 0.5 + 0.5 * Math.cos(ring * 3.2 + t * 1.7);
